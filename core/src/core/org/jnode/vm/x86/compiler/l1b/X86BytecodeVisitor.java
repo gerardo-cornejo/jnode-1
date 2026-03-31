@@ -247,9 +247,22 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     private final VirtualStack vstack;
 
     /**
-     * My counters
+     * My counters (lazy initialized to avoid recursive JIT compilation)
      */
-    private final CounterGroup counters = VmUtils.getVm().getCounterGroup(getClass().getName());
+    private CounterGroup counters;
+
+    /**
+     * Gets the counters, initializing lazily to avoid recursive JIT compilation.
+     * The counters field cannot be initialized at field declaration time because
+     * getCounterGroup() uses TreeMap which requires String.compareTo(), which
+     * may trigger JIT compilation and cause infinite recursion.
+     */
+    private CounterGroup getCounters() {
+        if (counters == null) {
+            counters = VmUtils.getVm().getCounterGroup(getClass().getName());
+        }
+        return counters;
+    }
 
     /**
      * Do counting?
@@ -321,7 +334,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     final void checkBounds(RefItem ref, IntItem index) {
         if (countBytecode) {
-            counters.getCounter("checkbounds").inc();
+            getCounters().getCounter("checkbounds").inc();
         }
 
 
@@ -329,7 +342,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
             //System.err.println("Index constant = " + index.getValue() + ", ref.register = " + ref.getRegister());
             // only one side has to be checked, > 0 can be checked at compile time
             if (countConstOps) {
-                counters.getCounter("TODOcheckbounds-indexIsConst").inc();
+                getCounters().getCounter("TODOcheckbounds-indexIsConst").inc();
             }
         }
 
@@ -842,12 +855,12 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
         IntItem v1 = vstack.popInt();
 
         if (countConstOps) {
-            counters.getCounter("ioperation").inc();
+            getCounters().getCounter("ioperation").inc();
         }
 
         if (v2.isConstant() && v1.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("ioperation-const").inc();
+                getCounters().getCounter("ioperation-const").inc();
             }
 
             final int v;
@@ -876,7 +889,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
         } else {
 
             if (countConstOps) {
-                counters.getCounter("ioperation-nonconst").inc();
+                getCounters().getCounter("ioperation-nonconst").inc();
             }
 
             if (prepareForOperation(v1, v2, commutative)) {
@@ -889,7 +902,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
             if (v2.isConstant()) {
 
                 if (countConstOps) {
-                    counters.getCounter("TODOioperation-SECONDconst").inc();
+                    getCounters().getCounter("TODOioperation-SECONDconst").inc();
                 }
 
                 final int value = v2.getValue();
@@ -898,14 +911,14 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                     case X86Operation.ADD:
                         if (value == 0) {
                             if (countConstOps) {
-                                counters.getCounter("NEWioperation-SECONDconstADD0").inc();
+                                getCounters().getCounter("NEWioperation-SECONDconstADD0").inc();
                             }
                             v2.release(eContext);
                             vstack.push(v1);
                             return;
                         } else if (value == 1) {
                             if (countConstOps) {
-                                counters.getCounter("NEWioperation-SECONDconstADD1").inc();
+                                getCounters().getCounter("NEWioperation-SECONDconstADD1").inc();
                             }
                             v2.release(eContext);
                             os.writeINC(v1.getRegister());
@@ -913,7 +926,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                             return;
                         } else if (value == -1) {
                             if (countConstOps) {
-                                counters.getCounter("NEWioperation-SECONDconstADD-1").inc();
+                                getCounters().getCounter("NEWioperation-SECONDconstADD-1").inc();
                             }
                             v2.release(eContext);
                             os.writeDEC(v1.getRegister());
@@ -924,7 +937,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                     case X86Operation.AND:
                         if (value == 0) {
                             if (countConstOps) {
-                                counters.getCounter("NEWioperation-SECONDconstAND0").inc();
+                                getCounters().getCounter("NEWioperation-SECONDconstAND0").inc();
                             }
                             v1.release(eContext);
                             v2.release(eContext);
@@ -933,7 +946,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                         } /*else if (value == 0xFF) {
                         // TODO DOES NOT WORK FOR SOME REASON :/
                         if (countConstOps) {
-                            counters.getCounter("NEWioperation-SECONDconstAND0xFF").inc();
+                            getCounters().getCounter("NEWioperation-SECONDconstAND0xFF").inc();
                         }
                         v2.release(eContext)
                         v1.loadToBITS8GPR(eContext);
@@ -943,7 +956,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                         return;
                     } else if (value == 0xFFFF) {
                         if (countConstOps) {
-                            counters.getCounter("NEWioperation-SECONDconstAND0xFFFF").inc();
+                            getCounters().getCounter("NEWioperation-SECONDconstAND0xFFFF").inc();
                         }
                         v2.release(eContext);
                         final GPR r1 = v1.getRegister();
@@ -955,7 +968,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                     case X86Operation.OR:
                         if (value == 0) {
                             if (countConstOps) {
-                                counters.getCounter("NEWioperation-SECONDconstOR0").inc();
+                                getCounters().getCounter("NEWioperation-SECONDconstOR0").inc();
                             }
                             v2.release(eContext);
                             vstack.push(v1);
@@ -965,7 +978,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                     case X86Operation.SUB:
                         if (value == 1) {
                             if (countConstOps) {
-                                counters.getCounter("NEWioperation-SECONDconstSUB1").inc();
+                                getCounters().getCounter("NEWioperation-SECONDconstSUB1").inc();
                             }
                             v2.release(eContext);
                             os.writeDEC(v1.getRegister());
@@ -973,7 +986,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                             return;
                         } else if (value == -1) {
                             if (countConstOps) {
-                                counters.getCounter("NEWioperation-SECONDconstSUB-1").inc();
+                                getCounters().getCounter("NEWioperation-SECONDconstSUB-1").inc();
                             }
                             v2.release(eContext);
                             os.writeINC(v1.getRegister());
@@ -984,7 +997,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                     case X86Operation.XOR:
                         if (value == -1) {
                             if (countConstOps) {
-                                counters.getCounter("NEWioperation-SECONDconstXOR-1").inc();
+                                getCounters().getCounter("NEWioperation-SECONDconstXOR-1").inc();
                             }
                             v2.release(eContext);
                             os.writeNOT(v1.getRegister());
@@ -1044,7 +1057,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
         if (val.isConstant() && isconst) {
             // TODO, implement constant ishift
             if (countConstOps) {
-                counters.getCounter("TODOishift-const").inc();
+                getCounters().getCounter("TODOishift-const").inc();
             }
         }
 
@@ -1104,17 +1117,17 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
         LongItem v1 = vstack.popLong();
 
         if (countConstOps) {
-            counters.getCounter("loperation").inc();
+            getCounters().getCounter("loperation").inc();
         }
 
         if (v1.isConstant() && v2.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("TODOloperation-const").inc();
+                getCounters().getCounter("TODOloperation-const").inc();
             }
             // TODO loperation for constants
         } else if (v1.isConstant() || v2.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("TODOloperation-ONEconst" + commutative).inc();
+                getCounters().getCounter("TODOloperation-ONEconst" + commutative).inc();
             }
             // TODO check for constants making it easier...
         }
@@ -1339,7 +1352,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_aaload() {
         if (countBytecode) {
-            counters.getCounter("aaload").inc();
+            getCounters().getCounter("aaload").inc();
         }
         waload(JvmType.REFERENCE);
     }
@@ -1349,7 +1362,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_aastore() {
         if (countBytecode) {
-            counters.getCounter("aastore").inc();
+            getCounters().getCounter("aastore").inc();
         }
         wastore(JvmType.REFERENCE);
     }
@@ -1359,7 +1372,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_aconst_null() {
         if (countBytecode) {
-            counters.getCounter("aconst_null").inc();
+            getCounters().getCounter("aconst_null").inc();
         }
         vstack.push(ifac.createAConst(eContext, null));
     }
@@ -1370,7 +1383,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_aload(int index) {
         if (countBytecode) {
-            counters.getCounter("aload").inc();
+            getCounters().getCounter("aload").inc();
         }
         wload(JvmType.REFERENCE, index, false);
     }
@@ -1380,7 +1393,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public void visit_aloadStored(int index) {
         if (countBytecode) {
-            counters.getCounter("aloadStored").inc();
+            getCounters().getCounter("aloadStored").inc();
         }
         wload(JvmType.REFERENCE, index, true);
     }
@@ -1391,7 +1404,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_anewarray(VmConstClass classRef) {
         if (countBytecode) {
-            counters.getCounter("anewarray").inc();
+            getCounters().getCounter("anewarray").inc();
         }
 
         // Push all, since we're going to call other methods
@@ -1431,7 +1444,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_areturn() {
         if (countBytecode) {
-            counters.getCounter("areturn").inc();
+            getCounters().getCounter("areturn").inc();
         }
         wreturn(JvmType.REFERENCE, true);
     }
@@ -1442,7 +1455,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_arraylength() {
 
         if (countBytecode) {
-            counters.getCounter("arraylength").inc();
+            getCounters().getCounter("arraylength").inc();
         }
 
         final RefItem ref = vstack.popRef();
@@ -1470,7 +1483,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_astore(int index) {
         if (countBytecode) {
-            counters.getCounter("astore").inc();
+            getCounters().getCounter("astore").inc();
         }
         wstore(JvmType.REFERENCE, index);
     }
@@ -1480,7 +1493,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_athrow() {
         if (countBytecode) {
-            counters.getCounter("athrow").inc();
+            getCounters().getCounter("athrow").inc();
         }
 
         final RefItem ref = vstack.popRef();
@@ -1503,7 +1516,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_baload() {
         if (countBytecode) {
-            counters.getCounter("baload").inc();
+            getCounters().getCounter("baload").inc();
         }
         waload(JvmType.BYTE);
     }
@@ -1513,7 +1526,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_bastore() {
         if (countBytecode) {
-            counters.getCounter("bastore").inc();
+            getCounters().getCounter("bastore").inc();
         }
         wastore(JvmType.BYTE);
     }
@@ -1523,7 +1536,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_caload() {
         if (countBytecode) {
-            counters.getCounter("caload").inc();
+            getCounters().getCounter("caload").inc();
         }
         waload(JvmType.CHAR);
     }
@@ -1533,7 +1546,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_castore() {
         if (countBytecode) {
-            counters.getCounter("castore").inc();
+            getCounters().getCounter("castore").inc();
         }
         wastore(JvmType.CHAR);
     }
@@ -1544,7 +1557,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_checkcast(VmConstClass classRef) {
         if (countBytecode) {
-            counters.getCounter("checkcast").inc();
+            getCounters().getCounter("checkcast").inc();
         }
 
         // Resolve classRef
@@ -1651,7 +1664,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_d2f() {
         if (countBytecode) {
-            counters.getCounter("d2f").inc();
+            getCounters().getCounter("d2f").inc();
         }
         fpCompiler.convert(JvmType.DOUBLE, JvmType.FLOAT);
     }
@@ -1661,7 +1674,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_d2i() {
         if (countBytecode) {
-            counters.getCounter("d2i").inc();
+            getCounters().getCounter("d2i").inc();
         }
         fpCompiler.convert(JvmType.DOUBLE, JvmType.INT);
     }
@@ -1671,7 +1684,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_d2l() {
         if (countBytecode) {
-            counters.getCounter("d2l").inc();
+            getCounters().getCounter("d2l").inc();
         }
         fpCompiler.convert(JvmType.DOUBLE, JvmType.LONG);
     }
@@ -1681,7 +1694,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dadd() {
         if (countBytecode) {
-            counters.getCounter("dadd").inc();
+            getCounters().getCounter("dadd").inc();
         }
         fpCompiler.add(JvmType.DOUBLE);
     }
@@ -1691,7 +1704,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_daload() {
         if (countBytecode) {
-            counters.getCounter("daload").inc();
+            getCounters().getCounter("daload").inc();
         }
         fpCompiler.fpaload(JvmType.DOUBLE);
     }
@@ -1701,7 +1714,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dastore() {
         if (countBytecode) {
-            counters.getCounter("dastore").inc();
+            getCounters().getCounter("dastore").inc();
         }
         dwastore(JvmType.DOUBLE);
     }
@@ -1711,7 +1724,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dcmpg() {
         if (countBytecode) {
-            counters.getCounter("dcmpg").inc();
+            getCounters().getCounter("dcmpg").inc();
         }
         fpCompiler.compare(true, JvmType.DOUBLE, getCurInstrLabel());
     }
@@ -1721,7 +1734,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dcmpl() {
         if (countBytecode) {
-            counters.getCounter("dcmpl").inc();
+            getCounters().getCounter("dcmpl").inc();
         }
         fpCompiler.compare(false, JvmType.DOUBLE, getCurInstrLabel());
     }
@@ -1732,7 +1745,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dconst(double value) {
         if (countBytecode) {
-            counters.getCounter("dconst").inc();
+            getCounters().getCounter("dconst").inc();
         }
         vstack.push(ifac.createDConst(eContext, value));
     }
@@ -1742,7 +1755,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ddiv() {
         if (countBytecode) {
-            counters.getCounter("ddiv").inc();
+            getCounters().getCounter("ddiv").inc();
         }
         fpCompiler.div(JvmType.DOUBLE);
     }
@@ -1753,7 +1766,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dload(int index) {
         if (countBytecode) {
-            counters.getCounter("dload").inc();
+            getCounters().getCounter("dload").inc();
         }
         vstack.push(ifac.createLocal(JvmType.DOUBLE, stackFrame
             .getWideEbpOffset(typeSizeInfo, index)));
@@ -1764,7 +1777,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dmul() {
         if (countBytecode) {
-            counters.getCounter("dmul").inc();
+            getCounters().getCounter("dmul").inc();
         }
         fpCompiler.mul(JvmType.DOUBLE);
     }
@@ -1774,7 +1787,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dneg() {
         if (countBytecode) {
-            counters.getCounter("dneg").inc();
+            getCounters().getCounter("dneg").inc();
         }
         fpCompiler.neg(JvmType.DOUBLE);
     }
@@ -1784,7 +1797,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_drem() {
         if (countBytecode) {
-            counters.getCounter("drem").inc();
+            getCounters().getCounter("drem").inc();
         }
         fpCompiler.rem(JvmType.DOUBLE);
     }
@@ -1794,7 +1807,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dreturn() {
         if (countBytecode) {
-            counters.getCounter("dreturn").inc();
+            getCounters().getCounter("dreturn").inc();
         }
         dwreturn(JvmType.DOUBLE, true);
     }
@@ -1805,7 +1818,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dstore(int index) {
         if (countBytecode) {
-            counters.getCounter("dstore").inc();
+            getCounters().getCounter("dstore").inc();
         }
         dwstore(JvmType.DOUBLE, index);
     }
@@ -1815,7 +1828,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dsub() {
         if (countBytecode) {
-            counters.getCounter("dsub").inc();
+            getCounters().getCounter("dsub").inc();
         }
         fpCompiler.sub(JvmType.DOUBLE);
     }
@@ -1825,7 +1838,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dup() {
         if (countBytecode) {
-            counters.getCounter("dup").inc();
+            getCounters().getCounter("dup").inc();
         }
         final Item v1 = vstack.pop();
         v1.loadIf(eContext, Item.Kind.STACK | Item.Kind.FPUSTACK);
@@ -1838,7 +1851,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dup_x1() {
         if (countBytecode) {
-            counters.getCounter("dup_x1").inc();
+            getCounters().getCounter("dup_x1").inc();
         }
         final Item v1 = vstack.pop();
         final Item v2 = vstack.pop();
@@ -1854,7 +1867,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dup_x2() {
         if (countBytecode) {
-            counters.getCounter("dup_x2").inc();
+            getCounters().getCounter("dup_x2").inc();
         }
         final Item v1 = vstack.pop();
         final Item v2 = vstack.pop();
@@ -1881,7 +1894,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dup2() {
         if (countBytecode) {
-            counters.getCounter("dup2").inc();
+            getCounters().getCounter("dup2").inc();
         }
         final Item v1 = vstack.pop();
         v1.loadIf(eContext, Item.Kind.STACK | Item.Kind.FPUSTACK);
@@ -1905,7 +1918,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_dup2_x1() {
         if (countBytecode) {
-            counters.getCounter("dup2_x1").inc();
+            getCounters().getCounter("dup2_x1").inc();
         }
         final Item v1 = vstack.pop();
         final Item v2 = vstack.pop();
@@ -1931,7 +1944,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      * @see org.jnode.vm.bytecode.BytecodeVisitor#visit_dup2_x2()
      *
     public final void visit_dup2_x2() {
-    if(countBytecode) { counters.getCounter("dup2_x2").inc(); }
+    if(countBytecode) { getCounters().getCounter("dup2_x2").inc(); }
 
     // Push all on the stack, since this opcode is just too complicated
     vstack.push(eContext);
@@ -2071,7 +2084,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_f2d() {
         if (countBytecode) {
-            counters.getCounter("f2d").inc();
+            getCounters().getCounter("f2d").inc();
         }
         fpCompiler.convert(JvmType.FLOAT, JvmType.DOUBLE);
     }
@@ -2081,7 +2094,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_f2i() {
         if (countBytecode) {
-            counters.getCounter("f2i").inc();
+            getCounters().getCounter("f2i").inc();
         }
         fpCompiler.convert(JvmType.FLOAT, JvmType.INT);
     }
@@ -2091,7 +2104,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_f2l() {
         if (countBytecode) {
-            counters.getCounter("f2l").inc();
+            getCounters().getCounter("f2l").inc();
         }
         fpCompiler.convert(JvmType.FLOAT, JvmType.LONG);
     }
@@ -2101,7 +2114,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_fadd() {
         if (countBytecode) {
-            counters.getCounter("fadd").inc();
+            getCounters().getCounter("fadd").inc();
         }
         fpCompiler.add(JvmType.FLOAT);
     }
@@ -2111,7 +2124,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_faload() {
         if (countBytecode) {
-            counters.getCounter("faload").inc();
+            getCounters().getCounter("faload").inc();
         }
         fpCompiler.fpaload(JvmType.FLOAT);
     }
@@ -2121,7 +2134,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_fastore() {
         if (countBytecode) {
-            counters.getCounter("fastore").inc();
+            getCounters().getCounter("fastore").inc();
         }
         wastore(JvmType.FLOAT);
     }
@@ -2131,7 +2144,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_fcmpg() {
         if (countBytecode) {
-            counters.getCounter("fcmpg").inc();
+            getCounters().getCounter("fcmpg").inc();
         }
         fpCompiler.compare(true, JvmType.FLOAT, getCurInstrLabel());
     }
@@ -2141,7 +2154,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_fcmpl() {
         if (countBytecode) {
-            counters.getCounter("fcmpl").inc();
+            getCounters().getCounter("fcmpl").inc();
         }
         fpCompiler.compare(false, JvmType.FLOAT, getCurInstrLabel());
     }
@@ -2152,7 +2165,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_fconst(float value) {
         if (countBytecode) {
-            counters.getCounter("fconst").inc();
+            getCounters().getCounter("fconst").inc();
         }
         vstack.push(ifac.createFConst(eContext, value));
     }
@@ -2162,7 +2175,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_fdiv() {
         if (countBytecode) {
-            counters.getCounter("fdiv").inc();
+            getCounters().getCounter("fdiv").inc();
         }
         fpCompiler.div(JvmType.FLOAT);
     }
@@ -2173,7 +2186,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_fload(int index) {
         if (countBytecode) {
-            counters.getCounter("fload").inc();
+            getCounters().getCounter("fload").inc();
         }
         wload(JvmType.FLOAT, index, false);
     }
@@ -2183,7 +2196,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public void visit_floadStored(int index) {
         if (countBytecode) {
-            counters.getCounter("floadStored").inc();
+            getCounters().getCounter("floadStored").inc();
         }
         wload(JvmType.FLOAT, index, true);
     }
@@ -2193,7 +2206,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_fmul() {
         if (countBytecode) {
-            counters.getCounter("fmul").inc();
+            getCounters().getCounter("fmul").inc();
         }
         fpCompiler.mul(JvmType.FLOAT);
     }
@@ -2203,7 +2216,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_fneg() {
         if (countBytecode) {
-            counters.getCounter("fneg").inc();
+            getCounters().getCounter("fneg").inc();
         }
         fpCompiler.neg(JvmType.FLOAT);
     }
@@ -2213,7 +2226,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_frem() {
         if (countBytecode) {
-            counters.getCounter("frem").inc();
+            getCounters().getCounter("frem").inc();
         }
         fpCompiler.rem(JvmType.FLOAT);
     }
@@ -2223,7 +2236,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_freturn() {
         if (countBytecode) {
-            counters.getCounter("freturn").inc();
+            getCounters().getCounter("freturn").inc();
         }
         wreturn(JvmType.FLOAT, true);
     }
@@ -2234,7 +2247,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_fstore(int index) {
         if (countBytecode) {
-            counters.getCounter("fstore").inc();
+            getCounters().getCounter("fstore").inc();
         }
         wstore(JvmType.FLOAT, index);
     }
@@ -2244,7 +2257,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_fsub() {
         if (countBytecode) {
-            counters.getCounter("fsub").inc();
+            getCounters().getCounter("fsub").inc();
         }
         fpCompiler.sub(JvmType.FLOAT);
     }
@@ -2255,7 +2268,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_getfield(VmConstFieldRef fieldRef) {
         if (countBytecode) {
-            counters.getCounter("getfield").inc();
+            getCounters().getCounter("getfield").inc();
         }
 
         fieldRef.resolve(loader);
@@ -2343,7 +2356,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_getstatic(VmConstFieldRef fieldRef) {
         if (countBytecode) {
-            counters.getCounter("getstatic").inc();
+            getCounters().getCounter("getstatic").inc();
         }
 
         final Label curInstrLabel = getCurInstrLabel();
@@ -2422,7 +2435,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_goto(int address) {
         if (countBytecode) {
-            counters.getCounter("goto").inc();
+            getCounters().getCounter("goto").inc();
         }
         vstack.push(eContext);
         os.writeJMP(helper.getInstrLabel(address));
@@ -2433,18 +2446,18 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_i2b() {
         if (countBytecode) {
-            counters.getCounter("i2b").inc();
+            getCounters().getCounter("i2b").inc();
         }
 
         final IntItem v = vstack.popInt();
         if (v.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("i2b-const").inc();
+                getCounters().getCounter("i2b-const").inc();
             }
             vstack.push(ifac.createIConst(eContext, (byte) v.getValue()));
         } else {
             if (countConstOps) {
-                counters.getCounter("i2b-nonconst").inc();
+                getCounters().getCounter("i2b-nonconst").inc();
             }
             v.loadToBITS8GPR(eContext);
             final GPR r = v.getRegister();
@@ -2458,18 +2471,18 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_i2c() {
         if (countBytecode) {
-            counters.getCounter("i2c").inc();
+            getCounters().getCounter("i2c").inc();
         }
 
         final IntItem v = vstack.popInt();
         if (v.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("i2c-const").inc();
+                getCounters().getCounter("i2c-const").inc();
             }
             vstack.push(ifac.createIConst(eContext, (char) v.getValue()));
         } else {
             if (countBytecode) {
-                counters.getCounter("i2c-nonconst").inc();
+                getCounters().getCounter("i2c-nonconst").inc();
             }
             v.load(eContext);
             final GPR r = v.getRegister();
@@ -2483,7 +2496,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_i2d() {
         if (countBytecode) {
-            counters.getCounter("i2d").inc();
+            getCounters().getCounter("i2d").inc();
         }
         fpCompiler.convert(JvmType.INT, JvmType.DOUBLE);
     }
@@ -2493,7 +2506,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_i2f() {
         if (countBytecode) {
-            counters.getCounter("i2f").inc();
+            getCounters().getCounter("i2f").inc();
         }
         fpCompiler.convert(JvmType.INT, JvmType.FLOAT);
     }
@@ -2503,7 +2516,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_i2l() {
         if (countBytecode) {
-            counters.getCounter("i2l").inc();
+            getCounters().getCounter("i2l").inc();
         }
 
         final IntItem v = vstack.popInt();
@@ -2544,7 +2557,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_i2s() {
         if (countBytecode) {
-            counters.getCounter("i2s").inc();
+            getCounters().getCounter("i2s").inc();
         }
         final IntItem v = vstack.popInt();
         if (v.isConstant()) {
@@ -2562,7 +2575,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_iadd() {
         if (countBytecode) {
-            counters.getCounter("iadd").inc();
+            getCounters().getCounter("iadd").inc();
         }
         ioperation(X86Operation.ADD, true);
     }
@@ -2572,7 +2585,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_iaload() {
         if (countBytecode) {
-            counters.getCounter("iaload").inc();
+            getCounters().getCounter("iaload").inc();
         }
         waload(JvmType.INT);
     }
@@ -2582,7 +2595,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_iand() {
         if (countBytecode) {
-            counters.getCounter("iand").inc();
+            getCounters().getCounter("iand").inc();
         }
         ioperation(X86Operation.AND, true);
     }
@@ -2592,7 +2605,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_iastore() {
         if (countBytecode) {
-            counters.getCounter("iastore").inc();
+            getCounters().getCounter("iastore").inc();
         }
         wastore(JvmType.INT);
     }
@@ -2603,7 +2616,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_iconst(int value) {
         if (countBytecode) {
-            counters.getCounter("iconst").inc();
+            getCounters().getCounter("iconst").inc();
         }
         vstack.push(ifac.createIConst(eContext, value));
     }
@@ -2620,14 +2633,14 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
         final IntItem v1 = vstack.popInt();
 
         if (countBytecode) {
-            counters.getCounter("idiv").inc();
+            getCounters().getCounter("idiv").inc();
         }
 
         final int shift;
         if (v1.isConstant() && v2.isConstant()) {
 
             if (countConstOps) {
-                counters.getCounter("idiv-const").inc();
+                getCounters().getCounter("idiv-const").inc();
             }
 
             vstack.push(ifac.createIConst(eContext, v1.getValue() / v2.getValue()));
@@ -2639,7 +2652,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
             // CHECK: check again if that is correct
 
             if (countConstOps) {
-                counters.getCounter("NEWidiv-const+/-1").inc();
+                getCounters().getCounter("NEWidiv-const+/-1").inc();
             }
 
             if (v2.getValue() < 0) {
@@ -2661,11 +2674,11 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
             // CHECK: check again if that is correct
             if (v2.getValue() < 0) {
                 if (countConstOps) {
-                    counters.getCounter("NEWidiv-const-shift<0").inc();
+                    getCounters().getCounter("NEWidiv-const-shift<0").inc();
                 }
             } else {
                 if (countConstOps) {
-                    counters.getCounter("idiv-const-shift>0").inc();
+                    getCounters().getCounter("idiv-const-shift>0").inc();
                 }
             }
 
@@ -2687,7 +2700,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
         } else {
 
             if (countConstOps) {
-                counters.getCounter("idiv-nonconst").inc();
+                getCounters().getCounter("idiv-nonconst").inc();
             }
 
             // We need v1 in EAX, so if that is not the case,
@@ -2727,7 +2740,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     private final void visit_if_acmp(int address, int jccOpcode) {
 
         if (countConstOps) {
-            counters.getCounter("if_acmp").inc();
+            getCounters().getCounter("if_acmp").inc();
         }
 
         RefItem v2 = vstack.popRef();
@@ -2736,14 +2749,14 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
         if (v1.isConstant() && v2.isConstant()) {
 
             if (countConstOps) {
-                counters.getCounter("TODOif_acmp-const").inc();
+                getCounters().getCounter("TODOif_acmp-const").inc();
             }
             // TODO implement constant acmp
 
         } else {
 
             if (countConstOps) {
-                counters.getCounter("if_acmp-nonconst").inc();
+                getCounters().getCounter("if_acmp-nonconst").inc();
             }
 
         }
@@ -2784,7 +2797,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_if_acmpeq(int address) {
         if (countBytecode) {
-            counters.getCounter("if_acmpeq").inc();
+            getCounters().getCounter("if_acmpeq").inc();
         }
         visit_if_acmp(address, X86Constants.JE); // JE
     }
@@ -2795,7 +2808,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_if_acmpne(int address) {
         if (countBytecode) {
-            counters.getCounter("if_acmpne").inc();
+            getCounters().getCounter("if_acmpne").inc();
         }
         visit_if_acmp(address, X86Constants.JNE); // JNE
     }
@@ -2809,7 +2822,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     private final void visit_if_icmp(int address, int jccOpcode) {
 
         if (countConstOps) {
-            counters.getCounter("if_icmp").inc();
+            getCounters().getCounter("if_icmp").inc();
         }
 
         IntItem v2 = vstack.popInt();
@@ -2819,14 +2832,14 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
         if (v1.isConstant() && v2.isConstant()) {
 
             if (countConstOps) {
-                counters.getCounter("TODOif_icmp-const").inc();
+                getCounters().getCounter("TODOif_icmp-const").inc();
             }
             // TODO implement constant if_icmp
 
         } else if (v1.isConstant() || v2.isConstant()) {
 
             if (countConstOps) {
-                counters.getCounter("TODOif_icmp-ONEonst-CheckSpecialCases").inc();
+                getCounters().getCounter("TODOif_icmp-ONEonst-CheckSpecialCases").inc();
             }
         }
 
@@ -2867,7 +2880,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_if_icmpeq(int address) {
         if (countBytecode) {
-            counters.getCounter("if_icmpeq").inc();
+            getCounters().getCounter("if_icmpeq").inc();
         }
         visit_if_icmp(address, X86Constants.JE); // JE
     }
@@ -2878,7 +2891,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_if_icmpge(int address) {
         if (countBytecode) {
-            counters.getCounter("if_icmpge").inc();
+            getCounters().getCounter("if_icmpge").inc();
         }
         visit_if_icmp(address, X86Constants.JGE); // JGE
     }
@@ -2889,7 +2902,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_if_icmpgt(int address) {
         if (countBytecode) {
-            counters.getCounter("if_icmpgt").inc();
+            getCounters().getCounter("if_icmpgt").inc();
         }
         visit_if_icmp(address, X86Constants.JG); // JG
     }
@@ -2900,7 +2913,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_if_icmple(int address) {
         if (countBytecode) {
-            counters.getCounter("if_icmple").inc();
+            getCounters().getCounter("if_icmple").inc();
         }
         visit_if_icmp(address, X86Constants.JLE); // JLE
     }
@@ -2911,7 +2924,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_if_icmplt(int address) {
         if (countBytecode) {
-            counters.getCounter("if_icmplt").inc();
+            getCounters().getCounter("if_icmplt").inc();
         }
         visit_if_icmp(address, X86Constants.JL); // JL
     }
@@ -2922,7 +2935,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_if_icmpne(int address) {
         if (countBytecode) {
-            counters.getCounter("if_icmpne").inc();
+            getCounters().getCounter("if_icmpne").inc();
         }
         visit_if_icmp(address, X86Constants.JNE); // JNE
     }
@@ -2933,7 +2946,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ifeq(int address) {
         if (countBytecode) {
-            counters.getCounter("ifeq").inc();
+            getCounters().getCounter("ifeq").inc();
         }
         visit_ifxx(JvmType.INT, address, X86Constants.JE); // JE
     }
@@ -2944,7 +2957,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ifge(int address) {
         if (countBytecode) {
-            counters.getCounter("ifge").inc();
+            getCounters().getCounter("ifge").inc();
         }
         visit_ifxx(JvmType.INT, address, X86Constants.JGE); // JGE
     }
@@ -2955,7 +2968,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ifgt(int address) {
         if (countBytecode) {
-            counters.getCounter("ifgt").inc();
+            getCounters().getCounter("ifgt").inc();
         }
         visit_ifxx(JvmType.INT, address, X86Constants.JG); // JG
     }
@@ -2966,7 +2979,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ifle(int address) {
         if (countBytecode) {
-            counters.getCounter("ifle").inc();
+            getCounters().getCounter("ifle").inc();
         }
         visit_ifxx(JvmType.INT, address, X86Constants.JLE); // JLE
     }
@@ -2977,7 +2990,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_iflt(int address) {
         if (countBytecode) {
-            counters.getCounter("iflt").inc();
+            getCounters().getCounter("iflt").inc();
         }
         visit_ifxx(JvmType.INT, address, X86Constants.JL); // JL
     }
@@ -2988,7 +3001,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ifne(int address) {
         if (countBytecode) {
-            counters.getCounter("ifne").inc();
+            getCounters().getCounter("ifne").inc();
         }
         visit_ifxx(JvmType.INT, address, X86Constants.JNE); // JNE
     }
@@ -2999,7 +3012,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ifnonnull(int address) {
         if (countBytecode) {
-            counters.getCounter("ifnonnull").inc();
+            getCounters().getCounter("ifnonnull").inc();
         }
         visit_ifxx(JvmType.REFERENCE, address, X86Constants.JNE);
     }
@@ -3010,7 +3023,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ifnull(int address) {
         if (countBytecode) {
-            counters.getCounter("ifnull").inc();
+            getCounters().getCounter("ifnull").inc();
         }
         visit_ifxx(JvmType.REFERENCE, address, X86Constants.JE);
     }
@@ -3071,7 +3084,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_iinc(int index, int incValue) {
         if (countBytecode) {
-            counters.getCounter("iinc").inc();
+            getCounters().getCounter("iinc").inc();
         }
 
         final int ebpOfs = stackFrame.getEbpOffset(typeSizeInfo, index);
@@ -3095,7 +3108,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_iload(int index) {
         if (countBytecode) {
-            counters.getCounter("iload").inc();
+            getCounters().getCounter("iload").inc();
         }
         wload(JvmType.INT, index, false);
     }
@@ -3105,7 +3118,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public void visit_iloadStored(int index) {
         if (countBytecode) {
-            counters.getCounter("iloadStored").inc();
+            getCounters().getCounter("iloadStored").inc();
         }
         wload(JvmType.INT, index, true);
     }
@@ -3153,12 +3166,12 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
         IntItem v1 = vstack.popInt();
 
         if (countBytecode) {
-            counters.getCounter("imul").inc();
+            getCounters().getCounter("imul").inc();
         }
 
         if (v2.isConstant() && v1.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("imul-const").inc();
+                getCounters().getCounter("imul-const").inc();
             }
             vstack.push(ifac.createIConst(eContext, v1.getValue() * v2.getValue()));
             v1.release(eContext);
@@ -3176,7 +3189,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
             switch (v2.getKind()) {
                 case Item.Kind.GPR:
                     if (countConstOps) {
-                        counters.getCounter("imul-nonconst").inc();
+                        getCounters().getCounter("imul-nonconst").inc();
                     }
                     os.writeIMUL(r1, v2.getRegister());
                     break;
@@ -3185,7 +3198,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                     if (val == 0) {
 
                         if (countConstOps) {
-                            counters.getCounter("NEWimul-const0").inc();
+                            getCounters().getCounter("NEWimul-const0").inc();
                         }
 
                         // CHECK: check again if this is correct
@@ -3201,19 +3214,19 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
 
                     } else if (val == 1) {
                         if (countConstOps) {
-                            counters.getCounter("imul-const1").inc();
+                            getCounters().getCounter("imul-const1").inc();
                         }
                         // Do nothing
                     } else if (val == -1) {
                         if (countConstOps) {
-                            counters.getCounter("imul-const~1").inc();
+                            getCounters().getCounter("imul-const~1").inc();
                         }
                         os.writeNEG(r1); // * -1
                     } else {
                         final int shift = getShiftForMultiplier(Math.abs(val));
                         if (shift > 0) {
                             if (countConstOps) {
-                                counters.getCounter("imul-constShift").inc();
+                                getCounters().getCounter("imul-constShift").inc();
                             }
                             // abs(val) is multiple of 2 && val=2^shift where shift
                             // <=
@@ -3224,7 +3237,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                             }
                         } else {
                             if (countConstOps) {
-                                counters.getCounter("imul-nonconst").inc();
+                                getCounters().getCounter("imul-nonconst").inc();
                             }
                             os.writeIMUL_3(r1, r1, val);
                         }
@@ -3232,7 +3245,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                     break;
                 case Item.Kind.LOCAL:
                     if (countConstOps) {
-                        counters.getCounter("imul-nonconst").inc();
+                        getCounters().getCounter("imul-nonconst").inc();
                     }
                     os.writeIMUL(r1, helper.BP, v2.getOffsetToFP(eContext));
                     break;
@@ -3247,18 +3260,18 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ineg() {
         if (countBytecode) {
-            counters.getCounter("ineg").inc();
+            getCounters().getCounter("ineg").inc();
         }
         final IntItem val = vstack.popInt();
         val.loadIf(eContext, ~Item.Kind.CONSTANT);
         if (val.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("ineg-const").inc();
+                getCounters().getCounter("ineg-const").inc();
             }
             vstack.push(ifac.createIConst(eContext, -val.getValue()));
         } else {
             if (countConstOps) {
-                counters.getCounter("ineg-nonconst").inc();
+                getCounters().getCounter("ineg-nonconst").inc();
             }
             os.writeNEG(val.getRegister());
             vstack.push(val);
@@ -3303,7 +3316,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_instanceof(VmConstClass classRef) {
         if (countBytecode) {
-            counters.getCounter("instanceof").inc();
+            getCounters().getCounter("instanceof").inc();
         }
 
         // Resolve the classRef
@@ -3399,7 +3412,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                                             int count) {
 
         if (countBytecode) {
-            counters.getCounter("invokeinterface").inc();
+            getCounters().getCounter("invokeinterface").inc();
         }
 
         vstack.push(eContext);
@@ -3433,7 +3446,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_invokespecial(VmConstMethodRef methodRef) {
 
         if (countBytecode) {
-            counters.getCounter("invokespecial").inc();
+            getCounters().getCounter("invokespecial").inc();
         }
 
         // Flush the stack before an invoke
@@ -3461,7 +3474,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_invokestatic(VmConstMethodRef methodRef) {
         if (countBytecode) {
-            counters.getCounter("invokestatic").inc();
+            getCounters().getCounter("invokestatic").inc();
         }
 
         methodRef.resolve(loader);
@@ -3488,7 +3501,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_invokevirtual(VmConstMethodRef methodRef) {
         if (countBytecode) {
-            counters.getCounter("invokevirtual").inc();
+            getCounters().getCounter("invokevirtual").inc();
         }
 
         methodRef.resolve(loader);
@@ -3512,7 +3525,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
             if (method.isFinal() || method.isPrivate() || declClass.isFinal()) {
                 // Do a fast invocation
                 if (countBytecode) {
-                    counters.getCounter("invokevirtual-final").inc();
+                    getCounters().getCounter("invokevirtual-final").inc();
                 }
 
                 // Call the methods native code from the statics table
@@ -3521,7 +3534,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
             } else {
                 // Do a virtual method table invocation
                 if (countBytecode) {
-                    counters.getCounter("invokevirtual-vmt").inc();
+                    getCounters().getCounter("invokevirtual-vmt").inc();
                 }
 
                 final int tibIndex = method.getTibOffset();
@@ -3553,7 +3566,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ior() {
         if (countBytecode) {
-            counters.getCounter("ior").inc();
+            getCounters().getCounter("ior").inc();
         }
         ioperation(X86Operation.OR, true);
     }
@@ -3563,7 +3576,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_irem() {
         if (countBytecode) {
-            counters.getCounter("irem").inc();
+            getCounters().getCounter("irem").inc();
         }
 
         // Pre-claim result in EDX
@@ -3577,12 +3590,12 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
 
         if (v1.isConstant() && v2.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("TODOirem-const").inc();
+                getCounters().getCounter("TODOirem-const").inc();
             }
         } else if (v2.isConstant()) {
             // TODO check for 2^n and use AND 0xFF instead of irem
             if (countBytecode) {
-                counters.getCounter("TODOirem-SECONDconst" + v2.getValue()).inc();
+                getCounters().getCounter("TODOirem-SECONDconst" + v2.getValue()).inc();
             }
         }
 
@@ -3614,7 +3627,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ireturn() {
         if (countBytecode) {
-            counters.getCounter("ireturn").inc();
+            getCounters().getCounter("ireturn").inc();
         }
         wreturn(JvmType.INT, true);
     }
@@ -3624,7 +3637,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ishl() {
         if (countBytecode) {
-            counters.getCounter("ishl").inc();
+            getCounters().getCounter("ishl").inc();
         }
         ishift(X86Operation.SAL);
     }
@@ -3634,7 +3647,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ishr() {
         if (countBytecode) {
-            counters.getCounter("ishr").inc();
+            getCounters().getCounter("ishr").inc();
         }
         ishift(X86Operation.SAR);
     }
@@ -3645,7 +3658,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_istore(int index) {
         if (countBytecode) {
-            counters.getCounter("istore").inc();
+            getCounters().getCounter("istore").inc();
         }
         wstore(JvmType.INT, index);
     }
@@ -3655,7 +3668,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_isub() {
         if (countBytecode) {
-            counters.getCounter("isub").inc();
+            getCounters().getCounter("isub").inc();
         }
         ioperation(X86Operation.SUB, false);
     }
@@ -3665,7 +3678,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_iushr() {
         if (countBytecode) {
-            counters.getCounter("iushr").inc();
+            getCounters().getCounter("iushr").inc();
         }
         ishift(X86Operation.SHR);
     }
@@ -3675,7 +3688,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ixor() {
         if (countBytecode) {
-            counters.getCounter("ixor").inc();
+            getCounters().getCounter("ixor").inc();
         }
         ioperation(X86Operation.XOR, true);
     }
@@ -3686,7 +3699,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_jsr(int address) {
         if (countBytecode) {
-            counters.getCounter("jsr").inc();
+            getCounters().getCounter("jsr").inc();
         }
         os.writeCALL(helper.getInstrLabel(address));
     }
@@ -3696,7 +3709,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_l2d() {
         if (countBytecode) {
-            counters.getCounter("l2d").inc();
+            getCounters().getCounter("l2d").inc();
         }
         fpCompiler.convert(JvmType.LONG, JvmType.DOUBLE);
     }
@@ -3706,7 +3719,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_l2f() {
         if (countBytecode) {
-            counters.getCounter("l2f").inc();
+            getCounters().getCounter("l2f").inc();
         }
         fpCompiler.convert(JvmType.LONG, JvmType.FLOAT);
     }
@@ -3716,18 +3729,18 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_l2i() {
         if (countBytecode) {
-            counters.getCounter("l2i").inc();
+            getCounters().getCounter("l2i").inc();
         }
 
         final LongItem v = vstack.popLong();
         if (v.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("l2i-const").inc();
+                getCounters().getCounter("l2i-const").inc();
             }
             vstack.push(ifac.createIConst(eContext, (int) v.getValue()));
         } else {
             if (countConstOps) {
-                counters.getCounter("l2i-nonconst").inc();
+                getCounters().getCounter("l2i-nonconst").inc();
             }
             final X86RegisterPool pool = eContext.getGPRPool();
             final IntItem result;
@@ -3756,7 +3769,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ladd() {
         if (countBytecode) {
-            counters.getCounter("ladd").inc();
+            getCounters().getCounter("ladd").inc();
         }
         loperation(X86Operation.ADD, X86Operation.ADC, true);
     }
@@ -3766,7 +3779,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_laload() {
         if (countBytecode) {
-            counters.getCounter("laload").inc();
+            getCounters().getCounter("laload").inc();
         }
 
         final IntItem idx = vstack.popInt();
@@ -3810,7 +3823,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_land() {
         if (countBytecode) {
-            counters.getCounter("land").inc();
+            getCounters().getCounter("land").inc();
         }
         loperation(X86Operation.AND, X86Operation.AND, true);
     }
@@ -3820,7 +3833,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lastore() {
         if (countBytecode) {
-            counters.getCounter("lastore").inc();
+            getCounters().getCounter("lastore").inc();
         }
         dwastore(JvmType.LONG);
     }
@@ -3831,7 +3844,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_lcmp() {
 
         if (countBytecode) {
-            counters.getCounter("lcmp").inc();
+            getCounters().getCounter("lcmp").inc();
         }
 
         final LongItem v2 = vstack.popLong();
@@ -3839,11 +3852,11 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
 
         if (v1.isConstant() && v2.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("TODOlcmp-const").inc();
+                getCounters().getCounter("TODOlcmp-const").inc();
             }
         } else if (v1.isConstant() || v2.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("TODOlcmp-ONEconst-checkSpecialCases").inc();
+                getCounters().getCounter("TODOlcmp-ONEconst-checkSpecialCases").inc();
             }
         }
 
@@ -3900,7 +3913,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lconst(long v) {
         if (countBytecode) {
-            counters.getCounter("lconst").inc();
+            getCounters().getCounter("lconst").inc();
         }
         vstack.push(ifac.createLConst(eContext, v));
     }
@@ -3912,7 +3925,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_ldc(VmConstClass classRef) {
 
         if (countBytecode) {
-            counters.getCounter("ldc-class").inc();
+            getCounters().getCounter("ldc-class").inc();
         }
 
         // Push all, since we're going to call other methods
@@ -3943,7 +3956,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_ldc(VmType<?> value) {
 
         if (countBytecode) {
-            counters.getCounter("ldc-vmtype").inc();
+            getCounters().getCounter("ldc-vmtype").inc();
         }
 
         final WordItem item = L1AHelper.requestWordRegister(eContext, JvmType.REFERENCE, false);
@@ -3965,7 +3978,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ldc(VmConstString value) {
         if (countBytecode) {
-            counters.getCounter("ldc-conststring").inc();
+            getCounters().getCounter("ldc-conststring").inc();
         }
         vstack.push(ifac.createAConst(eContext, value));
     }
@@ -3975,7 +3988,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ldiv() {
         if (countBytecode) {
-            counters.getCounter("ldiv").inc();
+            getCounters().getCounter("ldiv").inc();
         }
 
         if (os.isCode32()) {
@@ -3986,9 +3999,9 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
 
             if (countConstOps) {
                 if (v1.isConstant() && v2.isConstant()) {
-                    counters.getCounter("TODOldiv-const").inc();
+                    getCounters().getCounter("TODOldiv-const").inc();
                 } else if (v2.isConstant() && (getShiftForMultiplier(Math.abs(v2.getValue())) > 0)) {
-                    counters.getCounter("TODOldiv-const-shift").inc();
+                    getCounters().getCounter("TODOldiv-const-shift").inc();
                 }
             }
 
@@ -4034,7 +4047,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lload(int index) {
         if (countBytecode) {
-            counters.getCounter("lload").inc();
+            getCounters().getCounter("lload").inc();
         }
         vstack.push(ifac.createLocal(JvmType.LONG, stackFrame
             .getWideEbpOffset(typeSizeInfo, index)));
@@ -4045,7 +4058,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lmul() {
         if (countBytecode) {
-            counters.getCounter("lmul").inc();
+            getCounters().getCounter("lmul").inc();
         }
 
         if (os.isCode32()) {
@@ -4058,11 +4071,11 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
 
             if (countConstOps) {
                 if (v1.isConstant() && v2.isConstant()) {
-                    counters.getCounter("TODOlmul-const").inc();
+                    getCounters().getCounter("TODOlmul-const").inc();
                 } else if (v1.isConstant() && (getShiftForMultiplier(Math.abs(v1.getValue())) > 0)) {
-                    counters.getCounter("TODOlmul-const1-shift").inc();
+                    getCounters().getCounter("TODOlmul-const1-shift").inc();
                 } else if (v2.isConstant() && (getShiftForMultiplier(Math.abs(v2.getValue())) > 0)) {
-                    counters.getCounter("TODOlmul-const2-shift").inc();
+                    getCounters().getCounter("TODOlmul-const2-shift").inc();
                 }
             }
 
@@ -4129,19 +4142,19 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lneg() {
         if (countBytecode) {
-            counters.getCounter("lneg").inc();
+            getCounters().getCounter("lneg").inc();
         }
 
         final LongItem v = vstack.popLong();
 
         if (v.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("lneg-const").inc();
+                getCounters().getCounter("lneg-const").inc();
             }
             vstack.push(ifac.createLConst(eContext, -v.getValue()));
         } else {
             if (countConstOps) {
-                counters.getCounter("lneg-nonconst").inc();
+                getCounters().getCounter("lneg-nonconst").inc();
             }
             // Load val
             v.load(eContext);
@@ -4175,7 +4188,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                                          int[] addresses) {
 
         if (countBytecode) {
-            counters.getCounter("lookupswitch").inc();
+            getCounters().getCounter("lookupswitch").inc();
         }
 
         final int n = matchValues.length;
@@ -4201,7 +4214,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lor() {
         if (countBytecode) {
-            counters.getCounter("lor").inc();
+            getCounters().getCounter("lor").inc();
         }
         loperation(X86Operation.OR, X86Operation.OR, true);
     }
@@ -4212,7 +4225,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_lrem() {
 
         if (countBytecode) {
-            counters.getCounter("lrem").inc();
+            getCounters().getCounter("lrem").inc();
         }
 
         if (os.isCode32()) {
@@ -4263,7 +4276,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lreturn() {
         if (countBytecode) {
-            counters.getCounter("lreturn").inc();
+            getCounters().getCounter("lreturn").inc();
         }
         dwreturn(JvmType.LONG, true);
     }
@@ -4273,7 +4286,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lshl() {
         if (countBytecode) {
-            counters.getCounter("lshl").inc();
+            getCounters().getCounter("lshl").inc();
         }
 
         final GPR ECX = X86Register.ECX;
@@ -4283,7 +4296,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
 
         if (cnt.isConstant() && val.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("TODOlshl-const").inc();
+                getCounters().getCounter("TODOlshl-const").inc();
             }
         }
 
@@ -4329,7 +4342,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lshr() {
         if (countBytecode) {
-            counters.getCounter("lshr").inc();
+            getCounters().getCounter("lshr").inc();
         }
 
         final GPR ECX = X86Register.ECX;
@@ -4339,7 +4352,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
 
         if (cnt.isConstant() && val.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("TODOlshr-const").inc();
+                getCounters().getCounter("TODOlshr-const").inc();
             }
         }
 
@@ -4391,7 +4404,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lstore(int index) {
         if (countBytecode) {
-            counters.getCounter("lstore").inc();
+            getCounters().getCounter("lstore").inc();
         }
         dwstore(JvmType.LONG, index);
     }
@@ -4401,7 +4414,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lsub() {
         if (countBytecode) {
-            counters.getCounter("lsub").inc();
+            getCounters().getCounter("lsub").inc();
         }
         loperation(X86Operation.SUB, X86Operation.SBB, false);
     }
@@ -4411,7 +4424,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lushr() {
         if (countBytecode) {
-            counters.getCounter("lushr").inc();
+            getCounters().getCounter("lushr").inc();
         }
         final GPR ECX = X86Register.ECX;
 
@@ -4420,7 +4433,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
 
         if (cnt.isConstant() && val.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("TODOlushr-const").inc();
+                getCounters().getCounter("TODOlushr-const").inc();
             }
         }
 
@@ -4472,7 +4485,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_lxor() {
         if (countBytecode) {
-            counters.getCounter("lxor").inc();
+            getCounters().getCounter("lxor").inc();
         }
         loperation(X86Operation.XOR, X86Operation.XOR, true);
     }
@@ -4482,7 +4495,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_monitorenter() {
         if (countBytecode) {
-            counters.getCounter("monitorenter").inc();
+            getCounters().getCounter("monitorenter").inc();
         }
 
         vstack.push(eContext);
@@ -4499,7 +4512,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_monitorexit() {
 
         if (countBytecode) {
-            counters.getCounter("monitorexit").inc();
+            getCounters().getCounter("monitorexit").inc();
         }
 
         vstack.push(eContext);
@@ -4519,7 +4532,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_multianewarray(VmConstClass clazz, int dimensions) {
 
         if (countBytecode) {
-            counters.getCounter("multianewarray").inc();
+            getCounters().getCounter("multianewarray").inc();
         }
 
         // flush all vstack items to the stack
@@ -4571,7 +4584,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_new(VmConstClass classRef) {
 
         if (countBytecode) {
-            counters.getCounter("new").inc();
+            getCounters().getCounter("new").inc();
         }
 
         // Push all
@@ -4599,7 +4612,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_newarray(int type) {
 
         if (countBytecode) {
-            counters.getCounter("newarray").inc();
+            getCounters().getCounter("newarray").inc();
         }
 
         // Load count
@@ -4624,7 +4637,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_nop() {
         if (countBytecode) {
-            counters.getCounter("nop").inc();
+            getCounters().getCounter("nop").inc();
         }
         // Nothing
         os.writeNOP();
@@ -4635,7 +4648,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_pop() {
         if (countBytecode) {
-            counters.getCounter("pop").inc();
+            getCounters().getCounter("pop").inc();
         }
         generic_pop(helper.SLOTSIZE);
     }
@@ -4645,7 +4658,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_pop2() {
         if (countBytecode) {
-            counters.getCounter("pop2").inc();
+            getCounters().getCounter("pop2").inc();
         }
         generic_pop(helper.SLOTSIZE * 2);
     }
@@ -4657,7 +4670,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_putfield(VmConstFieldRef fieldRef) {
 
         if (countBytecode) {
-            counters.getCounter("putfield").inc();
+            getCounters().getCounter("putfield").inc();
         }
 
         fieldRef.resolve(loader);
@@ -4737,7 +4750,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_putstatic(VmConstFieldRef fieldRef) {
 
         if (countBytecode) {
-            counters.getCounter("putstatic").inc();
+            getCounters().getCounter("putstatic").inc();
         }
 
         final Label curInstrLabel = getCurInstrLabel();
@@ -4829,7 +4842,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_ret(int index) {
         if (countBytecode) {
-            counters.getCounter("ret").inc();
+            getCounters().getCounter("ret").inc();
         }
 
         // Calc EBP offset
@@ -4844,7 +4857,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_return() {
         if (countBytecode) {
-            counters.getCounter("return").inc();
+            getCounters().getCounter("return").inc();
         }
 
         // Discard vstack first
@@ -4869,7 +4882,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_saload() {
         if (countBytecode) {
-            counters.getCounter("saload").inc();
+            getCounters().getCounter("saload").inc();
         }
         waload(JvmType.SHORT);
     }
@@ -4879,7 +4892,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
      */
     public final void visit_sastore() {
         if (countBytecode) {
-            counters.getCounter("sastore").inc();
+            getCounters().getCounter("sastore").inc();
         }
         wastore(JvmType.SHORT);
     }
@@ -4890,7 +4903,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
     public final void visit_swap() {
 
         if (countBytecode) {
-            counters.getCounter("swap").inc();
+            getCounters().getCounter("swap").inc();
         }
 
         final Item v1 = vstack.pop();
@@ -4922,7 +4935,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
                                         int highValue, int[] addresses) {
 
         if (countBytecode) {
-            counters.getCounter("tableswitch").inc();
+            getCounters().getCounter("tableswitch").inc();
         }
 
         // IMPROVE: check Jaos implementation
@@ -4930,7 +4943,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
 
         if (val.isConstant()) {
             if (countConstOps) {
-                counters.getCounter("TODOtableswitch-constVal!!").inc();
+                getCounters().getCounter("TODOtableswitch-constVal!!").inc();
             }
         }
 
@@ -4943,7 +4956,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
             // Optimized version.  Needs some overhead, so only useful for
             // larger tables.
             if (countBytecode) {
-                counters.getCounter("tableswitch-opt").inc();
+                getCounters().getCounter("tableswitch-opt").inc();
             }
 
             final GPR tmp = (GPR) L1AHelper.requestRegister(eContext, JvmType.REFERENCE, false);
@@ -5009,7 +5022,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor implements
             // Space wasting, but simple implementation
 
             if (countBytecode) {
-                counters.getCounter("tableswitch-nonopt").inc();
+                getCounters().getCounter("tableswitch-nonopt").inc();
             }
             for (int i = 0; i < n; i++) {
                 os.writeCMP_Const(valr, lowValue + i);

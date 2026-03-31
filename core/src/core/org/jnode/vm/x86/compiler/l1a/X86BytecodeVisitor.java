@@ -243,9 +243,22 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
     private final VirtualStack vstack;
 
     /**
-     * My counters
+     * My counters (lazy initialized to avoid recursive JIT compilation)
      */
-    private final CounterGroup counters = VmUtils.getVm().getCounterGroup(getClass().getName());
+    private CounterGroup counters;
+
+    /**
+     * Gets the counters, initializing lazily to avoid recursive JIT compilation.
+     * The counters field cannot be initialized at field declaration time because
+     * getCounterGroup() uses TreeMap which requires String.compareTo(), which
+     * may trigger JIT compilation and cause infinite recursion.
+     */
+    private CounterGroup getCounters() {
+        if (counters == null) {
+            counters = VmUtils.getVm().getCounterGroup(getClass().getName());
+        }
+        return counters;
+    }
 
     /**
      * It is true while the compilation of a method is in progress.
@@ -328,7 +341,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
      * @param index
      */
     final void checkBounds(RefItem ref, IntItem index) {
-        counters.getCounter("checkbounds").inc();
+        getCounters().getCounter("checkbounds").inc();
         final Label curInstrLabel = getCurInstrLabel();
         final Label test = new Label(curInstrLabel + "$$cbtest");
         final Label failed = new Label(curInstrLabel + "$$cbfailed");
@@ -848,7 +861,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
         IntItem v1 = vstack.popInt();
 
         if (v2.isConstant() && v1.isConstant()) {
-            counters.getCounter("ioperation-const").inc();
+            getCounters().getCounter("ioperation-const").inc();
 
             final int v;
             switch (operation) {
@@ -874,7 +887,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
             v2.release(eContext);
             vstack.push(ifac.createIConst(eContext, v));
         } else {
-            counters.getCounter("ioperation-nonconst").inc();
+            getCounters().getCounter("ioperation-nonconst").inc();
 
             if (prepareForOperation(v1, v2, commutative)) {
                 // Swap
@@ -1226,7 +1239,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
      * @see org.jnode.vm.bytecode.BytecodeVisitor#visit_anewarray(org.jnode.vm.classmgr.VmConstClass)
      */
     public final void visit_anewarray(VmConstClass classRef) {
-        counters.getCounter("anewarray").inc();
+        getCounters().getCounter("anewarray").inc();
 
         // Push all, since we're going to call other methods
         vstack.push(eContext);
@@ -2175,14 +2188,14 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
         final int shift;
         if (v1.isConstant() && v2.isConstant()) {
             // Update counter
-            counters.getCounter("idiv-const").inc();
+            getCounters().getCounter("idiv-const").inc();
 
             vstack.push(ifac.createIConst(eContext, v1.getValue() / v2.getValue()));
             v1.release(eContext);
             v2.release(eContext);
         } else if (v2.isConstant() && ((shift = getShiftForMultiplier(v2.getValue())) > 0)) {
             // Update counter
-            counters.getCounter("idiv-const-shift").inc();
+            getCounters().getCounter("idiv-const-shift").inc();
 
             // Load v1
             v1.load(eContext);
@@ -2197,7 +2210,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
             vstack.push(v1);
         } else {
             // Update counter
-            counters.getCounter("idiv-nonconst").inc();
+            getCounters().getCounter("idiv-nonconst").inc();
 
             // We need v1 in EAX, so if that is not the case,
             // spill those item using EAX
@@ -2827,14 +2840,14 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
 
             if (method.isFinal() || method.isPrivate() || declClass.isFinal()) {
                 // Do a fast invocation
-                counters.getCounter("virtual-final").inc();
+                getCounters().getCounter("virtual-final").inc();
 
                 // Call the methods native code from the statics table
                 helper.invokeJavaMethod(method);
                 // Result is already on the stack.
             } else {
                 // Do a virtual method table invocation
-                counters.getCounter("virtual-vmt").inc();
+                getCounters().getCounter("virtual-vmt").inc();
 
                 final int tibIndex = method.getTibOffset();
                 final int argSlotCount = Signature.getArgSlotCount(typeSizeInfo, methodRef
@@ -3131,7 +3144,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
      * @see org.jnode.vm.bytecode.BytecodeVisitor#visit_ldc(VmConstClass)
      */
     public final void visit_ldc(VmConstClass classRef) {
-        counters.getCounter("ldc-class").inc();
+        getCounters().getCounter("ldc-class").inc();
         // Push all, since we're going to call other methods
         vstack.push(eContext);
 
@@ -3183,7 +3196,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
      */
     public final void visit_ldiv() {
         // Maintain counter
-        counters.getCounter("ldiv").inc();
+        getCounters().getCounter("ldiv").inc();
 
         if (os.isCode32()) {
             // TODO: port to ORP style (http://orp.sourceforge.net/)
@@ -3239,7 +3252,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
      */
     public final void visit_lmul() {
         // Maintain counter
-        counters.getCounter("lmul").inc();
+        getCounters().getCounter("lmul").inc();
 
         if (os.isCode32()) {
             final Label curInstrLabel = getCurInstrLabel();
@@ -3593,7 +3606,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
      * @see org.jnode.vm.bytecode.BytecodeVisitor#visit_monitorenter()
      */
     public final void visit_monitorenter() {
-        counters.getCounter("monitor-enter").inc();
+        getCounters().getCounter("monitor-enter").inc();
 
         vstack.push(eContext);
         final RefItem v = vstack.popRef();
@@ -3607,7 +3620,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
      * @see org.jnode.vm.bytecode.BytecodeVisitor#visit_monitorexit()
      */
     public final void visit_monitorexit() {
-        counters.getCounter("monitor-exit").inc();
+        getCounters().getCounter("monitor-exit").inc();
 
         vstack.push(eContext);
         final RefItem v = vstack.popRef();
@@ -3621,7 +3634,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
      * @see org.jnode.vm.bytecode.BytecodeVisitor#visit_multianewarray(VmConstClass, int)
      */
     public final void visit_multianewarray(VmConstClass clazz, int dimensions) {
-        counters.getCounter("multianewarray").inc();
+        getCounters().getCounter("multianewarray").inc();
 
         // flush all vstack items to the stack
         // all registers are freed
@@ -3669,7 +3682,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
      * @see org.jnode.vm.bytecode.BytecodeVisitor#visit_new(org.jnode.vm.classmgr.VmConstClass)
      */
     public final void visit_new(VmConstClass classRef) {
-        counters.getCounter("new").inc();
+        getCounters().getCounter("new").inc();
 
         // Push all
         vstack.push(eContext);
@@ -3693,7 +3706,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
      * @see org.jnode.vm.bytecode.BytecodeVisitor#visit_newarray(int)
      */
     public final void visit_newarray(int type) {
-        counters.getCounter("newarray").inc();
+        getCounters().getCounter("newarray").inc();
 
         // Load count
         final IntItem count = vstack.popInt();
@@ -3962,7 +3975,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
         if ((n > 4) && os.isCode32()) {
             // Optimized version.  Needs some overhead, so only useful for
             // larger tables.
-            counters.getCounter("tableswitch-opt").inc();
+            getCounters().getCounter("tableswitch-opt").inc();
 
             final GPR tmp = (GPR) L1AHelper.requestRegister(eContext, JvmType.REFERENCE, false);
             if (os.isCode64()) {
@@ -4026,7 +4039,7 @@ final class X86BytecodeVisitor extends InlineBytecodeVisitor {
         } else {
             // Space wasting, but simple implementation
 
-            counters.getCounter("tableswitch-nonopt").inc();
+            getCounters().getCounter("tableswitch-nonopt").inc();
             for (int i = 0; i < n; i++) {
                 os.writeCMP_Const(valr, lowValue + i);
                 os.writeJCC(helper.getInstrLabel(addresses[i]), X86Constants.JE); // JE
