@@ -165,7 +165,7 @@ public final class VmArrayClass<T> extends VmClassType<T> {
         return true;
     }
 
-    public final synchronized void incTotalLength(int len) {
+    public final void incTotalLength(int len) {
         this.totalLength += len;
         if (len > maxLength) {
             maxLength = len;

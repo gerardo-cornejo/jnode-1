@@ -35,6 +35,7 @@ import org.jnode.vm.classmgr.VmClassLoader;
 import org.jnode.vm.classmgr.VmMethod;
 import org.jnode.vm.classmgr.VmType;
 import org.jnode.vm.compiler.NativeCodeCompiler;
+import org.jnode.vm.scheduler.VmThread;
 
 /**
  * Service used to load classes and compile methods.
@@ -58,6 +59,12 @@ public final class LoadCompileService {
     private static boolean started = false;
 
     private static final int threadCount = 2; //4
+
+    /**
+     * Maximum depth of recursive JIT compilation per thread.
+     * Beyond this, compilation requests are enqueued instead of done recursively.
+     */
+    public static final int MAX_COMPILE_DEPTH = 3;
 
     /**
      * Default ctor
@@ -84,8 +91,33 @@ public final class LoadCompileService {
         }
 
         if ((!started) || (Thread.currentThread() instanceof LoadCompileThread)) {
-            // Compile now
-            service.doCompile(method, optLevel, enableTestCompilers);
+            // Check recursion depth on this thread
+            final VmThread vmThread = VmThread.currentThread();
+            final int depth = (vmThread != null) ? vmThread.compileDepth : 0;
+            
+            // If we're too deep in recursion, enqueue instead of compiling recursively
+            if (depth > MAX_COMPILE_DEPTH) {
+                // Enqueue for later compilation
+                if (started) {
+                    service.enqueAndWait(new CompileRequest(method, optLevel,
+                        enableTestCompilers));
+                }
+                // If not started, we can't enqueue - just skip
+                return;
+            }
+            
+            // Track depth
+            if (vmThread != null) {
+                vmThread.compileDepth++;
+            }
+            try {
+                // Compile now
+                service.doCompile(method, optLevel, enableTestCompilers);
+            } finally {
+                if (vmThread != null) {
+                    vmThread.compileDepth--;
+                }
+            }
         } else {
             // Put request in queue
             service.enqueAndWait(new CompileRequest(method, optLevel,

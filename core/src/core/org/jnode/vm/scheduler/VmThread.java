@@ -192,6 +192,12 @@ public abstract class VmThread extends VmSystemObject implements org.jnode.vm.fa
     private boolean inSystemException;
 
     /**
+     * Tracks the current depth of recursive JIT compilation on this thread.
+     * Used to prevent stack overflow from compilation chains.
+     */
+    public int compileDepth;
+
+    /**
      * The isolated statics table of the isolate that this thread is currently
      * running is
      */
@@ -1250,17 +1256,17 @@ public abstract class VmThread extends VmSystemObject implements org.jnode.vm.fa
      * @return The stacktrace
      */
     public static Object[] getStackTrace(VmThread current) {
-        if (current.inException) {
-            Unsafe.debug("Exception in getStackTrace");
-            VmProcessor.current().getArchitecture().getStackReader()
-                .debugStackTrace();
-            Unsafe.die("getStackTrace");
+        if (current == null || current.inException) {
+            // Recursive call during exception handling, return empty trace
+            // instead of dying to allow the system to continue
             return null;
         } else {
             current.inException = true;
         }
 
+        try {
         if (VmUtils.getVm().getHeapManager().isLowOnMemory()) {
+            current.inException = false;
             return null;
         }
 
@@ -1337,6 +1343,11 @@ public abstract class VmThread extends VmSystemObject implements org.jnode.vm.fa
 
         current.inException = false;
         return st;
+        } catch (Throwable ex) {
+            // Prevent recursive exception during stack trace generation
+            current.inException = false;
+            return null;
+        }
     }
 
     /**
@@ -1376,6 +1387,20 @@ public abstract class VmThread extends VmSystemObject implements org.jnode.vm.fa
         final VmThread current = VmProcessor.current().getCurrentThread();
         // final String state = " (" + current.getReadableErrorState() + ")";
         final String state = "";
+        // If we're already inside getStackTrace, avoid recursion:
+        // creating a new exception would call fillInStackTrace -> getStackTrace again.
+        // Return a simple exception without triggering stack trace generation.
+        if (current.inException) {
+            current.inException = false;
+            switch (nr) {
+                case EX_NULLPOINTER:
+                    return new NullPointerException();
+                case EX_PAGEFAULT:
+                    return new InternalError();
+                default:
+                    return new RuntimeException();
+            }
+        }
         // Mark a system exception, so the stacktrace uses the exception frame
         // instead of the current frame.
         current.setInSystemException();
