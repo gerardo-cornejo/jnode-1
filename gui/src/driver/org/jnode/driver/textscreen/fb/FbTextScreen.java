@@ -69,8 +69,6 @@ class FbTextScreen extends AbstractPcTextScreen {
         this.bufferedImage = bufferedImage;
         this.graphics = graphics;
         this.font = font;
-        
-        open();
     }
 
     public char getChar(int offset) {

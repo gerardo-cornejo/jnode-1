@@ -35,6 +35,7 @@ import org.jnode.driver.net.NetworkException;
 import org.jnode.naming.InitialNaming;
 import org.jnode.net.ProtocolAddressInfo;
 import org.jnode.net.ethernet.EthernetConstants;
+import org.jnode.net.ipv4.IPv4Address;
 import org.jnode.net.ipv4.config.IPv4ConfigurationService;
 import org.jnode.shell.AbstractCommand;
 import org.jnode.shell.syntax.Argument;
@@ -72,14 +73,23 @@ public class DhcpCommand extends AbstractCommand {
         // the IP address 127.0.0.1 is bound to the loopback network interface.  And if there isn't, JNode's
         // network layer is left in a state that will require a reboot to unjam it (AFAIK).  
         //
-        // So, check that loopback is correctly bound ...
+        // So, check that loopback is correctly bound, and configure it if needed ...
         Device loopback = (InitialNaming.lookup(DeviceManager.NAME)).getDevice("loopback");
         NetDeviceAPI api = loopback.getAPI(NetDeviceAPI.class);
         ProtocolAddressInfo info = api.getProtocolAddressInfo(EthernetConstants.ETH_P_IP);
         if (info == null || !info.contains(InetAddress.getByAddress(new byte[]{127, 0, 0, 1}))) {
-            PrintWriter err = getError().getPrintWriter();
-            err.format(err_loopback);
-            exit(1);
+            // Auto-configure loopback if needed
+            getOutput().getPrintWriter().println("Auto-configuring loopback interface to 127.0.0.1...");
+            final IPv4ConfigurationService cfg = InitialNaming.lookup(IPv4ConfigurationService.NAME);
+            cfg.configureDeviceStatic(loopback, 
+                new IPv4Address("127.0.0.1"), 
+                new IPv4Address("255.255.255.255"), 
+                false);
+            try {
+                Thread.sleep(1000); // Give it time to configure
+            } catch (InterruptedException ex) {
+                // Ignore
+            }
         }
 
         // Now it should be safe to do the DHCP configuration.

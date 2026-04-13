@@ -104,11 +104,24 @@ public class DHCPClient extends AbstractDHCPClient {
             throw new NetworkException(ex);
         }
         BOOTPHeader hdr = msg.getHeader();
+        
+        // Extract subnet mask from DHCP option 1, or use default class-based mask
+        IPv4Address subnetMask = null;
+        byte[] subnetMaskValue = msg.getOption(DHCPMessage.SUBNET_MASK_OPTION);
+        if (subnetMaskValue != null && subnetMaskValue.length == 4) {
+            subnetMask = new IPv4Address(subnetMaskValue, 0);
+            log.info("Got Subnet Mask        : " + subnetMask);
+        } else {
+            // Fall back to class-based default mask
+            subnetMask = new IPv4Address(hdr.getYourIPAddress()).getDefaultSubnetmask();
+            log.info("Using default Subnet Mask: " + subnetMask);
+        }
+        
         cfg.configureDeviceStatic(device, new IPv4Address(hdr
-                .getYourIPAddress()), null, false);
+                .getYourIPAddress()), subnetMask, false);
 
         final IPv4Address serverAddr = new IPv4Address(hdr.getServerIPAddress());
-        final IPv4Address networkAddress = serverAddr.and(serverAddr.getDefaultSubnetmask());
+        final IPv4Address networkAddress = serverAddr.and(subnetMask);
 
         if (hdr.getGatewayIPAddress().isAnyLocalAddress()) {
             cfg.addRoute(serverAddr, null, device, false);

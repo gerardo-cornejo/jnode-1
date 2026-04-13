@@ -66,7 +66,10 @@ public final class Main {
 
             Unsafe.debug("VmSystem.initialize\n");
             VmSystem.initialize();
-            
+
+            // Start core-level boot splash (direct framebuffer writes)
+            BootSplashRunner.start();
+
             // Load the plugins from the initjar
             BootLogInstance.get().info("Loading initjar plugins");
             final InitJarProcessor proc = new InitJarProcessor(VmSystem.getInitJar());

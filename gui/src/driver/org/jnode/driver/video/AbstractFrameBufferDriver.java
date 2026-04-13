@@ -81,11 +81,13 @@ public abstract class AbstractFrameBufferDriver extends Driver implements FrameB
             }
         }
         
-        owners.push(owner);        
-        
+        // Notify old owner BEFORE pushing new one, so old owner
+        // can safely call releaseOwnership() in its ownershipLost() handler
         if (oldOwner != null) {
             oldOwner.ownershipLost();
         }
+
+        owners.push(owner);
 
         // the owner doesn't need to be notified since the caller knows it
         // ...

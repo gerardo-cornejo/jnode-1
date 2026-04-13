@@ -1,3 +1,2 @@
 @echo off
-set QEMUDIR=c:\progra~1\qemu
-%QEMUDIR%\qemu.exe -monitor vc -m 400 -L %QEMUDIR%\bios -hda all\build\x86\jnodedisk.dat
+qemu-system-i386 -monitor vc -m 2048 -smp 2 -cdrom ./all/build/cdroms/jnode-x86.iso -boot d

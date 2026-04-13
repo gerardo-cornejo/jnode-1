@@ -1,5 +1,5 @@
 # GRUB Configuration
-default 0
+default 3
 timeout 5
 
 # ---------------------------
@@ -26,8 +26,9 @@ module /shell.jgz
 
 # ---------------------------
 title JNode (all plugins) (VESA mode)
+serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+vbematch 1280 800 32
 kernel /jnode32.gz mp=no fb
-vbematch 800 600 32
 module /full.jgz
 
 # ---------------------------

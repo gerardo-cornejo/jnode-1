@@ -4,7 +4,7 @@ if ("%JAVA_HOME%") == ("") GOTO ERROR1
 echo JAVA_HOME is set to "%JAVA_HOME%"
 
 if NOT EXIST "%JAVA_HOME%\bin\java.exe" GOTO ERROR2
-"%JAVA_HOME%\bin\java" -Xmx768M -Xms256M -jar core\lib\ant-launcher.jar -lib "%JAVA_HOME%\lib" -lib core\lib -f all\build.xml %*
+"%JAVA_HOME%\bin\java" -Xmx1512M -Xms512M -jar core\lib\ant-launcher.jar -lib "%JAVA_HOME%\lib" -lib core\lib -f all\build.xml -DskipJavadoc=true %*
 GOTO :END
 
 :ERROR1

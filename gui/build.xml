@@ -62,6 +62,12 @@
 	  <fileset dir="${my-src.dir}/font/org/jnode/font/bdf/">
 	    <include name="**/*.properties" />
 	  </fileset>	    
+    </copy>
+    <!-- copy image resources for boot splash -->
+    <copy todir="${my-classes.dir}/org/jnode/driver/textscreen/fb/">
+	  <fileset dir="${my-src.dir}/driver/org/jnode/driver/textscreen/fb/">
+	    <include name="**/*.gif" />
+	  </fileset>
     </copy>    	  	
   </target>
 

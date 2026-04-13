@@ -21,6 +21,7 @@
 package org.jnode.driver.console.textscreen;
 
 import java.awt.event.KeyEvent;
+import java.io.OutputStream;
 import java.io.PrintStream;
 
 import javax.naming.NamingException;
@@ -28,6 +29,7 @@ import javax.naming.NamingException;
 import org.jnode.driver.console.ConsoleException;
 import org.jnode.driver.console.ConsoleManager;
 import org.jnode.driver.console.TextConsole;
+import org.jnode.naming.BootSplashControl;
 import org.jnode.naming.InitialNaming;
 import org.jnode.plugin.Plugin;
 import org.jnode.plugin.PluginDescriptor;
@@ -64,9 +66,32 @@ public class TextScreenConsolePlugin extends Plugin {
                     ConsoleManager.CreateOptions.SCROLLABLE));
             first.setAcceleratorKeyCode(KeyEvent.VK_F1);
             mgr.focus(first);
-            System.setOut(new PrintStream(new WriterOutputStream(first.getOut(), false), true));
-            System.setErr(new PrintStream(new WriterOutputStream(first.getErr(), false), true));
-            System.out.println(VmSystem.getBootLog());
+
+            // Check if splash mode is active.  When it is, suppress ALL
+            // console output so the user never sees boot text -- only the
+            // graphical splash.  Output is restored by FbTextScreenManager
+            // or CommandShell when AWT takes over.
+            boolean splashActive = false;
+            try {
+                InitialNaming.lookup(BootSplashControl.class);
+                splashActive = true;
+            } catch (javax.naming.NamingException noBind) {
+                // no splash
+            }
+
+            if (splashActive) {
+                // Silent streams -- nothing reaches the VGA text screen
+                PrintStream silent = new PrintStream(new OutputStream() {
+                    public void write(int b) { }
+                    public void write(byte[] b, int off, int len) { }
+                });
+                System.setOut(silent);
+                System.setErr(silent);
+            } else {
+                System.setOut(new PrintStream(new WriterOutputStream(first.getOut(), false), true));
+                System.setErr(new PrintStream(new WriterOutputStream(first.getErr(), false), true));
+                System.out.println(VmSystem.getBootLog());
+            }
         } catch (ConsoleException ex) {
             throw new PluginException(ex);
         } catch (NamingException ex) {

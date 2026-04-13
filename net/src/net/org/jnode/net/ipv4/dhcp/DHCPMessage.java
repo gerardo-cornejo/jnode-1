@@ -60,6 +60,21 @@ public class DHCPMessage {
     /** IP address */
     public static final int DNS_OPTION = 6;
 
+    /** Boolean - Perform Router Discovery */
+    public static final int ROUTER_DISCOVERY_OPTION = 31;
+
+    /** Boolean - Static Route */
+    public static final int STATIC_ROUTE_OPTION = 33;
+
+    /** Boolean - Trailer Encapsulation */
+    public static final int TRAILER_ENCAPSULATION_OPTION = 34;
+
+    /** Boolean - Ethernet Encapsulation */
+    public static final int ETHERNET_ENCAPSULATION_OPTION = 36;
+
+    /** Boolean - TCP Keepalive */
+    public static final int TCP_KEEPALIVE_OPTION = 39;
+
     /** IP address */
     public static final int LOG_SERVER_OPTION = 7;
 

@@ -369,6 +369,43 @@ public class CommandShell implements Runnable, Shell, ConsoleListener {
             }
         });
 
+        // Auto-execute startawt after boot completes (silently)
+        if (bootShell) {
+            try {
+                // Wait up to 5 seconds for the splash to register.
+                // FbTextScreenPlugin runs in a separate thread, so it may
+                // not yet have created FbTextScreenManager.
+                org.jnode.naming.BootSplashControl splash = null;
+                for (int i = 0; i < 50 && splash == null; i++) {
+                    try {
+                        splash = org.jnode.naming.InitialNaming.lookup(
+                            org.jnode.naming.BootSplashControl.class);
+                    } catch (javax.naming.NamingException ne) {
+                        try { Thread.sleep(100); } catch (InterruptedException ie) { break; }
+                    }
+                }
+
+                // Pre-load AWT/Swing classes while the splash is still visible.
+                // This avoids the 1-2 second lag on first menu open after AWT starts.
+                warmUpAwt();
+
+                if (splash != null) {
+                    splash.stopSplash();
+                }
+                runCommand("startawt");
+            } catch (Throwable ex) {
+                // startawt failed, continue to shell
+            } finally {
+                // Unbind splash control so text console can start
+                try {
+                    org.jnode.naming.InitialNaming.unbind(
+                        org.jnode.naming.BootSplashControl.class);
+                } catch (Throwable t) {
+                    // ignore
+                }
+            }
+        }
+
         while (!isExited() && !VmSystem.isShuttingDown()) {
             CommandShellReader reader = null;
             try {
@@ -519,6 +556,53 @@ public class CommandShell implements Runnable, Shell, ConsoleListener {
     private void stackTrace(Throwable ex) {
         if (this.debugEnabled) {
             ex.printStackTrace(errPW);
+        }
+    }
+
+    /**
+     * Pre-load AWT and Swing classes into memory while the splash is
+     * still visible.  This forces the JVM to resolve the class hierarchy
+     * ahead of time so that the first menu open or button click is fast.
+     */
+    private static void warmUpAwt() {
+        try {
+            // Core AWT
+            Class.forName("java.awt.Toolkit");
+            Class.forName("java.awt.Graphics");
+            Class.forName("java.awt.Graphics2D");
+            Class.forName("java.awt.Color");
+            Class.forName("java.awt.Font");
+            Class.forName("java.awt.image.BufferedImage");
+            Class.forName("java.awt.event.ActionEvent");
+            Class.forName("java.awt.event.MouseEvent");
+            Class.forName("java.awt.event.KeyEvent");
+            Class.forName("java.awt.BorderLayout");
+            Class.forName("java.awt.FlowLayout");
+            Class.forName("java.awt.Dimension");
+            Class.forName("java.awt.Point");
+            Class.forName("java.awt.Rectangle");
+            // Swing core
+            Class.forName("javax.swing.JFrame");
+            Class.forName("javax.swing.JPanel");
+            Class.forName("javax.swing.JButton");
+            Class.forName("javax.swing.JLabel");
+            Class.forName("javax.swing.JPopupMenu");
+            Class.forName("javax.swing.JMenuItem");
+            Class.forName("javax.swing.JMenu");
+            Class.forName("javax.swing.JMenuBar");
+            Class.forName("javax.swing.JDesktopPane");
+            Class.forName("javax.swing.JInternalFrame");
+            Class.forName("javax.swing.JColorChooser");
+            Class.forName("javax.swing.JScrollPane");
+            Class.forName("javax.swing.JTextArea");
+            Class.forName("javax.swing.SwingUtilities");
+            Class.forName("javax.swing.UIManager");
+            Class.forName("javax.swing.DefaultDesktopManager");
+            Class.forName("javax.swing.plaf.metal.MetalLookAndFeel");
+            // ImageIO for desktop background
+            Class.forName("javax.imageio.ImageIO");
+        } catch (Throwable t) {
+            // ignore -- best-effort warm-up
         }
     }
     
