@@ -96,6 +96,9 @@ public class X86CpuID extends CpuID {
     private final long exFeatures;
     private final String brand;
     private String hypervisorVendor;
+    private transient X86CpuTopology topology;
+    private transient ExtendedTopologyInfo extendedTopologyInfo;
+    private transient boolean extendedTopologyInfoInitialized;
 
     /**
      * Create a cpu id that contains the data of a processor identified by the given processor id.
@@ -317,18 +320,31 @@ public class X86CpuID extends CpuID {
 
     /**
      * Gets the number of logical processors.
-     * This method will only return more then 1 of this processor
-     * has the Hyper Threading feature.
+     * This method prefers the logical processor count reported in CPUID leaf 1
+     * EBX[23:16]. Some hypervisors expose multiple vCPUs without setting HTT,
+     * so we treat a value greater than 1 as authoritative even when the legacy
+     * HTT flag is clear.
      *
      * @return The number of logical processors.
      */
     public final int getLogicalProcessors() {
-        if (hasFeature(FEAT_HTT)) {
-            // EBX bits 16-23 when EAX == 1
-            return (data[5] >> 16) & 0xFF;
-        } else {
+        final int logicalProcessors = getLeaf1LogicalProcessorField();
+        if (logicalProcessors > 1) {
+            return logicalProcessors;
+        }
+        return 1;
+    }
+
+    public final int getLogicalProcessorsPerPackage() {
+        return getTopology().getLogicalProcessorsPerPackage();
+    }
+
+    final int getLeaf1LogicalProcessorField() {
+        if (!hasBasicLeaf(1)) {
             return 1;
         }
+        final int logicalProcessors = (data[5] >> 16) & 0xFF;
+        return (logicalProcessors == 0) ? 1 : logicalProcessors;
     }
 
     /**
@@ -338,25 +354,122 @@ public class X86CpuID extends CpuID {
      * @return the physical package id.
      */
     public final int getPhysicalPackageId(int apicId) {
-        int index_lsb = 0;
-        int index_msb = 31;
-        final int numLogicalProcessors = getLogicalProcessors();
+        return getTopology().getPackageId(apicId);
+    }
 
-        int tmp = numLogicalProcessors;
-        while ((tmp & 1) == 0) {
-            tmp >>= 1;
-            index_lsb++;
+    public final int getCoreId(int apicId) {
+        return getTopology().getCoreId(apicId);
+    }
+
+    public final int getThreadId(int apicId) {
+        return getTopology().getThreadId(apicId);
+    }
+
+    final X86CpuTopology getTopology() {
+        if (topology == null) {
+            topology = X86CpuTopology.detect(this);
         }
-        tmp = numLogicalProcessors;
-        while ((tmp & 0x80000000) == 0) {
-            tmp <<= 1;
-            index_msb--;
+        return topology;
+    }
+
+    final ExtendedTopologyInfo getExtendedTopologyInfo() {
+        if (!extendedTopologyInfoInitialized) {
+            extendedTopologyInfo = loadExtendedTopologyInfo();
+            extendedTopologyInfoInitialized = true;
         }
-        if (index_lsb != index_msb) {
-            index_msb++;
+        return extendedTopologyInfo;
+    }
+
+    final int getIntelCoreCount() {
+        if (!isIntel() || !hasBasicLeaf(4)) {
+            return -1;
+        }
+        final int[] regs = new int[4];
+        UnsafeX86.getCPUID(Word.fromIntZeroExtend(4), regs);
+        final int cacheType = regs[0] & 0x1F;
+        if (cacheType == 0) {
+            return -1;
+        }
+        return ((regs[0] >>> 26) & 0x3F) + 1;
+    }
+
+    final int getAmdCoreCount() {
+        if (!isAMD()) {
+            return -1;
+        }
+        final int[] regs = new int[4];
+        UnsafeX86.getCPUID(Word.fromIntZeroExtend(0x80000000), regs);
+        final int maxExtLeaf = regs[0];
+        if (maxExtLeaf < 0x80000008) {
+            return -1;
+        }
+        UnsafeX86.getCPUID(Word.fromIntZeroExtend(0x80000008), regs);
+        return (regs[2] & 0xFF) + 1;
+    }
+
+    private boolean hasBasicLeaf(int leaf) {
+        return (leaf >= 0) && (data.length >= 4) && (data[0] >= leaf);
+    }
+
+    private ExtendedTopologyInfo loadExtendedTopologyInfo() {
+        ExtendedTopologyInfo topologyInfo = loadExtendedTopologyLeaf(0x1F, "cpuid.1f");
+        if (topologyInfo != null) {
+            return topologyInfo;
+        }
+        return loadExtendedTopologyLeaf(0x0B, "cpuid.0b");
+    }
+
+    private ExtendedTopologyInfo loadExtendedTopologyLeaf(int leaf, String source) {
+        if (!hasBasicLeaf(leaf)) {
+            return null;
+        }
+        final int[] regs = new int[4];
+        int threadsPerCore = 1;
+        int threadBits = 0;
+        int logicalProcessorsPerPackage = 0;
+        int packageShift = -1;
+        boolean foundLevel = false;
+
+        for (int subleaf = 0; subleaf < 8; subleaf++) {
+            if (!getCPUIDEx(leaf, subleaf, regs)) {
+                return null;
+            }
+            if (regs[1] == 0) {
+                break;
+            }
+
+            final int levelType = (regs[2] >>> 8) & 0xFF;
+            final int levelShift = regs[0] & 0x1F;
+            final int levelCount = regs[1] & 0xFFFF;
+            if ((levelType == 0) || (levelCount <= 0)) {
+                continue;
+            }
+
+            foundLevel = true;
+            logicalProcessorsPerPackage = Math.max(logicalProcessorsPerPackage, levelCount);
+            packageShift = Math.max(packageShift, levelShift);
+            if (levelType == 1) {
+                threadsPerCore = levelCount;
+                threadBits = levelShift;
+            }
         }
 
-        return ((data[5] >> 24) & 0xFF) >> index_msb;
+        if (!foundLevel || (logicalProcessorsPerPackage <= 0) || (packageShift < 0)) {
+            return null;
+        }
+        if (threadsPerCore > logicalProcessorsPerPackage) {
+            threadsPerCore = logicalProcessorsPerPackage;
+        }
+        if (threadBits > packageShift) {
+            threadBits = packageShift;
+        }
+        return new ExtendedTopologyInfo(source, logicalProcessorsPerPackage,
+            threadsPerCore, threadBits, packageShift);
+    }
+
+    private boolean getCPUIDEx(int leaf, int subleaf, int[] regs) {
+        final long packedInput = (((long) subleaf) << 32) | (((long) leaf) & 0xFFFFFFFFL);
+        return (UnsafeX86.getCPUIDEx(packedInput, regs) != 0);
     }
 
     /**
@@ -604,9 +717,12 @@ public class X86CpuID extends CpuID {
 
         if (hasFeature(FEAT_HTT)) {
             sb.append(" #log.proc: ");
-            sb.append(getLogicalProcessors());
+            sb.append(getLogicalProcessorsPerPackage());
             sb.append('\n');
         }
+        sb.append(" topology : ");
+        sb.append(getTopology());
+        sb.append('\n');
         if (hypervisorVendor != null) {
             sb.append(" hyperv.  : ");
             sb.append(hypervisorVendor);
@@ -621,5 +737,22 @@ public class X86CpuID extends CpuID {
         sb.append('\n');
 
         return sb.toString();
+    }
+
+    static final class ExtendedTopologyInfo {
+        final String source;
+        final int logicalProcessorsPerPackage;
+        final int threadsPerCore;
+        final int threadBits;
+        final int packageShift;
+
+        private ExtendedTopologyInfo(String source, int logicalProcessorsPerPackage,
+                                     int threadsPerCore, int threadBits, int packageShift) {
+            this.source = source;
+            this.logicalProcessorsPerPackage = logicalProcessorsPerPackage;
+            this.threadsPerCore = threadsPerCore;
+            this.threadBits = threadBits;
+            this.packageShift = packageShift;
+        }
     }
 }

@@ -22,6 +22,7 @@ package org.jnode.vm.x86;
 
 import java.nio.ByteOrder;
 import java.util.HashMap;
+import java.util.HashSet;
 import org.jnode.annotation.Internal;
 import org.jnode.annotation.MagicPermission;
 import org.jnode.assembler.x86.X86Constants;
@@ -58,6 +59,8 @@ import org.vmmagic.unboxed.Word;
  */
 @MagicPermission
 public abstract class VmX86Architecture extends BaseVmArchitecture {
+
+    private static final Address DEFAULT_LOCAL_APIC_ADDRESS = Address.fromIntZeroExtend(0xFEE00000);
 
     /**
      * Start address of the boot image (1Mb)
@@ -131,6 +134,21 @@ public abstract class VmX86Architecture extends BaseVmArchitecture {
      * The boot processor
      */
     private transient VmX86Processor bootProcessor;
+
+    /**
+     * Topology decoder derived from the boot processor CPUID.
+     */
+    private transient X86CpuTopology cpuTopology;
+
+    /**
+     * True when firmware already enumerates every processor, including SMT threads.
+     */
+    private transient boolean firmwareEnumeratesProcessors;
+
+    /**
+     * Human readable source used to enumerate processors.
+     */
+    private transient String processorEnumerationSource;
 
     /**
      * The centralized irq manager
@@ -247,6 +265,8 @@ public abstract class VmX86Architecture extends BaseVmArchitecture {
         final VmX86Processor bootCpu = (VmX86Processor) VmMagic.currentProcessor();
         this.bootProcessor = bootCpu;
         bootCpu.setBootProcessor(true);
+        firmwareEnumeratesProcessors = false;
+        processorEnumerationSource = "bootstrap";
 
         // Initialize HyperV
         initializeHyperV();
@@ -255,106 +275,17 @@ public abstract class VmX86Architecture extends BaseVmArchitecture {
         if (cmdLine.contains("mp=no")) {
             return;
         }
-        //
-
-        final MPFloatingPointerStructure mp = MPFloatingPointerStructure.find(
-            rm, ResourceOwner.SYSTEM);
-        if (mp == null) {
-            BootLogInstance.get().info("No MP table found");
-            // No MP table found.
-            return;
-        }
-        try {
-            BootLogInstance.get().info("Found " + mp);
-            this.mpConfigTable = mp.getMPConfigTable();
-        } finally {
-            mp.release();
-        }
-
-        if (mpConfigTable == null) {
-            return;
-        }
-
-        mpConfigTable.dump(System.out);
         final ResourceOwner owner = ResourceOwner.SYSTEM;
-        try {
-            // Create the local APIC accessor
-            localAPIC = new LocalAPIC(rm, owner, mpConfigTable
-                .getLocalApicAddress());
-        } catch (ResourceNotFreeException ex) {
-            BootLogInstance.get().error("Cannot claim APIC region");
+
+        if (initializeProcessorsViaAcpi(rm, owner, bootCpu)) {
+            BootLogInstance.get().info("Activating timeslice interrupts");
+            bootCpu.activateTimeSliceInterrupts();
             return;
         }
-
-        // Set the APIC reference of the current (bootstrap) processor
-        bootCpu.setApic(localAPIC);
-        bootCpu.loadAndSetApicID();
-
-        // Find & initialize this I/O APIC.
-        for (MPEntry entry : mpConfigTable.entries()) {
-            if (entry instanceof MPIOAPICEntry) {
-                final MPIOAPICEntry apicEntry = (MPIOAPICEntry) entry;
-                if (apicEntry.getFlags() != 0) {
-                    try {
-                        // We found an enabled I/O APIC.
-                        final IOAPIC ioAPIC = new IOAPIC(rm, owner, apicEntry
-                            .getAddress());
-                        ioAPIC.dump(System.out);
-                        break;
-                    } catch (ResourceNotFreeException ex) {
-                        BootLogInstance.get().error("Cannot claim I/O APIC region ", ex);
-                    }
-                }
-            }
+        if (initializeProcessorsViaMp(rm, owner, bootCpu)) {
+            return;
         }
-
-        try {
-            // Detect Hyper threading on current (bootstrap) processor
-            VmX86Processor.detectAndstartLogicalProcessors(rm);
-        } catch (ResourceNotFreeException ex) {
-            BootLogInstance.get().error("Cannot claim region for logical processor startup",
-                ex);
-        }
-
-        // Find all physical AP processors
-        final X86CpuID cpuId = (X86CpuID) bootCpu.getCPUID();
-        final HashMap<Integer, MPProcessorEntry> physCpus = new HashMap<Integer, MPProcessorEntry>();
-        for (MPEntry e : mpConfigTable.entries()) {
-            if (e.getEntryType() == 0) {
-                final MPProcessorEntry cpuEntry = (MPProcessorEntry) e;
-                if (cpuEntry.isEnabled() && !cpuEntry.isBootstrap()) {
-                    // Check if it is a physical CPU
-                    final int apicId = cpuEntry.getApicID();
-                    int physId = cpuId.getPhysicalPackageId(apicId);
-                    // This algorithme is based on the specification
-                    // that physical processors are listed before logical
-                    // processors.
-                    if (!physCpus.containsKey(physId)) {
-                        // New physical CPU found
-                        physCpus.put(physId, cpuEntry);
-                    }
-                }
-            }
-        }
-
-        // Start all physical AP processors
-        for (MPProcessorEntry cpuEntry : physCpus.values()) {
-            final int apicId = cpuEntry.getApicID();
-            // New CPU
-            final VmX86Processor newCpu = (VmX86Processor) createProcessor(
-                apicId, VmUtils.getVm().getSharedStatics(), bootCpu
-                .getIsolatedStatics(), bootCpu.getScheduler());
-            initX86Processor(newCpu);
-            try {
-                newCpu.startup(rm);
-            } catch (ResourceNotFreeException ex) {
-                BootLogInstance.get().error("Cannot claim region for processor startup", ex);
-            }
-        }
-
-        // If there is more then one CPU, start sending timeslice interrupts now
-        BootLogInstance.get().info("Activating timeslice interrupts");
-        bootCpu.activateTimeSliceInterrupts();
+        initializeProcessorsViaCpuTopologyFallback(rm, owner, bootCpu);
     }
 
     /**
@@ -388,7 +319,281 @@ public abstract class VmX86Architecture extends BaseVmArchitecture {
      */
     final void initX86Processor(VmX86Processor cpu) {
         cpu.setApic(localAPIC);
+        cpu.setTopology(cpuTopology);
         super.addProcessor(cpu);
+    }
+
+    final boolean hasFirmwareEnumeratedProcessors() {
+        return firmwareEnumeratesProcessors;
+    }
+
+    private boolean initializeProcessorsViaAcpi(ResourceManager rm, ResourceOwner owner,
+                                                VmX86Processor bootCpu) {
+        final AcpiMadt madt = AcpiMadt.find(rm, owner);
+        if (madt == null) {
+            return false;
+        }
+        if (!initializeBootstrapApic(rm, owner, bootCpu, madt.getLocalApicAddress())) {
+            return false;
+        }
+
+        firmwareEnumeratesProcessors = true;
+        processorEnumerationSource = "ACPI MADT via " + madt.getRootTableSignature();
+        for (AcpiMadt.IoApicInfo ioApicInfo : madt.getIoApics()) {
+            try {
+                final IOAPIC ioApic = new IOAPIC(rm, owner, ioApicInfo.getAddress());
+                ioApic.dump(System.out);
+            } catch (ResourceNotFreeException ex) {
+                BootLogInstance.get().error("Cannot claim I/O APIC region " + ioApicInfo, ex);
+            }
+        }
+        startApplicationProcessors(rm, bootCpu, madt.getProcessorApicIds());
+        return true;
+    }
+
+    private boolean initializeProcessorsViaMp(ResourceManager rm, ResourceOwner owner,
+                                              VmX86Processor bootCpu) {
+        final MPFloatingPointerStructure mp = MPFloatingPointerStructure.find(rm, owner);
+        if (mp == null) {
+            BootLogInstance.get().info("No MP table found");
+            return false;
+        }
+        int defaultConfigurationType = 0;
+        try {
+            BootLogInstance.get().info("Found " + mp);
+            this.mpConfigTable = mp.getMPConfigTable();
+            defaultConfigurationType = mp.getSystemConfigurationType();
+        } finally {
+            mp.release();
+        }
+
+        if (mpConfigTable == null) {
+            if (defaultConfigurationType != 0) {
+                initializeProcessorsViaDefaultMpConfig(rm, owner, bootCpu, mp,
+                    defaultConfigurationType);
+                return true;
+            }
+            return false;
+        }
+
+        processorEnumerationSource = "Intel MP table";
+
+        mpConfigTable.dump(System.out);
+        if (!initializeBootstrapApic(rm, owner, bootCpu, mpConfigTable.getLocalApicAddress())) {
+            return false;
+        }
+
+        for (MPEntry entry : mpConfigTable.entries()) {
+            if (entry instanceof MPIOAPICEntry) {
+                final MPIOAPICEntry apicEntry = (MPIOAPICEntry) entry;
+                if (apicEntry.getFlags() != 0) {
+                    try {
+                        final IOAPIC ioAPIC = new IOAPIC(rm, owner, apicEntry.getAddress());
+                        ioAPIC.dump(System.out);
+                        break;
+                    } catch (ResourceNotFreeException ex) {
+                        BootLogInstance.get().error("Cannot claim I/O APIC region ", ex);
+                    }
+                }
+            }
+        }
+
+        try {
+            VmX86Processor.detectAndstartLogicalProcessors(rm);
+        } catch (ResourceNotFreeException ex) {
+            BootLogInstance.get().error("Cannot claim region for logical processor startup", ex);
+        }
+
+        final X86CpuID cpuId = (X86CpuID) bootCpu.getCPUID();
+        final HashMap<Integer, MPProcessorEntry> physCpus = new HashMap<Integer, MPProcessorEntry>();
+        for (MPEntry e : mpConfigTable.entries()) {
+            if (e.getEntryType() == 0) {
+                final MPProcessorEntry cpuEntry = (MPProcessorEntry) e;
+                if (cpuEntry.isEnabled() && !cpuEntry.isBootstrap()) {
+                    final int apicId = cpuEntry.getApicID();
+                    final int physId = cpuId.getPhysicalPackageId(apicId);
+                    if (!physCpus.containsKey(physId)) {
+                        physCpus.put(physId, cpuEntry);
+                    }
+                }
+            }
+        }
+
+        for (MPProcessorEntry cpuEntry : physCpus.values()) {
+            final int apicId = cpuEntry.getApicID();
+            final VmX86Processor newCpu = (VmX86Processor) createProcessor(apicId,
+                VmUtils.getVm().getSharedStatics(), bootCpu.getIsolatedStatics(),
+                bootCpu.getScheduler());
+            initX86Processor(newCpu);
+            try {
+                newCpu.startup(rm);
+            } catch (ResourceNotFreeException ex) {
+                BootLogInstance.get().error("Cannot claim region for processor startup", ex);
+            }
+        }
+
+        BootLogInstance.get().info("Activating timeslice interrupts");
+        bootCpu.activateTimeSliceInterrupts();
+        return true;
+    }
+
+    private void initializeProcessorsViaDefaultMpConfig(ResourceManager rm, ResourceOwner owner,
+                                                        VmX86Processor bootCpu,
+                                                        MPFloatingPointerStructure mp,
+                                                        int defaultConfigurationType) {
+        processorEnumerationSource = "Intel MP default config type "
+            + defaultConfigurationType;
+
+        if (!initializeBootstrapApic(rm, owner, bootCpu, mp.getDefaultLocalApicAddress())) {
+            return;
+        }
+
+        try {
+            final IOAPIC ioApic = new IOAPIC(rm, owner, mp.getDefaultIoApicAddress());
+            ioApic.dump(System.out);
+        } catch (ResourceNotFreeException ex) {
+            BootLogInstance.get().warn("Cannot claim default I/O APIC region", ex);
+        }
+
+        final int processorCountBefore = VmUtils.getVm().availableProcessors();
+        try {
+            VmX86Processor.detectAndstartLogicalProcessors(rm);
+        } catch (ResourceNotFreeException ex) {
+            BootLogInstance.get().error("Cannot claim region for logical processor startup", ex);
+        }
+
+        if (VmUtils.getVm().availableProcessors() == processorCountBefore) {
+            startApplicationProcessors(rm, bootCpu, createDefaultMpProcessorApicIds());
+        }
+
+        BootLogInstance.get().info("Activating timeslice interrupts");
+        bootCpu.activateTimeSliceInterrupts();
+    }
+
+    private void initializeProcessorsViaCpuTopologyFallback(ResourceManager rm,
+                                                            ResourceOwner owner,
+                                                            VmX86Processor bootCpu) {
+        final X86CpuID cpuId = (X86CpuID) bootCpu.getCPUID();
+        final int logicalProcessors = cpuId.getLogicalProcessorsPerPackage();
+        System.out.println("CPUID topology probe: apic=" + cpuId.hasAPIC()
+            + ", htt=" + cpuId.hasHTT()
+            + ", leaf1-logical=" + cpuId.getLeaf1LogicalProcessorField()
+            + ", logical/package=" + logicalProcessors
+            + ", topology=" + cpuId.getTopology().getSource());
+        if (!cpuId.hasAPIC() || (logicalProcessors <= 1)) {
+            return;
+        }
+
+        System.out.println("No firmware SMP tables found; trying CPUID/APIC fallback");
+        processorEnumerationSource = "CPUID/APIC fallback";
+        if (!initializeBootstrapApic(rm, owner, bootCpu, DEFAULT_LOCAL_APIC_ADDRESS)) {
+            processorEnumerationSource = "bootstrap";
+            return;
+        }
+
+        final int processorCountBefore = VmUtils.getVm().availableProcessors();
+        try {
+            VmX86Processor.detectAndstartLogicalProcessors(rm);
+        } catch (ResourceNotFreeException ex) {
+            BootLogInstance.get().error("Cannot claim region for CPUID/APIC fallback processor startup", ex);
+        }
+
+        final int processorCountAfter = VmUtils.getVm().availableProcessors();
+        if (processorCountAfter > processorCountBefore) {
+            System.out.println("CPUID/APIC fallback started "
+                + (processorCountAfter - processorCountBefore) + " additional processor(s)");
+            BootLogInstance.get().info("Activating timeslice interrupts");
+            bootCpu.activateTimeSliceInterrupts();
+        } else {
+            System.out.println("CPUID/APIC fallback did not start additional processors");
+        }
+    }
+
+    private Iterable<Integer> createDefaultMpProcessorApicIds() {
+        final java.util.ArrayList<Integer> processorApicIds = new java.util.ArrayList<Integer>(2);
+        processorApicIds.add(Integer.valueOf(0));
+        processorApicIds.add(Integer.valueOf(1));
+        return processorApicIds;
+    }
+
+    private boolean initializeBootstrapApic(ResourceManager rm, ResourceOwner owner,
+                                            VmX86Processor bootCpu, Address localApicAddress) {
+        try {
+            localAPIC = new LocalAPIC(rm, owner, localApicAddress);
+        } catch (ResourceNotFreeException ex) {
+            BootLogInstance.get().error("Cannot claim APIC region", ex);
+            return false;
+        }
+
+        bootCpu.setApic(localAPIC);
+        bootCpu.loadAndSetApicID();
+        final X86CpuID cpuId = (X86CpuID) bootCpu.getCPUID();
+        cpuTopology = cpuId.getTopology();
+        bootCpu.setTopology(cpuTopology);
+        BootLogInstance.get().info("CPU topology: " + cpuTopology);
+        return true;
+    }
+
+    @Override
+    public String getProcessorSummary() {
+        if (bootProcessor == null) {
+            return null;
+        }
+
+        final HashSet<Integer> packages = new HashSet<Integer>();
+        final HashSet<String> cores = new HashSet<String>();
+        int logicalProcessors = 0;
+
+        for (org.jnode.vm.facade.VmProcessor processor : VmUtils.getVm().getProcessors()) {
+            if (processor instanceof VmX86Processor) {
+                final VmX86Processor x86Processor = (VmX86Processor) processor;
+                packages.add(Integer.valueOf(x86Processor.getPackageId()));
+                cores.add(x86Processor.getPackageId() + ":" + x86Processor.getCoreId());
+                logicalProcessors++;
+            }
+        }
+
+        final X86CpuTopology topology = cpuTopology;
+        final StringBuilder sb = new StringBuilder();
+        sb.append("enumeration=");
+        sb.append((processorEnumerationSource == null) ? "unknown" : processorEnumerationSource);
+        if (topology != null) {
+            sb.append(", decode=");
+            sb.append(topology.getSource());
+        }
+        sb.append(", packages=");
+        sb.append(packages.isEmpty() ? 1 : packages.size());
+        sb.append(", cores=");
+        sb.append(cores.isEmpty() ? 1 : cores.size());
+        sb.append(", logical=");
+        sb.append((logicalProcessors == 0) ? 1 : logicalProcessors);
+        if (topology != null) {
+            sb.append(", cores/package=");
+            sb.append(topology.getCoresPerPackage());
+            sb.append(", threads/core=");
+            sb.append(topology.getThreadsPerCore());
+        }
+        return sb.toString();
+    }
+
+    private void startApplicationProcessors(ResourceManager rm, VmX86Processor bootCpu,
+                                            Iterable<Integer> apicIds) {
+        final int bootApicId = bootCpu.getId();
+        for (Integer apicIdValue : apicIds) {
+            final int apicId = apicIdValue.intValue();
+            if (apicId == bootApicId) {
+                continue;
+            }
+            final VmX86Processor newCpu = (VmX86Processor) createProcessor(apicId,
+                VmUtils.getVm().getSharedStatics(), bootCpu.getIsolatedStatics(),
+                bootCpu.getScheduler());
+            initX86Processor(newCpu);
+            try {
+                newCpu.startup(rm);
+            } catch (ResourceNotFreeException ex) {
+                BootLogInstance.get().error("Cannot claim region for processor startup", ex);
+            }
+        }
     }
 
     /**

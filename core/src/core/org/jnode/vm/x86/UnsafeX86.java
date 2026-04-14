@@ -83,6 +83,19 @@ public final class UnsafeX86 {
     static native int getCPUID(Word input, int[] result);
 
     /**
+     * Read CPU identification data with an explicit ECX subleaf.
+     *
+     * <p>The packedInput value stores the CPUID leaf in the low 32 bits and
+     * the subleaf in the high 32 bits.</p>
+     *
+     * @param packedInput Encoded CPUID leaf/subleaf pair
+     * @param result      An array of length 4 (or longer) where eax, ebx, ecx, edx is stored into.
+     * @return 1 on success, 0 otherwise (result == null or result.length less than 4).
+     */
+    @Internal
+    static native int getCPUIDEx(long packedInput, int[] result);
+
+    /**
      * Read a model specific register
      */
     @KernelSpace

@@ -110,6 +110,13 @@ public abstract class BaseVmArchitecture extends VmSystemObject implements org.j
     public abstract TypeSizeInfo getTypeSizeInfo();
 
     /**
+     * {@inheritDoc}
+     */
+    public String getProcessorSummary() {
+        return null;
+    }
+
+    /**
      * Gets the stackreader for this architecture.
      *
      * @return the architecture's stack reader

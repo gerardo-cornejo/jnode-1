@@ -94,6 +94,9 @@ jnode.install-nt.dir=C:\jnode
 #   to the VMX file's location!
 
 @vmware.vmx.overrides/=#@
+@vmware.vmx.guestOS/=#@
+@vmware.vmx.numvcpus/=#@
+@vmware.vmx.coresPerSocket/=#@
 
 # -----------------------------------------------
 # Set this property to the directory containing user applications for the

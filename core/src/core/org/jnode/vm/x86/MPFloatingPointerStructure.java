@@ -20,6 +20,9 @@
  
 package org.jnode.vm.x86;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.jnode.system.resource.MemoryResource;
 import org.jnode.system.resource.MemoryScanner;
 import org.jnode.system.resource.ResourceManager;
@@ -36,6 +39,9 @@ import org.vmmagic.unboxed.Address;
 @MagicPermission
 final class MPFloatingPointerStructure {
 
+    private static final Address DEFAULT_LOCAL_APIC_ADDRESS = Address.fromIntZeroExtend(0xFEE00000);
+    private static final Address DEFAULT_IO_APIC_ADDRESS = Address.fromIntZeroExtend(0xFEC00000);
+
     private MemoryResource mem;
 
     private static final int MAGIC = 0x5F504D5F; // _MP_
@@ -50,9 +56,12 @@ final class MPFloatingPointerStructure {
     public static MPFloatingPointerStructure find(ResourceManager rm,
                                                   ResourceOwner owner) {
         MPFloatingPointerStructure mp;
-        mp = find(rm, owner, 639 * 1024, 640 * 1024);
+        mp = findInEbda(rm, owner);
         if (mp == null) {
-            mp = find(rm, owner, 0xF0000, 0xFFFFF);
+            mp = findInLastKilobyteOfBaseMemory(rm, owner);
+        }
+        if (mp == null) {
+            mp = find(rm, owner, 0xF0000, 0x100000);
         }
         if (mp == null) {
             return null;
@@ -130,6 +139,28 @@ final class MPFloatingPointerStructure {
         return configTable;
     }
 
+    final boolean hasDefaultConfiguration() {
+        return (getSystemConfigurationType() != 0);
+    }
+
+    final Address getDefaultLocalApicAddress() {
+        return DEFAULT_LOCAL_APIC_ADDRESS;
+    }
+
+    final Address getDefaultIoApicAddress() {
+        return DEFAULT_IO_APIC_ADDRESS;
+    }
+
+    final List<Integer> getDefaultProcessorApicIds() {
+        if (!hasDefaultConfiguration()) {
+            return Collections.emptyList();
+        }
+        final ArrayList<Integer> processorApicIds = new ArrayList<Integer>(2);
+        processorApicIds.add(Integer.valueOf(0));
+        processorApicIds.add(Integer.valueOf(1));
+        return processorApicIds;
+    }
+
     /**
      * Initialize this instance.
      *
@@ -163,6 +194,9 @@ final class MPFloatingPointerStructure {
     private final boolean initConfigTable(ResourceManager rm,
                                           ResourceOwner owner) {
         final Address tablePtr = getMPConfigTablePtr();
+        if (tablePtr.isZero()) {
+            return false;
+        }
         int size = 0x2C; // Base table length
         try {
             MemoryResource mem = rm.claimMemoryResource(owner, tablePtr, size,
@@ -210,12 +244,12 @@ final class MPFloatingPointerStructure {
             if (res != null) {
                 try {
                     final MemoryResource mem;
-                    mem = rm.claimMemoryResource(owner, ptr, 16,
+                    mem = rm.claimMemoryResource(owner, res, 16,
                         ResourceManager.MEMMODE_NORMAL);
                     final MPFloatingPointerStructure mp = new MPFloatingPointerStructure(
                         mem);
                     if (mp.isValid()) {
-                        if (mp.initConfigTable(rm, owner)) {
+                        if (mp.hasDefaultConfiguration() || mp.initConfigTable(rm, owner)) {
                             return mp;
                         }
                     }
@@ -228,5 +262,51 @@ final class MPFloatingPointerStructure {
             size -= stepSize;
         }
         return null;
+    }
+
+    private static MPFloatingPointerStructure findInEbda(ResourceManager rm, ResourceOwner owner) {
+        MemoryResource bda = null;
+        try {
+            bda = rm.claimMemoryResource(owner, Address.fromIntZeroExtend(0x40E), 2,
+                ResourceManager.MEMMODE_NORMAL);
+            final int ebdaSegment = bda.getChar(0) & 0xFFFF;
+            if (ebdaSegment == 0) {
+                return null;
+            }
+            final int ebdaAddress = ebdaSegment << 4;
+            if ((ebdaAddress < 0x80000) || (ebdaAddress >= 0xA0000)) {
+                return null;
+            }
+            return find(rm, owner, ebdaAddress, ebdaAddress + 1024);
+        } catch (ResourceNotFreeException ex) {
+            BootLogInstance.get().warn("Cannot claim BIOS data area while searching MP table");
+            return null;
+        } finally {
+            if (bda != null) {
+                bda.release();
+            }
+        }
+    }
+
+    private static MPFloatingPointerStructure findInLastKilobyteOfBaseMemory(ResourceManager rm,
+                                                                              ResourceOwner owner) {
+        MemoryResource bda = null;
+        try {
+            bda = rm.claimMemoryResource(owner, Address.fromIntZeroExtend(0x413), 2,
+                ResourceManager.MEMMODE_NORMAL);
+            final int baseMemoryKb = bda.getChar(0) & 0xFFFF;
+            if (baseMemoryKb < 2) {
+                return find(rm, owner, 639 * 1024, 640 * 1024);
+            }
+            final int end = baseMemoryKb * 1024;
+            return find(rm, owner, end - 1024, end);
+        } catch (ResourceNotFreeException ex) {
+            BootLogInstance.get().warn("Cannot claim BIOS data area while searching base memory for MP table");
+            return find(rm, owner, 639 * 1024, 640 * 1024);
+        } finally {
+            if (bda != null) {
+                bda.release();
+            }
+        }
     }
 }

@@ -105,6 +105,9 @@
         	    </not>
         	</and>
         </condition>
+        <property name="vmware.vmx.guestOS" value="other" />
+        <property name="vmware.vmx.numvcpus" value="1" />
+        <property name="vmware.vmx.coresPerSocket" value="1" />
 	    <condition property="vmware.vmx.vmdk.image" 
 	    	value="${jnode.virtual.disk.dir}/${jnode.virtual.disk}" else="">
 	        <and>
@@ -345,6 +348,9 @@
 			isoFile="${jnode-x86.iso}"
 			logFile="${logFile}"
 			memSize="${jnode.virtual.memsize}"
+            guestOS="${vmware.vmx.guestOS}"
+            numVcpus="${vmware.vmx.numvcpus}"
+            coresPerSocket="${vmware.vmx.coresPerSocket}"
             saveDir="${save.dir}"
 			vmdkImageFile="${vmware.vmx.vmdk.image}"
 		    overrideFile="${vmware.vmx.overrides}"
@@ -361,6 +367,9 @@
 			isoFile="${jnode-x86-lite.iso}"
 			logFile="${logFile}"
 			memSize="${jnode.virtual.memsize}"
+            guestOS="${vmware.vmx.guestOS}"
+            numVcpus="${vmware.vmx.numvcpus}"
+            coresPerSocket="${vmware.vmx.coresPerSocket}"
             saveDir="${save.dir}"
 			vmdkImageFile="${vmware.vmx.vmdk.image}"
             overrideFile="${vmware.vmx.overrides}"
@@ -376,6 +385,9 @@
 			isoFile="${jnode-x86_64-lite.iso}"
 			logFile="${logFile}"
 			memSize="${jnode.virtual.memsize}"
+            guestOS="${vmware.vmx.guestOS}"
+            numVcpus="${vmware.vmx.numvcpus}"
+            coresPerSocket="${vmware.vmx.coresPerSocket}"
 			saveDir="${save.dir}"
 			vmdkImageFile="${vmware.vmx.vmdk.image}"
             overrideFile="${vmware.vmx.overrides}"

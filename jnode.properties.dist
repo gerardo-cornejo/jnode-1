@@ -96,6 +96,15 @@ jnode.debugger.port=6789
 
 #vmware.vmx.overrides=<some-file-containing-vmx-settings>
 
+# VMware guest type. "other" works better for JNode than the historical "dos"
+# template and avoids conservative single-CPU assumptions in modern VMware.
+#vmware.vmx.guestOS=other
+
+# Explicit VMware CPU topology.
+# For example, a single socket with 2 cores is:
+#vmware.vmx.numvcpus=2
+#vmware.vmx.coresPerSocket=2
+
 # -----------------------------------------------
 # Custom system properties 
 # -----------------------------------------------

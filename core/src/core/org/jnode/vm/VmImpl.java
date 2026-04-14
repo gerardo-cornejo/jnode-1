@@ -289,6 +289,10 @@ final class VmImpl extends VmSystemObject implements Statistics, org.jnode.vm.fa
         } else {
             System.out.println("Detected " + cnt + " processors");
         }
+        final String processorSummary = arch.getProcessorSummary();
+        if ((processorSummary != null) && (processorSummary.length() > 0)) {
+            System.out.println("Processor summary: " + processorSummary);
+        }
     }
 
     /**

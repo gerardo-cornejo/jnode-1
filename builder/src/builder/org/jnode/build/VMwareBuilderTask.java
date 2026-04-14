@@ -47,6 +47,11 @@ import org.apache.tools.ant.Task;
  */
 public class VMwareBuilderTask extends Task {
 
+    /**
+     * VMware Workstation / Player 17.x virtual hardware compatibility level.
+     */
+    private static final String VMWARE_WORKSTATION_17_HW_VERSION = "20";
+
     private String logFile; // log file use for kernel debugger messages
     private String isoFile;
     private int memSize;
@@ -54,6 +59,9 @@ public class VMwareBuilderTask extends Task {
     private String vmdkImageFile;
     private String saveDir;
     private String name;
+    private int numVcpus = 1;
+    private int coresPerSocket = 1;
+    private String guestOS = "other";
 
     /**
      * @return Returns the Virtual machine name
@@ -67,6 +75,30 @@ public class VMwareBuilderTask extends Task {
      */
     public final void setName(String name) {
         this.name = name;
+    }
+
+    public final int getNumVcpus() {
+        return numVcpus;
+    }
+
+    public final void setNumVcpus(int numVcpus) {
+        this.numVcpus = numVcpus;
+    }
+
+    public final int getCoresPerSocket() {
+        return coresPerSocket;
+    }
+
+    public final void setCoresPerSocket(int coresPerSocket) {
+        this.coresPerSocket = coresPerSocket;
+    }
+
+    public final String getGuestOS() {
+        return guestOS;
+    }
+
+    public final void setGuestOS(String guestOS) {
+        this.guestOS = guestOS;
     }
     
     /**
@@ -152,6 +184,19 @@ public class VMwareBuilderTask extends Task {
      */
     @Override
     public void execute() throws BuildException {
+        if (numVcpus < 1) {
+            throw new BuildException("numVcpus must be >= 1");
+        }
+        if (coresPerSocket < 1) {
+            throw new BuildException("coresPerSocket must be >= 1");
+        }
+        if ((numVcpus % coresPerSocket) != 0) {
+            throw new BuildException("numVcpus must be divisible by coresPerSocket");
+        }
+        if ((guestOS == null) || (guestOS.trim().length() == 0)) {
+            guestOS = "other";
+        }
+
         // Build the default properties, based on the supplied memSize and logFile.
         Properties props = new Properties();
         buildDefaultProperties(props);
@@ -266,7 +311,7 @@ public class VMwareBuilderTask extends Task {
 
     private void buildDefaultProperties(Properties props) {
         props.put("config.version", "8");
-        props.put("virtualHW.version", "4");
+        props.put("virtualHW.version", VMWARE_WORKSTATION_17_HW_VERSION);
         props.put("memsize", String.valueOf(memSize));
         props.put("MemAllowAutoScaleDown", "FALSE");
 
@@ -284,7 +329,11 @@ public class VMwareBuilderTask extends Task {
         props.put("sound.present", "FALSE");
         props.put("sound.virtualDev", "es1371");
         props.put("displayName", (name != null) ? name : "JNode");
-        props.put("guestOS", "dos");
+        props.put("guestOS", guestOS);
+        props.put("numvcpus", String.valueOf(numVcpus));
+        props.put("cpuid.coresPerSocket", String.valueOf(coresPerSocket));
+        props.put("acpi.present", "TRUE");
+        props.put("apic.present", "TRUE");
 
         props.put("nvram", "JNode.nvram");  
         props.put("MemTrimRate", "-1");  

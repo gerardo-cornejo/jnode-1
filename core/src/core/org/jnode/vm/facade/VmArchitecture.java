@@ -128,4 +128,13 @@ public interface VmArchitecture {
      * @return the architecture's type size information descriptor
      */
     TypeSizeInfo getTypeSizeInfo();
+
+    /**
+     * Gets a human readable summary of the processor topology detected for
+     * this architecture, or {@code null} when no architecture specific
+     * summary is available.
+     *
+     * @return processor topology summary or {@code null}
+     */
+    String getProcessorSummary();
 }

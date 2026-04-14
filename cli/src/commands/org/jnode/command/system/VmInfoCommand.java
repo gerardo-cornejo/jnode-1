@@ -64,6 +64,10 @@ public class VmInfoCommand extends AbstractCommand {
             VmUtils.getVm().getHeapManager().dumpStatistics(out);
             final SecurityManager sm = System.getSecurityManager();
             out.format(fmt_sm, sm);
+            final String processorSummary = vm.getArch().getProcessorSummary();
+            if ((processorSummary != null) && (processorSummary.length() > 0)) {
+                out.format("Processor summary %s%n", processorSummary);
+            }
             List<VmProcessor> processors = vm.getProcessors();
             for (VmProcessor cpu : processors) {
                 out.format(fmt_proc, processors.indexOf(cpu), cpu.getIdString());

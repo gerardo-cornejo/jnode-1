@@ -92,6 +92,13 @@ public abstract class VmX86Processor extends VmProcessor {
     private boolean bootProcessor;
 
     /**
+     * Decoded topology identifiers for this processor.
+     */
+    private int packageId;
+    private int coreId;
+    private int threadId;
+
+    /**
      * Must the processor send timeslice interrupts to other cpu's (vm_ints.asm)
      */
     volatile Word sendTimeSliceInterrupt;
@@ -201,6 +208,28 @@ public abstract class VmX86Processor extends VmProcessor {
         if (this.localAPIC != null) {
             setId(localAPIC.getId());
         }
+    }
+
+    final void setTopology(X86CpuTopology topology) {
+        if (topology == null) {
+            return;
+        }
+        final int apicId = getId();
+        this.packageId = topology.getPackageId(apicId);
+        this.coreId = topology.getCoreId(apicId);
+        this.threadId = topology.getThreadId(apicId);
+    }
+
+    final int getPackageId() {
+        return packageId;
+    }
+
+    final int getCoreId() {
+        return coreId;
+    }
+
+    final int getThreadId() {
+        return threadId;
     }
 
     /**
@@ -343,21 +372,31 @@ public abstract class VmX86Processor extends VmProcessor {
         if (cpu.logical) {
             return;
         }
+        final VmX86Architecture arch = (VmX86Architecture) cpu.getArchitecture();
+        if (arch.hasFirmwareEnumeratedProcessors()) {
+            return;
+        }
         final X86CpuID cpuid = (X86CpuID) cpu.getCPUID();
-        if (!cpuid.hasFeature(X86CpuID.FEAT_HTT)) {
-            // No HTT
+        if (!cpuid.hasAPIC()) {
             return;
         }
 
         // Prepare for threading first
         cpu.systemReadyForThreadSwitch();
 
-        final VmX86Architecture arch = (VmX86Architecture) cpu
-            .getArchitecture();
-        final int logCpuCnt = cpuid.getLogicalProcessors();
+        final X86CpuTopology topology = cpuid.getTopology();
+        final int logCpuCnt = topology.getLogicalProcessorsPerPackage();
+        if (logCpuCnt <= 1) {
+            return;
+        }
+        final int currentApicId = cpu.getId();
+        final int baseApicId = topology.getPackageBaseApicId(currentApicId);
         // Now create and start all logical processors
-        for (int i = 1; i < logCpuCnt; i++) {
-            final int logId = cpu.getId() | i;
+        for (int i = 0; i < logCpuCnt; i++) {
+            final int logId = baseApicId | i;
+            if (logId == currentApicId) {
+                continue;
+            }
             Unsafe.debug("Adding logical CPU 0x" + NumberUtils.hex(logId, 2));
             final VmX86Processor logCpu = (VmX86Processor) arch
                 .createProcessor(logId, VmUtils.getVm().getSharedStatics(), cpu
@@ -387,6 +426,7 @@ public abstract class VmX86Processor extends VmProcessor {
 
     public void dumpStatistics(PrintWriter out) {
         out.println("Type       : " + (bootProcessor ? "BSP" : (logical ? "AP-logical" : "AP")));
+        out.println("Topology   : package " + packageId + ", core " + coreId + ", thread " + threadId);
         out.println("CPUID      : " + getCPUID());
         out.println("fxSave/Res : " + fxSaveCounter + '/' + fxRestoreCounter
             + '/' + deviceNaCounter);

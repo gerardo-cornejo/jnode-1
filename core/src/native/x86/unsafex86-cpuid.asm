@@ -29,6 +29,7 @@ GLABEL Q53org5jnode2vm3x869UnsafeX8623getCPUID2e28Lorg2fvmmagic2funboxed2fWord3b
 	
 	lea ADI,[ADI+VmArray_DATA_OFFSET*SLOT_SIZE]		; Load &id[0] into edi
 	; Execute CPUID
+	xor ecx,ecx
 	cpuid
 	mov [ADI+0],eax		; store eax
 	mov [ADI+4],ebx		; store ebx
@@ -48,4 +49,48 @@ cpuid_ret:
 	pop ADI
 	ret SLOT_SIZE
 
-	
+;	 * Read CPU identification data with an explicit ECX subleaf.
+;	 *
+;	 * @param packedInput CPUID leaf in low 32 bits, subleaf in high 32 bits.
+;    * @param result An array of length 4 (or longer) where eax, ebx, ecx, edx is stored into.
+;	 * @return 1 on success, 0 otherwise (result == null or result.length less than 4).
+;	public static native int getCPUIDEx(long packedInput, int[] result);
+GLABEL Q53org5jnode2vm3x869UnsafeX8623getCPUIDEx2e28J5bI29I
+	push ADI
+	mov ADI,[ASP+(2*SLOT_SIZE)]		; Get result
+	push ABX
+	push ACX
+	push ADX
+
+	test ADI,ADI		; is id null?
+	je cpuidex_invalid_arg
+	mov ebx,4 			; We need an array of length 4 (or more)
+	cmp ebx,[ADI+VmArray_LENGTH_OFFSET*SLOT_SIZE]
+	ja cpuidex_invalid_arg; id is not large enough?
+
+%ifdef BITS32
+	mov eax,[ASP+(6*SLOT_SIZE)]		; packedInput low 32 bits -> CPUID leaf
+	mov ecx,[ASP+(7*SLOT_SIZE)]		; packedInput high 32 bits -> CPUID subleaf
+%else
+	mov AAX,[ASP+(6*SLOT_SIZE)]		; packedInput
+	mov ACX,AAX
+	shr ACX,32
+%endif
+	lea ADI,[ADI+VmArray_DATA_OFFSET*SLOT_SIZE]		; Load &id[0] into edi
+	cpuid
+	mov [ADI+0],eax		; store eax
+	mov [ADI+4],ebx		; store ebx
+	mov [ADI+8],ecx		; store ecx
+	mov [ADI+12],edx	; store edx
+	mov eax,1			; Return 1
+	jmp cpuidex_ret
+
+cpuidex_invalid_arg:
+	xor eax,eax 		; Return 0
+
+cpuidex_ret:
+	pop ADX
+	pop ACX
+	pop ABX
+	pop ADI
+	ret SLOT_SIZE*3
