@@ -24,6 +24,7 @@ import java.io.PrintWriter;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Driver;
 import org.jnode.driver.DriverException;
@@ -58,7 +59,7 @@ import static org.jnode.vm.VirtualMemoryRegion.ACPI;
  */
 final class AcpiDriver extends Driver implements AcpiAPI {
 
-    private static final Logger log = Logger.getLogger(AcpiDriver.class);
+    private static final Logger log = LogManager.getLogger(AcpiDriver.class);
 
     private SystemDescriptionTable sdt;
 

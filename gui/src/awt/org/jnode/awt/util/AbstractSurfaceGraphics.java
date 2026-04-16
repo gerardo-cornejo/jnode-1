@@ -43,6 +43,7 @@ import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
 import java.awt.image.renderable.RenderableImage;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.JNodeToolkit;
 import org.jnode.driver.video.Surface;
@@ -56,7 +57,7 @@ import sun.awt.image.ToolkitImage;
 public abstract class AbstractSurfaceGraphics extends AbstractGraphics {
 
     private final Surface surface;
-    private static final Logger log = Logger.getLogger(AbstractSurfaceGraphics.class);
+    private static final Logger log = LogManager.getLogger(AbstractSurfaceGraphics.class);
     private int mode = Surface.PAINT_MODE;
 
     /**

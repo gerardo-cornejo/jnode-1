@@ -20,6 +20,7 @@
  
 package org.jnode.driver.net.ethernet.spi;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DriverException;
@@ -41,7 +42,7 @@ public abstract class BasicEthernetDriver extends AbstractEthernetDriver {
     /**
      * My logger
      */
-    protected static final Logger log = Logger.getLogger(BasicEthernetDriver.class);
+    protected static final Logger log = LogManager.getLogger(BasicEthernetDriver.class);
 
     /**
      * The device flags

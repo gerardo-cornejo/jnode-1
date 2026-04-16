@@ -20,6 +20,7 @@
  
 package org.jnode.net.ipv4.tcp;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -27,7 +28,7 @@ import org.apache.log4j.Logger;
  */
 public class TCPTimer extends Thread {
 
-    private static final Logger log = Logger.getLogger(TCPTimer.class);
+    private static final Logger log = LogManager.getLogger(TCPTimer.class);
     private final TCPControlBlockList cbList;
     private boolean stop = false;
     private long counter;

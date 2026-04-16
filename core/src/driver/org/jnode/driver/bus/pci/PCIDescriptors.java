@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -36,7 +37,7 @@ public class PCIDescriptors {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(PCIDescriptors.class);
+    private static final Logger log = LogManager.getLogger(PCIDescriptors.class);
     private final Map<Integer, VendorDescriptor> vendors;
     private static final PCIDescriptors instance = new PCIDescriptors();
 

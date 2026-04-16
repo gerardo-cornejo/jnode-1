@@ -23,6 +23,7 @@ package org.jnode.driver.block.floppy;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import javax.naming.NamingException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Driver;
 import org.jnode.driver.RemovableDeviceAPI;
@@ -47,7 +48,7 @@ public class FloppyDriver extends Driver implements FSBlockDeviceAPI, RemovableD
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(FloppyDriver.class);
+    private static final Logger log = LogManager.getLogger(FloppyDriver.class);
     /**
      * Drive number
      */

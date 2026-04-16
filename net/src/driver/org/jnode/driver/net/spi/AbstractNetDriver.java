@@ -23,6 +23,7 @@ package org.jnode.driver.net.spi;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
@@ -54,7 +55,7 @@ public abstract class AbstractNetDriver extends Driver
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(AbstractNetDriver.class);
+    private static final Logger log = LogManager.getLogger(AbstractNetDriver.class);
     /**
      * Device prefix for ethernet devices
      */

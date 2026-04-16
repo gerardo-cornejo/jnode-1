@@ -20,6 +20,7 @@
  
 package org.jnode.driver.serial;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Bus;
 import org.jnode.driver.Device;
@@ -36,7 +37,7 @@ public class SerialPortFinder implements DeviceFinder {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(SerialPortFinder.class);
+    private static final Logger log = LogManager.getLogger(SerialPortFinder.class);
 
     /**
      * @see org.jnode.driver.DeviceFinder#findDevices(DeviceManager, Bus)

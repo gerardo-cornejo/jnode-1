@@ -21,6 +21,7 @@
 package org.jnode.fs.ntfs;
 
 import java.io.UnsupportedEncodingException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.util.LittleEndian;
 
@@ -32,7 +33,7 @@ public class NTFSStructure {
     /**
      * My logger
      */
-    protected static final Logger log = Logger.getLogger(NTFSStructure.class);
+    protected static final Logger log = LogManager.getLogger(NTFSStructure.class);
 
     private byte[] buffer;
     private int offset;

@@ -31,6 +31,7 @@ import static org.jnode.driver.net.prism2.Prism2Constants.Register.PARAM2;
 import static org.jnode.driver.net.prism2.Prism2Constants.Register.SELECT0;
 import static org.jnode.driver.net.prism2.Prism2Constants.Register.STATUS;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DriverException;
 import org.jnode.system.resource.MemoryResource;
@@ -49,7 +50,7 @@ final class Prism2IO implements Prism2Constants {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(Prism2IO.class);
+    private static final Logger log = LogManager.getLogger(Prism2IO.class);
 
     /**
      * The memory mapped registers

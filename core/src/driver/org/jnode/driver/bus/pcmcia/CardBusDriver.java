@@ -21,6 +21,7 @@
 package org.jnode.driver.bus.pcmcia;
 
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
@@ -41,7 +42,7 @@ public class CardBusDriver extends Driver {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(CardBusDriver.class);
+    private static final Logger log = LogManager.getLogger(CardBusDriver.class);
     private CardBusBus bus;
 
     public CardBusDriver() {

@@ -28,6 +28,7 @@ import java.util.List;
 import javax.naming.NameNotFoundException;
 
 import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.ApiNotFoundException;
 import org.jnode.driver.DeviceListener;
@@ -41,7 +42,7 @@ import org.jnode.partitions.PartitionTableEntry;
 import org.jnode.partitions.ibm.IBMPartitionTableEntry;
 
 public class OSFacade {
-    private static final Logger LOG = Logger.getLogger(OSFacade.class);
+    private static final Logger LOG = LogManager.getLogger(OSFacade.class);
 
     @SuppressWarnings("unused")
     private static Comparator<Partition> PARTITION_COMPARATOR = new Comparator<Partition>() {

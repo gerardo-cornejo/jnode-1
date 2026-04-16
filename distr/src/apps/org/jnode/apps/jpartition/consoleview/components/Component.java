@@ -23,6 +23,7 @@ package org.jnode.apps.jpartition.consoleview.components;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.jpartition.Context;
 

@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.shell.CommandLine.Token;
 import org.jnode.shell.help.Help;
@@ -59,7 +60,7 @@ public class DefaultInterpreter implements CommandInterpreter {
 
     static final String[] NO_ARGS = new String[0];
     
-    private static final Logger LOG = Logger.getLogger(DefaultInterpreter.class);
+    private static final Logger LOG = LogManager.getLogger(DefaultInterpreter.class);
 
     public static final int REDIRECTS_FLAG = 0x01;
 

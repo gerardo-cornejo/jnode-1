@@ -27,6 +27,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -36,7 +37,7 @@ import org.apache.log4j.Logger;
  *
  */
 public class DiskCopier {
-    private static final Logger LOG = Logger.getLogger(DiskCopier.class);
+    private static final Logger LOG = LogManager.getLogger(DiskCopier.class);
 
     /**
      * Copy a VMware disk to a given directory.

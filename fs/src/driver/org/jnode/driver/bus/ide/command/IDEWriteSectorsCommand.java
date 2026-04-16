@@ -21,6 +21,7 @@
 package org.jnode.driver.bus.ide.command;
 
 import java.nio.ByteBuffer;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.bus.ide.IDEBus;
 import org.jnode.driver.bus.ide.IDEIO;
@@ -36,7 +37,7 @@ import org.jnode.util.TimeoutException;
 public class IDEWriteSectorsCommand extends IDERWSectorsCommand {
 
     private final ByteBuffer buf;
-    private static final Logger log = Logger.getLogger(IDEWriteSectorsCommand.class);
+    private static final Logger log = LogManager.getLogger(IDEWriteSectorsCommand.class);
 
     //private int sectorsWritten = 0;
     //private final Semaphore irqSem = new Semaphore(0);

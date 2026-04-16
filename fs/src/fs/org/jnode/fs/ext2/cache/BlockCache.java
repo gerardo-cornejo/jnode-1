@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -36,7 +37,7 @@ public final class BlockCache extends LinkedHashMap<Object, Block> {
     // at most MAX_SIZE blocks fit in the cache
     static final int MAX_SIZE = 10;
 
-    private static final Logger log = Logger.getLogger(BlockCache.class);
+    private static final Logger log = LogManager.getLogger(BlockCache.class);
 
     private ArrayList<CacheListener> cacheListeners;
 

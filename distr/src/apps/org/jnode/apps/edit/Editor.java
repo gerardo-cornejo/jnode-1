@@ -44,13 +44,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
  * @author Levente S\u00e1ntha
  */
 public class Editor extends JFrame {
-    private static Logger logger = Logger.getLogger(Editor.class);
+    private static Logger logger = LogManager.getLogger(Editor.class);
     private JTextArea textArea;
     private JFileChooser fc;
     private String directory;

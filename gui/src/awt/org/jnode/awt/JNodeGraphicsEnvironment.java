@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import javax.naming.NamingException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.font.FontManager;
 import org.jnode.awt.image.JNodeBufferedImageGraphics2D;
@@ -50,7 +51,7 @@ public class JNodeGraphicsEnvironment extends GraphicsEnvironment {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(JNodeGraphicsEnvironment.class);
+    private static final Logger log = LogManager.getLogger(JNodeGraphicsEnvironment.class);
     private JNodeFrameBufferDevice[] devices;
     private GraphicsDevice defaultDevice;
 

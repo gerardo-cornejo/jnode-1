@@ -22,6 +22,7 @@ package org.jnode.driver.input.usb;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Driver;
 import org.jnode.driver.DriverException;
@@ -52,7 +53,7 @@ public class USBKeyboardDriver extends Driver implements USBPipeListener, USBCon
         ByteQueueProcessor {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(USBKeyboardDriver.class);
+    private static final Logger log = LogManager.getLogger(USBKeyboardDriver.class);
     /** The endpoint we're communicating with */
     private USBEndPoint ep;
     /** The interrupt pipe */

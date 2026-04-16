@@ -22,6 +22,7 @@ package org.jnode.fs.hfsplus.extent;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.fs.hfsplus.tree.AbstractLeafNode;
 import org.jnode.fs.hfsplus.tree.Key;
@@ -30,7 +31,7 @@ import org.jnode.fs.hfsplus.tree.NodeDescriptor;
 
 public class ExtentLeafNode extends AbstractLeafNode<ExtentKey> {
 
-    private static final Logger log = Logger.getLogger(ExtentLeafNode.class);
+    private static final Logger log = LogManager.getLogger(ExtentLeafNode.class);
 
     /**
      * Create a new node.

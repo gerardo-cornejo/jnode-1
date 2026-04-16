@@ -49,7 +49,7 @@ public class Log4jLoggerArgument extends Argument<Logger> {
      */
     @Override
     protected Logger doAccept(Token value, int flags) throws CommandSyntaxException {
-        return Logger.getLogger(value.text);
+        return LogManager.getLogger(value.text);
     }
 
     /**
@@ -57,9 +57,10 @@ public class Log4jLoggerArgument extends Argument<Logger> {
      */
     @Override
     public void doComplete(CompletionInfo completions, String partial, int flags) {
-        Enumeration<?> en = LogManager.getCurrentLoggers();
+        @SuppressWarnings("unchecked")
+        Enumeration<Logger> en = LogManager.getCurrentLoggers();
         while (en.hasMoreElements()) {
-            String loggerName = ((Logger) en.nextElement()).getName();
+            String loggerName = en.nextElement().getName();
             if (isCompletion(loggerName, partial)) {
                 completions.addCompletion(loggerName);
             }

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.IOUtils;
 import org.jnode.apps.vmware.disk.VMWareDisk;
@@ -49,7 +50,7 @@ import org.junit.runners.Parameterized.Parameters;
  */
 @RunWith(value = Parameterized.class)
 public abstract class BaseReadWriteTest extends BaseTest {
-    private static final Logger LOG = Logger.getLogger(BaseReadWriteTest.class);
+    private static final Logger LOG = LogManager.getLogger(BaseReadWriteTest.class);
 
     private static final String DISKS_PACKAGE = "/org/jnode/apps/vmware/disk/test/disks/";
     private static final String DISK_BASE_NAME = "Menuet32-";

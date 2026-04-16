@@ -25,6 +25,7 @@ import net.wimpi.telnetd.net.Connection;
 import net.wimpi.telnetd.net.ConnectionEvent;
 import net.wimpi.telnetd.shell.Shell;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.console.ConsoleException;
 import org.jnode.driver.console.ConsoleManager;
@@ -47,7 +48,7 @@ public class JNodeShell implements Shell {
         }
     }
 
-    private static final Logger log = Logger.getLogger(JNodeShell.class);
+    private static final Logger log = LogManager.getLogger(JNodeShell.class);
 
     private CommandShell commandShell;
     private Connection connection;

@@ -20,6 +20,7 @@
  
 package org.jnode.driver.input.usb;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Driver;
 import org.jnode.driver.DriverException;
@@ -43,7 +44,7 @@ import org.jnode.driver.input.PointerEvent;
 public class USBMouseDriver extends Driver implements USBPipeListener, USBConstants {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(USBMouseDriver.class);
+    private static final Logger log = LogManager.getLogger(USBMouseDriver.class);
     /** The endpoint we're communicating with */
     private USBEndPoint ep;
     /** The interrupt pipe */

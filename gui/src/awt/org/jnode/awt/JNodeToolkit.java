@@ -80,6 +80,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.naming.NamingException;
 import javax.swing.JDesktopPane;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.font.FontManager;
 import org.jnode.awt.image.BufferedImageSurface;
@@ -103,7 +104,7 @@ import sun.awt.image.ToolkitImage;
  */
 @SharedStatics
 public abstract class JNodeToolkit extends ClasspathToolkit implements FrameBufferAPIOwner {
-    protected static final Logger log = Logger.getLogger(JNodeToolkit.class);
+    protected static final Logger log = LogManager.getLogger(JNodeToolkit.class);
 
     private final Object initCloseLock = new Object();
     private EventQueue waitingNativeQueue;

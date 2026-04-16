@@ -46,6 +46,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.swingpeers.ISwingPeer;
 import org.jnode.awt.swingpeers.SwingToolkit;
@@ -55,7 +56,7 @@ import org.jnode.awt.swingpeers.SwingToolkit;
  */
 public class WindowBar extends JPanel {
     private static final long serialVersionUID = 1L;
-    private static final Logger log = Logger.getLogger(WindowBar.class);
+    private static final Logger log = LogManager.getLogger(WindowBar.class);
     private final Map<JInternalFrame, FrameWrapper> wrappers;
 
     public WindowBar() {

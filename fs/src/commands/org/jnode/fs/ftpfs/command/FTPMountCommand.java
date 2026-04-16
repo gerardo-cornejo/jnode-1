@@ -22,6 +22,7 @@ package org.jnode.fs.ftpfs.command;
 
 import java.io.File;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DeviceManager;
 import org.jnode.driver.DeviceUtils;
@@ -93,8 +94,8 @@ public class FTPMountCommand extends AbstractCommand {
                     }
                     dm.unregister(dev);
                 } catch (Exception ex) {
-                    Logger log = Logger.getLogger(FTPMountCommand.class);
-                    log.fatal("Cannot undo failed mount attempt", ex);
+                    Logger log = LogManager.getLogger(FTPMountCommand.class);
+                    log.error("Cannot undo failed mount attempt", ex);
                 }
             }
         }

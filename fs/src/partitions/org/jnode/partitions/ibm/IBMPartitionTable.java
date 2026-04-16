@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.ApiNotFoundException;
 import org.jnode.driver.Device;
@@ -86,7 +87,7 @@ public class IBMPartitionTable implements PartitionTable<IBMPartitionTableEntry>
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(IBMPartitionTable.class);
+    private static final Logger log = LogManager.getLogger(IBMPartitionTable.class);
 
     /**
      * The position of the extendedPartition in the table

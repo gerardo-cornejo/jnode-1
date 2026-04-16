@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.AbstractDeviceManager;
 import org.jnode.driver.Device;
@@ -56,7 +57,7 @@ public class Emu {
     }
 
     public static class DeviceManager extends AbstractDeviceManager {
-        public static final Logger log = Logger.getLogger(DeviceManager.class);
+        public static final Logger log = LogManager.getLogger(DeviceManager.class);
 
         public static final DeviceManager INSTANCE = new DeviceManager();
 
@@ -123,7 +124,7 @@ public class Emu {
 
                 log.debug("StubDeviceManager initialized !");
             } catch (InterruptedException e) {
-                log.fatal("can't find devices", e);
+                log.error("can't find devices", e);
             }
         }
 

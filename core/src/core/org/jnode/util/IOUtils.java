@@ -33,6 +33,7 @@ import java.lang.reflect.Field;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -131,7 +132,7 @@ public class IOUtils {
                     field.setAccessible(false);
                     return (InputStream) in;
                 } catch (Exception ex) {
-                    Logger.getLogger(IOUtils.class).error("Cannot extract the 'in' field", ex);
+                    LogManager.getLogger(IOUtils.class).error("Cannot extract the 'in' field", ex);
                     return null;
                 }
             }
@@ -149,7 +150,7 @@ public class IOUtils {
                     Object out = field.get(outputStream);
                     return (OutputStream) out;
                 } catch (Exception ex) {
-                    Logger.getLogger(IOUtils.class).error("Cannot extract the 'out' field", ex);
+                    LogManager.getLogger(IOUtils.class).error("Cannot extract the 'out' field", ex);
                     return null;
                 }
             }
@@ -169,7 +170,7 @@ public class IOUtils {
                     Object lock = field.get(writer);
                     return (OutputStream) lock;
                 } catch (Exception ex) {
-                    Logger.getLogger(IOUtils.class).error("Cannot extract the 'lock' field", ex);
+                    LogManager.getLogger(IOUtils.class).error("Cannot extract the 'lock' field", ex);
                     return null;
                 }
             }
@@ -189,7 +190,7 @@ public class IOUtils {
                     Object lock = field.get(reader);
                     return (InputStream) lock;
                 } catch (Exception ex) {
-                    Logger.getLogger(IOUtils.class).error("Cannot extract the 'lock' field", ex);
+                    LogManager.getLogger(IOUtils.class).error("Cannot extract the 'lock' field", ex);
                     return null;
                 }
             }

@@ -23,6 +23,7 @@ package org.jnode.apps.vmware.disk.handler;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.descriptor.DescriptorRW;
 import org.jnode.apps.vmware.disk.handler.sparse.SparseExtentFactory;
@@ -35,7 +36,7 @@ import org.jnode.apps.vmware.disk.handler.sparse.SparseExtentFactory;
  */
 public abstract class ExtentFactory {
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(SparseExtentFactory.class);
+    private static final Logger LOG = LogManager.getLogger(SparseExtentFactory.class);
 
     /**
      * 

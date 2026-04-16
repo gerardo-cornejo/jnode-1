@@ -22,6 +22,7 @@ package org.jnode.apps.vmware.disk.handler.sparse;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.ExtentDeclaration;
 import org.jnode.apps.vmware.disk.descriptor.Descriptor;
@@ -35,7 +36,7 @@ import org.jnode.apps.vmware.disk.handler.IOHandler;
  * 
  */
 public class SparseExtent extends Extent {
-    private static final Logger LOG = Logger.getLogger(SparseExtent.class);
+    private static final Logger LOG = LogManager.getLogger(SparseExtent.class);
 
     private final SparseExtentHeader header;
     private final AllocationTable redundantAllocationTable;

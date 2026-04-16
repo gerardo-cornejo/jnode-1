@@ -41,6 +41,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.command.util.AbstractDirectoryWalker;
 import org.jnode.command.util.AbstractDirectoryWalker.PathnamePatternFilter;
@@ -61,7 +62,7 @@ import org.jnode.shell.syntax.StringArgument;
  */
 public class GrepCommand extends AbstractCommand {
 
-    private static final Logger log = Logger.getLogger(GrepCommand.class);
+    private static final Logger log = LogManager.getLogger(GrepCommand.class);
     private static final boolean DEBUG = false;
     private static final int BUFFER_SIZE = 8192;
     

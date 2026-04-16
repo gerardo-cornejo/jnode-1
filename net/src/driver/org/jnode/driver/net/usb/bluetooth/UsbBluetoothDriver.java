@@ -20,6 +20,7 @@
  
 package org.jnode.driver.net.usb.bluetooth;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Driver;
 import org.jnode.driver.DriverException;
@@ -38,7 +39,7 @@ import org.jnode.util.NumberUtils;
 
 public class UsbBluetoothDriver extends Driver implements USBPipeListener, UsbNetConstant {
 
-    private static final Logger log = Logger.getLogger(UsbBluetoothDriver.class);
+    private static final Logger log = LogManager.getLogger(UsbBluetoothDriver.class);
 
     USBDataPipe intPipe;
     USBPacket intData;

@@ -21,6 +21,7 @@
 package org.jnode.net.ipv4.tcp;
 
 import java.net.SocketException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.net.SocketBuffer;
 import org.jnode.net.ipv4.IPv4Header;
@@ -34,7 +35,7 @@ public class TCPOutSegment extends TCPSegment {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(TCPOutSegment.class);
+    private static final Logger log = LogManager.getLogger(TCPOutSegment.class);
 
     private final TCPDataBuffer buffer;
     private int dataOffset;

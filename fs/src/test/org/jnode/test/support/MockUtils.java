@@ -20,11 +20,12 @@
  
 package org.jnode.test.support;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jmock.cglib.Mock;
 
 public class MockUtils {
-    private static final Logger log = Logger.getLogger(MockUtils.class);
+    private static final Logger log = LogManager.getLogger(MockUtils.class);
 
     public static <T> T createMockObject(Class<T> name) {
         return createMockObject(name, null);

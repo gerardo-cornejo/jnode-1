@@ -30,6 +30,7 @@ import java.net.SocketImplFactory;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.net.NetworkException;
 import org.jnode.net.SocketBuffer;
@@ -77,7 +78,7 @@ public class TCPProtocol implements IPv4Protocol, IPv4Constants, TCPConstants {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(TCPProtocol.class);
+    private static final Logger log = LogManager.getLogger(TCPProtocol.class);
 
     /**
      * Initialize a new instance

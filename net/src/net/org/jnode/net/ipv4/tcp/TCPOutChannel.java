@@ -23,6 +23,7 @@ package org.jnode.net.ipv4.tcp;
 import java.net.SocketException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.net.ipv4.IPv4Header;
 
@@ -35,7 +36,7 @@ public class TCPOutChannel {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(TCPOutChannel.class);
+    private static final Logger log = LogManager.getLogger(TCPOutChannel.class);
 
     /**
      * The protocol

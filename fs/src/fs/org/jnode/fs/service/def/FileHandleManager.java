@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.fs.FSFile;
 
@@ -35,7 +36,7 @@ import org.jnode.fs.FSFile;
 final class FileHandleManager {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(FileHandleManager.class);
+    private static final Logger log = LogManager.getLogger(FileHandleManager.class);
     /** A map between File and FileData */
     public final Map<FSFile, FileData> openFiles = new HashMap<FSFile, FileData>();
 
@@ -99,7 +100,7 @@ final class FileHandleManager {
 
         /** My logger */
         @SuppressWarnings("unused")
-        private final Logger fdLog = Logger.getLogger(getClass());
+        private final Logger fdLog = LogManager.getLogger(getClass());
         /** The actual file */
         private final FSFile file;
         /** Set of open filehandles */

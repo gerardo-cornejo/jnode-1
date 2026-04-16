@@ -22,6 +22,7 @@ package org.jnode.driver.bus.pcmcia;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Bus;
 import org.jnode.driver.bus.pci.PCIConstants;
@@ -33,7 +34,7 @@ public class CardBusBus extends Bus implements PCIConstants {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(CardBusBus.class);
+    private static final Logger log = LogManager.getLogger(CardBusBus.class);
     /**
      * The CardBus controller
      */

@@ -22,6 +22,7 @@ package org.jnode.driver.ps2;
 
 import java.nio.channels.ByteChannel;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DeviceException;
 import org.jnode.driver.DriverException;
@@ -37,7 +38,7 @@ public class PS2KeyboardDriver extends AbstractKeyboardDriver implements PS2Cons
     private final PS2Bus bus;
     private final PS2ByteChannel channel;
     private IRQResource irq;
-    private static final Logger log = Logger.getLogger(PS2KeyboardDriver.class);
+    private static final Logger log = LogManager.getLogger(PS2KeyboardDriver.class);
 
     PS2KeyboardDriver(PS2Bus ps2) {
         this.bus = ps2;

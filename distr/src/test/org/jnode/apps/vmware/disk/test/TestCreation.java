@@ -21,6 +21,7 @@
 package org.jnode.apps.vmware.disk.test;
 
 import java.io.IOException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
@@ -32,7 +33,7 @@ import org.junit.Test;
  */
 public class TestCreation extends BaseTest {
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(TestCreation.class);
+    private static final Logger LOG = LogManager.getLogger(TestCreation.class);
 
     /**
      * 

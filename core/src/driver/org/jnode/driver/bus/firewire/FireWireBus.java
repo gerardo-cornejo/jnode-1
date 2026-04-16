@@ -20,6 +20,7 @@
  
 package org.jnode.driver.bus.firewire;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Bus;
 
@@ -30,7 +31,7 @@ public class FireWireBus extends Bus {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(FireWireBus.class);
+    private static final Logger log = LogManager.getLogger(FireWireBus.class);
     /**
      * The FireWire controller
      */

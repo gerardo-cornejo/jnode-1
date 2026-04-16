@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.jpartition.Context;
 import org.jnode.apps.jpartition.commands.CreatePartitionCommand;
@@ -47,7 +48,7 @@ import org.jnode.fs.fat.FatType;
 import org.jnode.fs.jfat.ClusterSize;
 
 public class UserFacade {
-    private static final Logger LOG = Logger.getLogger(UserFacade.class);
+    private static final Logger LOG = LogManager.getLogger(UserFacade.class);
 
     static {
         LOG.setLevel(Level.DEBUG);

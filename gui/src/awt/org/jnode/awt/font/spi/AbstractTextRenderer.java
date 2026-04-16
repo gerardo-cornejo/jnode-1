@@ -28,6 +28,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.WritableRaster;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.font.TextRenderer;
 import org.jnode.awt.font.renderer.GlyphRenderer;
@@ -45,7 +46,7 @@ public abstract class AbstractTextRenderer implements TextRenderer {
     /**
      * My logger
      */
-    protected static final Logger log = Logger.getLogger(AbstractTextRenderer.class);
+    protected static final Logger log = LogManager.getLogger(AbstractTextRenderer.class);
 
     protected final FontMetrics fontMetrics;
 

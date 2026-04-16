@@ -23,6 +23,7 @@ package org.jnode.test.fs.driver.stubs;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.AbstractDeviceManager;
 import org.jnode.driver.Device;
@@ -36,7 +37,7 @@ import org.jnode.driver.DriverException;
  * @author epr
  */
 public class StubDeviceManager extends AbstractDeviceManager {
-    public static final Logger log = Logger.getLogger(StubDeviceManager.class);
+    public static final Logger log = LogManager.getLogger(StubDeviceManager.class);
 
     public static final StubDeviceManager INSTANCE = new StubDeviceManager();
 
@@ -104,7 +105,7 @@ public class StubDeviceManager extends AbstractDeviceManager {
 
             log.debug("StubDeviceManager initialized !");
         } catch (InterruptedException e) {
-            log.fatal("can't find devices", e);
+            log.error("can't find devices", e);
         }
     }
 

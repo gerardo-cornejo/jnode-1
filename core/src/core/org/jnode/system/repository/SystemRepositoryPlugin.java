@@ -34,7 +34,7 @@ import org.jnode.system.repository.plugins.PluginLoaderPlugin;
 public final class SystemRepositoryPlugin extends Plugin {
 
     // private static final Logger log =
-    // Logger.getLogger(SystemRepositoryPlugin.class);
+    // LogManager.getLogger(SystemRepositoryPlugin.class);
     private Repository repository;
 
     /**

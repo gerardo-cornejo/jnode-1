@@ -22,6 +22,7 @@ package org.jnode.net.ipv4;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.net.SocketBuffer;
 
@@ -33,7 +34,7 @@ import org.jnode.net.SocketBuffer;
 public class IPv4FragmentList implements IPv4Constants {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(IPv4FragmentList.class);
+    private static final Logger log = LogManager.getLogger(IPv4FragmentList.class);
     /** When was this object created */
     private final long creationTime;
     /** List of fragments */

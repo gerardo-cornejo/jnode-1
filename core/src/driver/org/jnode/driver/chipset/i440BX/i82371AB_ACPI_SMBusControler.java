@@ -23,6 +23,7 @@ package org.jnode.driver.chipset.i440BX;
 import java.io.IOException;
 import java.security.PrivilegedExceptionAction;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DeviceUtils;
 import org.jnode.driver.DriverException;
@@ -60,7 +61,7 @@ import org.jnode.util.NumberUtils;
 
 public class i82371AB_ACPI_SMBusControler extends SMBusControler {
 
-    private static final Logger log = Logger.getLogger(i82371AB_ACPI_SMBusControler.class);
+    private static final Logger log = LogManager.getLogger(i82371AB_ACPI_SMBusControler.class);
     PCIDevice device;
     int hostStatusIORegister = 0;
     int slaveStatusIORegister = 0;

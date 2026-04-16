@@ -25,6 +25,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.channels.FileChannel;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.IOUtils;
 import org.jnode.apps.vmware.disk.handler.IOHandler;
@@ -36,7 +37,7 @@ import org.jnode.apps.vmware.disk.handler.IOHandler;
  * 
  */
 public class AllocationTableRW {
-    private static final Logger LOG = Logger.getLogger(SparseExtentRW.class);
+    private static final Logger LOG = LogManager.getLogger(SparseExtentRW.class);
 
     /**
      * 
@@ -57,13 +58,13 @@ public class AllocationTableRW {
             if (LOG.isDebugEnabled()) {
                 long pos = raf.getChannel().position();
                 if ((pos % IOHandler.SECTOR_SIZE) != 0) {
-                    LOG.fatal("read: FATAL: pos not begin of a sector");
+                    LOG.error("read: FATAL: pos not begin of a sector");
                 }
 
                 final long gtOffset = (pos / IOHandler.SECTOR_SIZE);
                 final long gde = grainDirectory.getEntry(i);
                 if (gde != gtOffset) {
-                    LOG.fatal("read: FATAL: grainTables[" + i + "] (value:" + gtOffset +
+                    LOG.error("read: FATAL: grainTables[" + i + "] (value:" + gtOffset +
                             ") doesn't match to GrainDirectoryEntry #" + i + "(value:" + gde + ")");
                 }
 

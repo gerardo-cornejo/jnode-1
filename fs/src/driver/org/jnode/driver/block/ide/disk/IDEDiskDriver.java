@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.bootlog.BootLogInstance;
 import org.jnode.driver.Bus;
@@ -64,7 +65,7 @@ public class IDEDiskDriver extends Driver
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(IDEDiskDriver.class);
+    private static final Logger log = LogManager.getLogger(IDEDiskDriver.class);
 
     /**
      * Number of addressable sectors

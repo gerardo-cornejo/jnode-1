@@ -24,6 +24,7 @@ import java.net.DatagramSocketImplFactory;
 import java.net.SocketException;
 import java.net.SocketImplFactory;
 import java.util.Vector;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.net.SocketBuffer;
 import org.jnode.net.ipv4.IPv4Constants;
@@ -48,7 +49,7 @@ public class ICMPProtocol implements IPv4Protocol, IPv4Constants, ICMPConstants,
     /**
      * My logger
      */
-    private Logger log = Logger.getLogger(getClass());
+    private Logger log = LogManager.getLogger(getClass());
 
     /**
      * The IP service we're a part of

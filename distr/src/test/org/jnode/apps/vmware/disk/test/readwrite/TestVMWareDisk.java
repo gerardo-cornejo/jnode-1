@@ -26,6 +26,7 @@ import java.nio.ByteBuffer;
 
 import junit.framework.Assert;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.IOUtils;
 import org.jnode.apps.vmware.disk.VMWareDisk;
@@ -41,7 +42,7 @@ import org.junit.Ignore;
  * 
  */
 public class TestVMWareDisk extends BaseReadWriteTest {
-    private static final Logger LOG = Logger.getLogger(TestVMWareDisk.class);
+    private static final Logger LOG = LogManager.getLogger(TestVMWareDisk.class);
 
     /**
      * Construct a test class for a VMware disk stored in a file.

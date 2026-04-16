@@ -23,6 +23,7 @@ package org.jnode.driver.bus.pci;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.StringTokenizer;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Driver;
 import org.jnode.driver.DriverException;
@@ -35,7 +36,7 @@ import org.jnode.util.NumberUtils;
  */
 public class AbstractPCIDeviceToDriverMapper {
 
-    final Logger log = Logger.getLogger(getClass());
+    final Logger log = LogManager.getLogger(getClass());
     private final String driverClass;
     private final int[] ids;
     private final int[] masks;

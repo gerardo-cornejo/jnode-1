@@ -20,6 +20,7 @@
  
 package org.jnode.driver.bus.ide.atapi;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Bus;
 import org.jnode.driver.Device;
@@ -48,7 +49,7 @@ public class ATAPIDriver extends Driver implements SCSIHostControllerAPI {
 
     private ATAPISCSIDevice scsiDevice;
 
-    private static final Logger log = Logger.getLogger(ATAPIDriver.class);
+    private static final Logger log = LogManager.getLogger(ATAPIDriver.class);
 
     /**
      * @see org.jnode.driver.Driver#startDevice()

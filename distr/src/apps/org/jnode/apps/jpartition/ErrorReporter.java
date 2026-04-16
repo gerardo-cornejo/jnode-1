@@ -20,6 +20,7 @@
  
 package org.jnode.apps.jpartition;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**

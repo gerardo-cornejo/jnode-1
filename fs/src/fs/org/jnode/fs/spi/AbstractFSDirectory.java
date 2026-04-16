@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.fs.FSDirectory;
 import org.jnode.fs.FSEntry;
@@ -37,7 +38,7 @@ import org.jnode.fs.ReadOnlyFileSystemException;
  * @author Fabien DUMINY
  */
 public abstract class AbstractFSDirectory extends AbstractFSObject implements FSDirectory {
-    private static final Logger log = Logger.getLogger(AbstractFSDirectory.class);
+    private static final Logger log = LogManager.getLogger(AbstractFSDirectory.class);
 
     /* Table of entries */
     private FSEntryTable entries = FSEntryTable.EMPTY_TABLE;
@@ -221,7 +222,7 @@ public abstract class AbstractFSDirectory extends AbstractFSObject implements FS
                 }
                 resetDirty();
             } catch (IOException e) {
-                log.fatal("unable to read directory entries", e);
+                log.error("unable to read directory entries", e);
                 // the next time, we will call checkEntriesLoaded()
                 // we will retry to load entries
                 entries = FSEntryTable.EMPTY_TABLE;

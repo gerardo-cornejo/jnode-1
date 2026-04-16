@@ -20,6 +20,7 @@
  
 package org.jnode.driver.block.usb.storage;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Bus;
 import org.jnode.driver.Device;
@@ -52,7 +53,7 @@ public class USBStorageSCSIHostDriver extends Driver
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(USBStorageSCSIHostDriver.class);
+    private static final Logger log = LogManager.getLogger(USBStorageSCSIHostDriver.class);
 
     /**
      * Storage specific device data

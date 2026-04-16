@@ -20,6 +20,7 @@
  
 package org.jnode.test;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -32,13 +33,13 @@ public class Log4jTest {
         //System.getProperties().setProperty("log4j.defaultInitOverride", "true");
         //BasicConfigurator.configure();
 
-        final Logger log = Logger.getLogger(Log4jTest.class);
+        final Logger log = LogManager.getLogger(Log4jTest.class);
 
         log.debug("This is a debug message");
         log.info("This is a info message");
         log.warn("This is a warn message");
         log.error("This is a error message");
-        log.fatal("This is a fatal message");
+        log.error("This is a fatal message");
 
     }
 }

@@ -35,6 +35,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.JNodeAwtContext;
 import org.jnode.awt.JNodeToolkit;
@@ -48,7 +49,7 @@ import org.jnode.vm.facade.VmUtils;
  */
 public class Desktop implements Runnable {
 
-    static final Logger log = Logger.getLogger(Desktop.class);
+    static final Logger log = LogManager.getLogger(Desktop.class);
 
     ControlBar controlBar;
 

@@ -31,6 +31,7 @@ import java.awt.image.Raster;
 import java.io.PrintWriter;
 import java.security.PrivilegedExceptionAction;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.util.BitmapGraphics;
 import org.jnode.driver.DriverException;
@@ -62,7 +63,7 @@ public class VMWareCore extends AbstractSurface implements VMWareConstants, PCI_
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(VMWareCore.class);
+    private static final Logger log = LogManager.getLogger(VMWareCore.class);
     private final VMWareDriver driver;
     private final int indexPort;
     private final int valuePort;

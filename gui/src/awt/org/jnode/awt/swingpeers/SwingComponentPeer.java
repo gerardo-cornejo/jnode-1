@@ -49,6 +49,7 @@ import java.awt.peer.ContainerPeer;
 import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.GraphicsFactory;
 import org.jnode.awt.JNodeGenericPeer;
@@ -71,7 +72,7 @@ abstract class SwingComponentPeer<awtT extends Component, swingPeerT extends Com
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // Private
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = LogManager.getLogger(getClass());
     protected final swingPeerT peerComponent;
 
     /**

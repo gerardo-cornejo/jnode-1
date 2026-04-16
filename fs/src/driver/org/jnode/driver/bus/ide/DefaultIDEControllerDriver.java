@@ -23,6 +23,7 @@ package org.jnode.driver.bus.ide;
 import java.util.ArrayList;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
@@ -43,7 +44,7 @@ public class DefaultIDEControllerDriver extends Driver implements IDEControllerA
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(DefaultIDEControllerDriver.class);
+    private static final Logger log = LogManager.getLogger(DefaultIDEControllerDriver.class);
 
     /**
      * The actual worker

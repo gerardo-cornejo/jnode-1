@@ -24,6 +24,7 @@ import java.util.Stack;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
@@ -38,7 +39,7 @@ import org.jnode.naming.InitialNaming;
 public abstract class AbstractFrameBufferDriver extends Driver implements FrameBufferAPI {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(AbstractFrameBufferDriver.class);
+    private static final Logger log = LogManager.getLogger(AbstractFrameBufferDriver.class);
 
     /** Device name prefix of framebuffer devices */
     public static final String FB_DEVICE_PREFIX = "fb";

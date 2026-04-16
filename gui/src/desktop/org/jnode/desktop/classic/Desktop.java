@@ -51,6 +51,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.JNodeAwtContext;
 import org.jnode.awt.JNodeToolkit;
@@ -63,7 +64,7 @@ import org.jnode.vm.VmSystem;
  */
 public class Desktop implements Runnable {
 
-    static final Logger log = Logger.getLogger(Desktop.class);
+    static final Logger log = LogManager.getLogger(Desktop.class);
 
     TaskBar taskBar;
     JPopupMenu desktopMenu;

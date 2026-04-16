@@ -20,6 +20,7 @@
  
 package org.jnode.driver.net.via_rhine;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import static org.jnode.driver.net.via_rhine.ViaRhineConstants.PKT_BUF_SZ;
 import org.jnode.system.resource.MemoryResource;
@@ -31,7 +32,7 @@ import org.vmmagic.unboxed.Address;
  */
 class ViaRhineDesc {
     private static final int OWN_BIT_MASK = 0x80000000;
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = LogManager.getLogger(getClass());
     byte[] desc;
     int descOffs;
     MemoryResource descMr;

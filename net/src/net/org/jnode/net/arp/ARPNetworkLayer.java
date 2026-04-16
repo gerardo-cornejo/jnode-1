@@ -23,6 +23,7 @@ package org.jnode.net.arp;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collection;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.annotation.SharedStatics;
 import org.jnode.driver.ApiNotFoundException;
@@ -58,7 +59,7 @@ public class ARPNetworkLayer implements NetworkLayer {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(ARPNetworkLayer.class);
+    private static final Logger log = LogManager.getLogger(ARPNetworkLayer.class);
 
     private static final boolean DEBUG = false;
 

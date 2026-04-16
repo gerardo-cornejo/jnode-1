@@ -20,6 +20,7 @@
  
 package org.jnode.driver.bus.usb.hub;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DeviceNotFoundException;
 import org.jnode.driver.Driver;
@@ -43,7 +44,7 @@ public class USBHubDriver extends Driver implements USBHubAPI, USBHubConstants {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(USBHubDriver.class);
+    private static final Logger log = LogManager.getLogger(USBHubDriver.class);
     /**
      * The number of ports
      */

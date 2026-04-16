@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.ExtentDeclaration;
 import org.jnode.apps.vmware.disk.IOUtils;
@@ -49,7 +50,7 @@ import org.jnode.driver.bus.ide.IDEConstants;
  * 
  */
 public class SparseDiskFactory extends DiskFactory {
-    private static final Logger LOG = Logger.getLogger(SparseDiskFactory.class);
+    private static final Logger LOG = LogManager.getLogger(SparseDiskFactory.class);
 
     @Override
     protected File createDiskImpl(File directory, String name, long size) throws IOException {

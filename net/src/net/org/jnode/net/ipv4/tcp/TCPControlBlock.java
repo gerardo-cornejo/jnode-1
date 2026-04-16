@@ -23,6 +23,7 @@ package org.jnode.net.ipv4.tcp;
 import java.net.ConnectException;
 import java.net.SocketException;
 import java.util.LinkedList;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.net.SocketBuffer;
 import org.jnode.net.ipv4.IPv4Address;
@@ -40,7 +41,7 @@ public class TCPControlBlock extends IPv4ControlBlock implements TCPConstants {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(TCPControlBlock.class);
+    private static final Logger log = LogManager.getLogger(TCPControlBlock.class);
 
     /**
      * The outgoing channel

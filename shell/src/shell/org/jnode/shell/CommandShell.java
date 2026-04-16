@@ -44,6 +44,7 @@ import java.util.TreeMap;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.console.CompletionInfo;
 import org.jnode.driver.console.ConsoleEvent;
@@ -121,7 +122,7 @@ public class CommandShell implements Runnable, Shell, ConsoleListener {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(CommandShell.class);
+    private static final Logger log = LogManager.getLogger(CommandShell.class);
 
     private CommandInput cin;
     

@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.extent.Extent;
 
@@ -34,7 +35,7 @@ import org.jnode.apps.vmware.disk.extent.Extent;
  * 
  */
 public class ExtentIO {
-    private static final Logger LOG = Logger.getLogger(ExtentIO.class);
+    private static final Logger LOG = LogManager.getLogger(ExtentIO.class);
 
     protected final RandomAccessFile raf;
     protected final FileChannel channel;

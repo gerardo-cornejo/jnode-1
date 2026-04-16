@@ -20,6 +20,7 @@
  
 package org.jnode.driver.block.usb.storage;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceToDriverMapper;
@@ -36,7 +37,7 @@ public class USBStorageDeviceToDriverMapper implements DeviceToDriverMapper, USB
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(USBStorageDeviceToDriverMapper.class);
+    private static final Logger log = LogManager.getLogger(USBStorageDeviceToDriverMapper.class);
 
     /**
      * @see org.jnode.driver.DeviceToDriverMapper#findDriver(org.jnode.driver.Device)

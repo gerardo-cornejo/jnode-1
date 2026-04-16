@@ -20,6 +20,7 @@
  
 package org.jnode.driver.system.firmware.bios;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Bus;
 import org.jnode.driver.Device;
@@ -36,7 +37,7 @@ public final class BiosFinder implements DeviceFinder {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(BiosFinder.class);
+    private static final Logger log = LogManager.getLogger(BiosFinder.class);
 
     /**
      * @param devMan

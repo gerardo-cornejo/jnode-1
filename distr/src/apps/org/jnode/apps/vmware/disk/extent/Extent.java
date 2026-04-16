@@ -21,6 +21,7 @@
 package org.jnode.apps.vmware.disk.extent;
 
 import java.io.File;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.ExtentDeclaration;
 import org.jnode.apps.vmware.disk.descriptor.Descriptor;
@@ -32,7 +33,7 @@ import org.jnode.apps.vmware.disk.descriptor.Descriptor;
  * 
  */
 public class Extent {
-    private static final Logger LOG = Logger.getLogger(Extent.class);
+    private static final Logger LOG = LogManager.getLogger(Extent.class);
 
     private Descriptor descriptor;
 

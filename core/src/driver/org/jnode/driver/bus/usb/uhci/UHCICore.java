@@ -22,6 +22,7 @@ package org.jnode.driver.bus.usb.uhci;
 
 import java.security.PrivilegedExceptionAction;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DriverException;
 import org.jnode.driver.bus.pci.PCIBaseAddress;
@@ -52,7 +53,7 @@ public class UHCICore implements USBHostControllerAPI, UHCIConstants, IRQHandler
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(UHCICore.class);
+    private static final Logger log = LogManager.getLogger(UHCICore.class);
     /**
      * The pci device
      */

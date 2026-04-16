@@ -26,6 +26,7 @@ import java.nio.ByteBuffer;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.ApiNotFoundException;
 import org.jnode.driver.Device;
@@ -54,7 +55,7 @@ import org.jnode.work.WorkUtils;
 final class FileSystemMounter implements DeviceListener {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(FileSystemMounter.class);
+    private static final Logger log = LogManager.getLogger(FileSystemMounter.class);
 
     private static final String MOUNT_ROOT = "devices";
 

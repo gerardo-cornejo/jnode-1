@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.shell.help.Help;
 import org.jnode.shell.help.HelpException;
@@ -60,7 +61,7 @@ public class RedirectingInterpreter extends DefaultInterpreter implements
         }
     };
 
-    private static final Logger LOG = Logger.getLogger(RedirectingInterpreter.class);
+    private static final Logger LOG = LogManager.getLogger(RedirectingInterpreter.class);
 
     @Override
     public String getName() {

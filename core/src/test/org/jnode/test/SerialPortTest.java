@@ -26,6 +26,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.channels.ByteChannel;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DeviceException;
 import org.jnode.driver.DeviceUtils;
@@ -43,7 +44,7 @@ public class SerialPortTest {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(SerialPortTest.class);
+    private static final Logger log = LogManager.getLogger(SerialPortTest.class);
 
     public static void main(String[] args) {
         try {

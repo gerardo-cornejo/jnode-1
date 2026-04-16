@@ -20,6 +20,7 @@
  
 package org.jnode.apps.jpartition.commands.framework;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.jpartition.Context;
 
@@ -29,7 +30,7 @@ import org.jnode.apps.jpartition.Context;
  *
  */
 public abstract class BaseCommand implements Command {
-    private static final Logger log = Logger.getLogger(BaseCommand.class);
+    private static final Logger log = LogManager.getLogger(BaseCommand.class);
 
     private CommandStatus status = CommandStatus.NOT_RUNNING;
     private final String name;

@@ -30,6 +30,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.extent.Access;
 import org.jnode.apps.vmware.disk.extent.ExtentType;
@@ -48,7 +49,7 @@ import org.jnode.apps.vmware.disk.handler.sparse.SparseExtentHeader;
  * 
  */
 public class IOUtils {
-    private static final Logger LOG = Logger.getLogger(IOUtils.class);
+    private static final Logger LOG = LogManager.getLogger(IOUtils.class);
 
     private static final String COMMENT = "#";
     private static final String EQUAL = "=";
@@ -219,7 +220,7 @@ public class IOUtils {
 
         if ((wantedKey != null) && !keyValue.getKey().equals(wantedKey)) {
             LOG.debug("readValue: KeyValue=" + keyValue);
-            LOG.fatal("************");
+            LOG.error("************");
             throw new IOException("excepted key(" + wantedKey + ") not found (actual:" +
                     keyValue.getKey() + ")");
         }
@@ -384,7 +385,7 @@ public class IOUtils {
         //
         if ((ch.position() + size) > ch.size()) {
             // TODO fix the bug
-            LOG.fatal("getByteBuffer: FATAL: size too big. size=" + size + " position=" +
+            LOG.error("getByteBuffer: FATAL: size too big. size=" + size + " position=" +
                     ch.position() + " channel.size=" + ch.size());
             size = (int) (ch.size() - ch.position());
         }

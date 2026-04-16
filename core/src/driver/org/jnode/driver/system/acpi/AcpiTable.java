@@ -20,6 +20,7 @@
  
 package org.jnode.driver.system.acpi;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.annotation.MagicPermission;
 import org.jnode.system.resource.MemoryResource;
@@ -38,7 +39,7 @@ import org.vmmagic.unboxed.Offset;
 @MagicPermission
 public abstract class AcpiTable {
 
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = LogManager.getLogger(getClass());
 
     private final AcpiDriver driver;
     private final MemoryResource tableResource;

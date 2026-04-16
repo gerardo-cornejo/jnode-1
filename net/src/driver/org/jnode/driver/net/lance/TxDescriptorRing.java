@@ -20,6 +20,7 @@
  
 package org.jnode.driver.net.lance;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.net.SocketBuffer;
 import org.jnode.system.resource.MemoryResource;
@@ -31,7 +32,7 @@ public class TxDescriptorRing extends DescriptorRing {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(TxDescriptorRing.class);
+    private static final Logger log = LogManager.getLogger(TxDescriptorRing.class);
 
     private TxDescriptor[] txDescriptors;
 

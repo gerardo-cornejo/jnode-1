@@ -24,6 +24,7 @@ import java.security.PrivilegedExceptionAction;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Bus;
 import org.jnode.driver.DeviceException;
@@ -46,7 +47,7 @@ import org.jnode.util.NumberUtils;
 public class PS2Bus extends Bus implements IRQHandler, PS2Constants {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(PS2Bus.class);
+    private static final Logger log = LogManager.getLogger(PS2Bus.class);
     private IOResource ioResData;
     private IOResource ioResCtrl;
     private int activeCount = 0;

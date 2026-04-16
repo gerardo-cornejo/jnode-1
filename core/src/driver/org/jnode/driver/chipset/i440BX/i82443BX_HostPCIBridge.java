@@ -21,6 +21,7 @@
 package org.jnode.driver.chipset.i440BX;
 
 import java.util.Vector;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Driver;
 import org.jnode.driver.bus.pci.PCIDevice;
@@ -48,7 +49,7 @@ import org.jnode.driver.system.ram.RAMModuleCollection;
 
 public class i82443BX_HostPCIBridge extends Driver implements RAMControler {
 
-    private static final Logger log = Logger.getLogger(i82443BX_HostPCIBridge.class);
+    private static final Logger log = LogManager.getLogger(i82443BX_HostPCIBridge.class);
     PCIDevice device = null;
     RAMModuleCollection ramModules = null;
 

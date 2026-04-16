@@ -22,6 +22,7 @@ package org.jnode.net.ipv4.config.impl;
 
 import java.util.Collection;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceListener;
@@ -36,7 +37,7 @@ import org.jnode.driver.net.NetDeviceAPI;
 final class NetDeviceMonitor implements DeviceListener {
     
     /** My logger */
-    private static final Logger log = Logger.getLogger(NetDeviceMonitor.class);
+    private static final Logger log = LogManager.getLogger(NetDeviceMonitor.class);
     private final ConfigurationProcessor processor;
     private final NetConfigurationData config;
     

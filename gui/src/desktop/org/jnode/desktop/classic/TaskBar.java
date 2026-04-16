@@ -56,6 +56,7 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.OceanTheme;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.JNodeGraphicsConfiguration;
 import org.jnode.awt.JNodeToolkit;
@@ -66,7 +67,7 @@ import org.jnode.plugin.ExtensionPoint;
  */
 public class TaskBar extends JPanel {
     private static final long serialVersionUID = 1L;
-    static final Logger log = Logger.getLogger(TaskBar.class);
+    static final Logger log = LogManager.getLogger(TaskBar.class);
     private static final Class<?>[] mainTypes = {String[].class};
     JButton startButton;
     JPopupMenu startMenu;

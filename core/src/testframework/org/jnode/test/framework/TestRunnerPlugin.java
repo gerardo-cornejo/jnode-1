@@ -20,6 +20,7 @@
  
 package org.jnode.test.framework;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.bootlog.BootLogInstance;
 import org.jnode.plugin.Plugin;
@@ -34,7 +35,7 @@ public class TestRunnerPlugin extends Plugin {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(TestRunnerPlugin.class);
+    private static final Logger log = LogManager.getLogger(TestRunnerPlugin.class);
 
     private final TestManager manager;
 

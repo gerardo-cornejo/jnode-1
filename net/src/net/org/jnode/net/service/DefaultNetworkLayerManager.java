@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.ApiNotFoundException;
 import org.jnode.driver.Device;
@@ -50,7 +51,7 @@ public class DefaultNetworkLayerManager implements NetworkLayerManager,
         QueueProcessor<SocketBuffer>, ExtensionPointListener {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(DefaultNetworkLayerManager.class);
+    private static final Logger log = LogManager.getLogger(DefaultNetworkLayerManager.class);
 
     /** Registered packet types */
     private final HashMap<Integer, NetworkLayer> layers = new HashMap<Integer, NetworkLayer>();

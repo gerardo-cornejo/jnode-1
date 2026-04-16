@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Stack;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.command.util.AbstractDirectoryWalker;
 import org.jnode.driver.Device;
@@ -140,7 +141,7 @@ public class DuCommand extends AbstractCommand {
     private static final int DEFAULT_FILESYSTEM_BLOCK_SIZE = 1024;
     private static final int DEFAULT_DISPLAY_BLOCK_SIZE = 1024;
 
-    private Logger logger = Logger.getLogger(getClass());
+    private Logger logger = LogManager.getLogger(getClass());
 
     private int fsBlockSize;
     private int displayBlockSize;

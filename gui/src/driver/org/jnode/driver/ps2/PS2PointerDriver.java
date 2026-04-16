@@ -22,6 +22,7 @@ package org.jnode.driver.ps2;
 
 import java.io.IOException;
 import java.nio.channels.ByteChannel;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DeviceException;
 import org.jnode.driver.DriverException;
@@ -36,7 +37,7 @@ import org.jnode.util.TimeoutException;
  */
 public class PS2PointerDriver extends AbstractPointerDriver implements PS2Constants {
 
-    private static final Logger log = Logger.getLogger(PS2PointerDriver.class);
+    private static final Logger log = LogManager.getLogger(PS2PointerDriver.class);
 
     static final int CMD_SET_RES = 0xE8; /* Set resolution */
     static final int CMD_SET_SCALE11 = 0xE6; /* Set 1:1 scaling */

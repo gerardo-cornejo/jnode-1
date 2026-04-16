@@ -25,6 +25,7 @@ import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.RepaintManager;
 import javax.swing.SwingUtilities;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.JNodeAwtContext;
 
@@ -33,7 +34,7 @@ import org.jnode.awt.JNodeAwtContext;
  */
 final class SwingRepaintManager extends RepaintManager {
 
-    private static final Logger log = Logger.getLogger(SwingRepaintManager.class);
+    private static final Logger log = LogManager.getLogger(SwingRepaintManager.class);
 
     /**
      * The AWT context

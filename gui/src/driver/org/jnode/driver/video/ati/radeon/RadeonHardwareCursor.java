@@ -22,6 +22,7 @@ package org.jnode.driver.video.ati.radeon;
 
 import java.util.HashMap;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.video.HardwareCursor;
 import org.jnode.driver.video.HardwareCursorAPI;
@@ -36,7 +37,7 @@ import org.jnode.util.NumberUtils;
 public class RadeonHardwareCursor implements RadeonConstants, HardwareCursorAPI {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(RadeonHardwareCursor.class);
+    private static final Logger log = LogManager.getLogger(RadeonHardwareCursor.class);
     /** Radeon register accessor */
     private final RadeonVgaIO io;
     /** Map between HardwareCursorImage and short[] */

@@ -43,6 +43,7 @@ import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.BorderFactory;
 import javax.swing.border.BevelBorder;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -50,7 +51,7 @@ import org.apache.log4j.Logger;
  */
 @SuppressWarnings("serial")
 public class Editor extends JFrame {
-    private static Logger logger = Logger.getLogger(Editor.class);
+    private static Logger logger = LogManager.getLogger(Editor.class);
     private JTextArea textArea;
     private JFileChooser fc;
     private String directory;

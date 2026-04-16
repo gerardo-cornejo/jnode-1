@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.block.BlockDeviceAPI;
 import org.jnode.partitions.ibm.MasterBootRecord;
@@ -37,7 +38,7 @@ import org.jnode.util.FileUtils;
  * @author tango
  */
 class MBRFormatter {
-    private static final Logger log = Logger.getLogger(MBRFormatter.class);
+    private static final Logger log = LogManager.getLogger(MBRFormatter.class);
     private MasterBootRecord stage1;
 
     static final String GRUB_HOME = "/devices/sg0/boot/grub/";

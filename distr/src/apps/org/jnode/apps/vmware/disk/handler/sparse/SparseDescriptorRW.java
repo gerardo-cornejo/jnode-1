@@ -23,6 +23,7 @@ package org.jnode.apps.vmware.disk.handler.sparse;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.ExtentDeclaration;
 import org.jnode.apps.vmware.disk.IOUtils;
@@ -38,7 +39,7 @@ import org.jnode.apps.vmware.disk.handler.UnsupportedFormatException;
  * 
  */
 final class SparseDescriptorRW extends DescriptorRW {
-    static final Logger LOG = Logger.getLogger(SparseDescriptorRW.class);
+    static final Logger LOG = LogManager.getLogger(SparseDescriptorRW.class);
 
     @Override
     public SparseExtent createMainExtent(Descriptor desc, ExtentDeclaration extentDecl)

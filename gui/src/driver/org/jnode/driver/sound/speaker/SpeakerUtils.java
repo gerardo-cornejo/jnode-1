@@ -22,6 +22,7 @@ package org.jnode.driver.sound.speaker;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.ApiNotFoundException;
 import org.jnode.driver.Device;
@@ -37,7 +38,7 @@ import org.jnode.naming.InitialNaming;
 public class SpeakerUtils {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(SpeakerUtils.class);
+    private static final Logger log = LogManager.getLogger(SpeakerUtils.class);
 
     /** The length of a standard interval * */
     public static final int INTERVAL = 500;

@@ -20,6 +20,7 @@
  
 package org.jnode.driver.net.usb;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceToDriverMapper;
@@ -37,7 +38,7 @@ import org.jnode.driver.net.usb.bluetooth.UsbBluetoothDriver;
  */
 public class UsbNetDeviceToDriverMapper implements DeviceToDriverMapper, UsbNetConstant {
 
-    private static final Logger log = Logger.getLogger(UsbNetDeviceToDriverMapper.class);
+    private static final Logger log = LogManager.getLogger(UsbNetDeviceToDriverMapper.class);
 
     public Driver findDriver(Device device) {
 

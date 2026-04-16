@@ -46,8 +46,8 @@
 	<property name="jnode-ver" value="0.2.9-dev"/>
 
 	<!-- Java target and source version -->
-	<property name="java.target" value="1.6"/>
-	<property name="java.source" value="1.6"/>
+	<property name="java.target" value="1.8"/>
+	<property name="java.source" value="1.8"/>
 	<property name="java.encoding" value="US-ASCII"/>
 
 	<property name="build.dir" value="${basedir}/build"/>
@@ -232,7 +232,7 @@
 			</condition>
 		</fail>
 
-		<fail message="Java Runtime version 1.6, 1.7 or 1.8 needed. Your version is: ${java.runtime.version}">
+		<fail message="Java Runtime version 1.6, 1.7, or 1.8 needed. Your version is: ${java.runtime.version}">
 			<condition>
 				<not>
 					<or>

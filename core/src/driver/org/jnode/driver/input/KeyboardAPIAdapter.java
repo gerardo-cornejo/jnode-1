@@ -22,6 +22,7 @@ package org.jnode.driver.input;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -32,7 +33,7 @@ public class KeyboardAPIAdapter implements KeyboardAPI {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(KeyboardAPIAdapter.class);
+    private static final Logger log = LogManager.getLogger(KeyboardAPIAdapter.class);
 
     /**
      * All listeners

@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.font.TextRenderer;
 import org.jnode.awt.font.renderer.RenderCache;
@@ -41,7 +42,7 @@ public class TTFontProvider extends AbstractFontProvider<TTFFont, TTFFontData> {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(TTFontProvider.class);
+    private static final Logger log = LogManager.getLogger(TTFontProvider.class);
 
     /**
      * All system fonts

@@ -31,6 +31,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.plugin.ConfigurationElement;
 import org.jnode.plugin.Extension;
@@ -42,7 +43,7 @@ import org.jnode.plugin.ExtensionPoint;
 public class ApplicationBar extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    static final Logger log = Logger.getLogger(ApplicationBar.class);
+    static final Logger log = LogManager.getLogger(ApplicationBar.class);
 
     private final ExtensionPoint ep;
 

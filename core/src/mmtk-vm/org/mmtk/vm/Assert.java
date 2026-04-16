@@ -42,7 +42,7 @@ public class Assert {
      *            the string to log
      */
     public static void fail(String message) {
-        BootLogInstance.get().fatal(message);
+        BootLogInstance.get().error(message);
         if (VmUtils.isRunningVm()) {
             Unsafe.die(message);
         } else {

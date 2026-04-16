@@ -20,6 +20,7 @@
  
 package org.jnode.driver.block.usb.storage;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.bus.scsi.CDB;
 import org.jnode.driver.bus.usb.SetupPacket;
@@ -36,7 +37,7 @@ final class USBStorageBulkTransport implements ITransport, USBStorageConstants {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(USBStorageBulkTransport.class);
+    private static final Logger log = LogManager.getLogger(USBStorageBulkTransport.class);
     /** */
     private final USBStorageDeviceData storageDeviceData;
 

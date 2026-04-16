@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find c:/Users/gerardo.cornejo/Desktop/jnode -type f \\\\\\( -name \"*.xml\" -o -name \"*.properties\" \\\\\\) -exec grep -l \"dnsjava\\\\|commons-net\\\\|jsch\\\\|jcifs\\\\|edtftpj\\\\|log4j\" {} \\\\;)",
+      "Bash(xargs grep:*)",
+      "Bash(cmd /c build.bat clean)",
+      "Bash(export JAVA_HOME=\"C:\\\\\\\\Users\\\\\\\\gerardo.cornejo\\\\\\\\.jdks\\\\\\\\corretto-11.0.30\")",
+      "Bash(./build.bat assemble:*)",
+      "Bash(tee build_output.log)",
+      "Bash(export JAVA_HOME=\"C:\\\\\\\\Users\\\\\\\\gerardo.cornejo\\\\\\\\.jdks\\\\\\\\corretto-1.8.0_482\")",
+      "Bash(./build.bat clean:*)",
+      "Bash(ls -lah net/lib/dnsjava*)",
+      "Bash(git checkout:*)",
+      "Bash(ls -lah net/lib/jsch*)",
+      "Bash(ls -lah fs/lib/edtftpj* core/lib/commons-net*)",
+      "Bash(ls -lah fs/lib/jcifs*)",
+      "Bash(ls -lah core/lib/junit*)"
+    ]
+  }
+}

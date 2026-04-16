@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.block.BlockDeviceAPI;
 import org.jnode.driver.bus.ide.IDEConstants;
@@ -39,7 +40,7 @@ import org.jnode.util.LittleEndian;
  * @author tango
  */
 class Stage1_5 {
-    private static final Logger log = Logger.getLogger(Stage1_5.class);
+    private static final Logger log = LogManager.getLogger(Stage1_5.class);
     private byte[] stage1_5;
 
     static final String GRUB_HOME = "/devices/sg0/boot/grub/";

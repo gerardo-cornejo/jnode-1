@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 import org.jnode.plugin.ConfigurationElement;
@@ -147,7 +148,7 @@ public class DefaultSyntaxManager implements SyntaxManager, ExtensionPointListen
      * Reload the syntax list from the extension-point
      */
     protected void refreshSyntaxes() {
-        final Logger log = Logger.getLogger(getClass());
+        final Logger log = LogManager.getLogger(getClass());
         System.out.println("Refreshing syntax list");
         if (syntaxEP != null) {
             syntaxes.clear();

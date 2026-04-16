@@ -28,6 +28,7 @@ import java.awt.image.Raster;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.util.BitmapGraphics;
 import org.jnode.driver.DriverException;
@@ -63,7 +64,7 @@ public class NVidiaCore extends AbstractSurface implements NVidiaConstants, Disp
     /** Hardware cursor implementation */
     private final NVidiaHardwareCursor hwCursor;
     /** My logger */
-    private static final Logger log = Logger.getLogger(NVidiaCore.class);
+    private static final Logger log = LogManager.getLogger(NVidiaCore.class);
     private final int MaxVClockFreqKHz;
     /** Size of card memory in MB */
     private final int memSize;

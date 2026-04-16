@@ -20,6 +20,7 @@
  
 package org.jnode.driver.net.spi;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DriverException;
 import org.jnode.net.HardwareAddress;
@@ -37,7 +38,7 @@ public abstract class AbstractDeviceCore {
     /**
      * My logger
      */
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Gets the hardware address of this device

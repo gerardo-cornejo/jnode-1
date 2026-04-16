@@ -20,6 +20,7 @@
  
 package org.jnode.driver.chipset.via;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.bus.pci.PCIDevice;
 import org.jnode.driver.bus.pci.PCI_IDs;

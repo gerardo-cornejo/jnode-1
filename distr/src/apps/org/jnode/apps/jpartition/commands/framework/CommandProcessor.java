@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.jpartition.Context;
 
@@ -33,7 +34,7 @@ import org.jnode.apps.jpartition.Context;
  *
  */
 public class CommandProcessor {
-    private static final Logger log = Logger.getLogger(CommandProcessor.class);
+    private static final Logger log = LogManager.getLogger(CommandProcessor.class);
 
     /**
      * The context to use.

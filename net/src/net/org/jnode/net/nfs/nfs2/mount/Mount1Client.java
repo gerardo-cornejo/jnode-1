@@ -33,6 +33,7 @@ import org.acplt.oncrpc.XdrAble;
 import org.acplt.oncrpc.XdrDecodingStream;
 import org.acplt.oncrpc.XdrEncodingStream;
 import org.acplt.oncrpc.XdrVoid;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.net.nfs.Protocol;
 
@@ -42,7 +43,7 @@ import org.jnode.net.nfs.Protocol;
  */
 public class Mount1Client {
 
-    private static final Logger LOGGER = Logger.getLogger(Mount1Client.class);
+    private static final Logger LOGGER = LogManager.getLogger(Mount1Client.class);
 
     private static final int MOUNT_CODE = 100005;
     private static final int MOUNT_VERSION = 1;

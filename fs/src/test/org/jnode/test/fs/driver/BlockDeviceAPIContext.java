@@ -22,6 +22,7 @@ package org.jnode.test.fs.driver;
 
 import java.io.IOException;
 import java.util.Collection;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jmock.MockObjectTestCase;
 import org.jnode.driver.Device;
@@ -161,7 +162,7 @@ public class BlockDeviceAPIContext implements Context {
                     + (dev == null ? "null" : "" + dev.getDriver()));
             return dev.getDriver();
         } catch (DeviceNotFoundException e) {
-            log.fatal("can't find " + devName, e);
+            log.error("can't find " + devName, e);
             return null;
         }
     }

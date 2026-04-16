@@ -20,6 +20,7 @@
  
 package org.jnode.fs.jifs;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.fs.FileSystemException;
@@ -34,7 +35,7 @@ public class JIFileSystemType implements FileSystemType<JIFileSystem> {
     public static final String VIRTUAL_DEVICE_NAME = "jifs";
 
     /** Logger */
-    private static final Logger log = Logger.getLogger(JIFileSystemType.class);
+    private static final Logger log = LogManager.getLogger(JIFileSystemType.class);
 
     /**
      * Gets the unique name of this file system type.

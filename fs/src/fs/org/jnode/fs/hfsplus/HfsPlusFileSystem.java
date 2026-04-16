@@ -23,6 +23,7 @@ package org.jnode.fs.hfsplus;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.fs.FSDirectory;
@@ -42,7 +43,7 @@ import org.jnode.fs.hfsplus.tree.LeafRecord;
 import org.jnode.fs.spi.AbstractFileSystem;
 
 public class HfsPlusFileSystem extends AbstractFileSystem<HfsPlusEntry> {
-    private final Logger log = Logger.getLogger(getClass());
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * HFS volume header

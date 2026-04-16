@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
 import org.jnode.driver.DeviceManager;
@@ -48,7 +49,7 @@ import org.jnode.util.NumberUtils;
  */
 public class InitRamdisk extends Plugin {
 
-    private static final Logger log = Logger.getLogger(InitRamdisk.class);
+    private static final Logger log = LogManager.getLogger(InitRamdisk.class);
 
     /**
      * Create a new instance

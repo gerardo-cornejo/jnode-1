@@ -25,6 +25,7 @@ import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
@@ -56,7 +57,7 @@ final class PCIDriver extends Driver implements DeviceInfoAPI, PCIBusAPI, PCICon
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(PCIDriver.class);
+    private static final Logger log = LogManager.getLogger(PCIDriver.class);
 
     /**
      * IO space of the PCI configuration registers

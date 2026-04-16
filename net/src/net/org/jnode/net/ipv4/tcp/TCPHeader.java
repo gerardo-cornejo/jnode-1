@@ -20,6 +20,7 @@
  
 package org.jnode.net.ipv4.tcp;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.net.SocketBuffer;
 import org.jnode.net.TransportLayerHeader;
@@ -32,7 +33,7 @@ import org.jnode.util.NumberUtils;
  */
 public class TCPHeader implements TransportLayerHeader, TCPConstants {
 
-    private static final Logger log = Logger.getLogger(TCPHeader.class);
+    private static final Logger log = LogManager.getLogger(TCPHeader.class);
     private final int srcPort;
     private final int dstPort;
     private int sequenceNr;

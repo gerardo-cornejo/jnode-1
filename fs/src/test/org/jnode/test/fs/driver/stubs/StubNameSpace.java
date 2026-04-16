@@ -23,12 +23,13 @@ package org.jnode.test.fs.driver.stubs;
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.emu.naming.BasicNameSpace;
 import org.jnode.test.support.MockUtils;
 
 public class StubNameSpace extends BasicNameSpace {
-    private static final Logger log = Logger.getLogger(StubNameSpace.class);
+    private static final Logger log = LogManager.getLogger(StubNameSpace.class);
 
     public StubNameSpace() {
     }

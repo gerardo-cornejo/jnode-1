@@ -33,6 +33,7 @@ import java.util.TreeSet;
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.plugin.ConfigurationElement;
 import org.jnode.plugin.Extension;
@@ -53,7 +54,7 @@ public final class TestManager implements ExtensionPointListener {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(TestManager.class);
+    private static final Logger log = LogManager.getLogger(TestManager.class);
 
     /**
      * The org.jnode.tests extension point

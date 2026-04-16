@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DeviceManager;
 import org.jnode.driver.DeviceNotFoundException;
@@ -47,7 +48,7 @@ import org.jnode.plugin.ExtensionPointListener;
 final class JIFSExtension implements ExtensionPointListener {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(JIFSExtension.class);
+    private static final Logger log = LogManager.getLogger(JIFSExtension.class);
 
     /** The org.jnode.fs.jifs.def.info extension point */
     private final ExtensionPoint infoEP;

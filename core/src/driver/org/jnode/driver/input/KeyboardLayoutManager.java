@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.plugin.ConfigurationElement;
 import org.jnode.plugin.Extension;
@@ -41,7 +42,7 @@ import org.jnode.plugin.ExtensionPointListener;
  */
 public class KeyboardLayoutManager implements ExtensionPointListener {
     
-    private final Logger log = Logger.getLogger(KeyboardLayoutManager.class);
+    private final Logger log = LogManager.getLogger(KeyboardLayoutManager.class);
 
     /**
      * The name used to bind this manager in the InitialNaming namespace.

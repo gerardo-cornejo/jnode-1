@@ -25,6 +25,7 @@ import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -114,7 +115,7 @@ final class EntryTimes {
 
             return cal.getTime();
         } catch (Exception e) {
-            Logger.getLogger(EntryTimes.class).error("Error getting entry times", e);
+            LogManager.getLogger(EntryTimes.class).error("Error getting entry times", e);
             return null;
         }
     }

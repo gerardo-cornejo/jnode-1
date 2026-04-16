@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.naming.NamingException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.naming.InitialNaming;
 import org.jnode.plugin.Plugin;
@@ -44,7 +45,7 @@ public class WorkPlugin extends Plugin implements WorkManager {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(WorkPlugin.class);
+    private static final Logger log = LogManager.getLogger(WorkPlugin.class);
 
     /**
      * Queue of work items
@@ -184,7 +185,7 @@ public class WorkPlugin extends Plugin implements WorkManager {
         public void process(Work work) throws Exception {
             incWorkStartCounter();
             try {
-                final Logger log = Logger.getLogger(work.getClass());
+                final Logger log = LogManager.getLogger(work.getClass());
                 if (log.isDebugEnabled()) {
                     log.debug("Start working on " + work);
                 }

@@ -21,6 +21,7 @@
 package org.jnode.driver.system.acpi.aml;
 
 import java.nio.ByteBuffer;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -45,7 +46,7 @@ import org.apache.log4j.Logger;
 
 public class Parser {
 
-    private static final Logger log = Logger.getLogger(Parser.class);
+    private static final Logger log = LogManager.getLogger(Parser.class);
 
     private class ReferencedInteger {
 

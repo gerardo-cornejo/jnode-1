@@ -23,6 +23,7 @@ package org.jnode.driver.system.acpi.aml;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -47,7 +48,7 @@ import org.apache.log4j.Logger;
 
 public class ParseNode {
 
-    private static final Logger log = Logger.getLogger(ParseNode.class);
+    private static final Logger log = LogManager.getLogger(ParseNode.class);
     protected int opcode;
 
     protected NameString name = null;

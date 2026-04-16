@@ -21,11 +21,12 @@
 package org.jnode.fs.hfsplus.tree;
 
 import java.util.LinkedList;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 public abstract class AbstractIndexNode<K extends Key> extends AbstractNode<K, IndexRecord> {
 
-    private static final Logger log = Logger.getLogger(AbstractIndexNode.class);
+    private static final Logger log = LogManager.getLogger(AbstractIndexNode.class);
 
     /**
      * Create a new node.

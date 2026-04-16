@@ -22,6 +22,7 @@ package org.jnode.driver.video.ati.mach64;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.util.BitmapGraphics;
 import org.jnode.driver.DriverException;
@@ -47,7 +48,7 @@ import org.vmmagic.unboxed.Offset;
 final class Mach64Core implements Mach64Constants {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(Mach64Core.class);
+    private static final Logger log = LogManager.getLogger(Mach64Core.class);
 
     /** The driver we belong to */
     private final Mach64Driver driver;

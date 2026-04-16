@@ -20,6 +20,7 @@
  
 package org.jnode.driver.block.usb.storage.scsi;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceToDriverMapper;
@@ -33,7 +34,7 @@ public class USBStorageSCSIDeviceToDriverMapper implements DeviceToDriverMapper 
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(USBStorageSCSIDeviceToDriverMapper.class);
+    private static final Logger log = LogManager.getLogger(USBStorageSCSIDeviceToDriverMapper.class);
 
     /**
      * @see org.jnode.driver.DeviceToDriverMapper#findDriver(org.jnode.driver.Device)

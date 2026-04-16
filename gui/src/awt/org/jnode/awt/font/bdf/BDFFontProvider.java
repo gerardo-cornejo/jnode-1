@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.font.TextRenderer;
 import org.jnode.awt.font.renderer.RenderCache;
@@ -49,7 +50,7 @@ public class BDFFontProvider extends AbstractFontProvider<BDFFont, BDFFontContai
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(BDFFontProvider.class);
+    private static final Logger log = LogManager.getLogger(BDFFontProvider.class);
 
     /**
      * All system fonts

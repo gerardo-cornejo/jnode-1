@@ -20,6 +20,7 @@
  
 package org.jnode.driver.net.eepro100;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.system.resource.IOResource;
 import org.jnode.util.NumberUtils;
@@ -29,7 +30,7 @@ import org.jnode.util.NumberUtils;
  */
 public class EEPRO100Registers implements EEPRO100Constants {
 
-    protected static final Logger log = Logger.getLogger(EEPRO100Registers.class);
+    protected static final Logger log = LogManager.getLogger(EEPRO100Registers.class);
 
     /**
      * Start of IO address space

@@ -32,6 +32,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -40,7 +41,7 @@ import org.apache.log4j.Logger;
 public class WindowBar extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    private static final Logger log = Logger.getLogger(WindowBar.class);
+    private static final Logger log = LogManager.getLogger(WindowBar.class);
 
     private final JList list;
     private final DefaultListModel model;

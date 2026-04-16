@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DriverException;
@@ -57,7 +58,7 @@ public abstract class Ne2000Core extends AbstractDeviceCore implements IRQHandle
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(Ne2000Core.class);
+    private static final Logger log = LogManager.getLogger(Ne2000Core.class);
     /**
      * Start of IO address space
      */

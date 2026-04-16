@@ -24,6 +24,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 public abstract class AbstractTestSuite extends TestSuite {
@@ -63,5 +64,5 @@ public abstract class AbstractTestSuite extends TestSuite {
      */
     public abstract Class<? extends TestCase>[] getTestSuites();
 
-    protected final Logger log = Logger.getLogger(getClass().getName());
+    protected final Logger log = LogManager.getLogger(getClass().getName());
 }

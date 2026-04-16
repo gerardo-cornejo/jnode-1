@@ -21,6 +21,7 @@
 package org.jnode.fs.ext2.cache;
 
 import java.io.IOException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.fs.ext2.Ext2FileSystem;
 
@@ -28,7 +29,7 @@ import org.jnode.fs.ext2.Ext2FileSystem;
  * @author Andras Nagy
  */
 public class Block {
-    private final Logger log = Logger.getLogger(getClass());
+    private final Logger log = LogManager.getLogger(getClass());
 
     protected byte[] data;
     boolean dirty = false;

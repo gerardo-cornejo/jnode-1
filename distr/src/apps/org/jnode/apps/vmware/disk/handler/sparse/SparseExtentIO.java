@@ -23,6 +23,7 @@ package org.jnode.apps.vmware.disk.handler.sparse;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.extent.Extent;
 import org.jnode.apps.vmware.disk.handler.ExtentIO;
@@ -35,7 +36,7 @@ import org.jnode.apps.vmware.disk.handler.IOHandler;
  * 
  */
 public class SparseExtentIO extends ExtentIO {
-    private static final Logger LOG = Logger.getLogger(SparseExtentIO.class);
+    private static final Logger LOG = LogManager.getLogger(SparseExtentIO.class);
 
     /**
      * 

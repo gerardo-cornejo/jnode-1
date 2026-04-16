@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.partitions.PartitionTableType;
 import org.jnode.plugin.ConfigurationElement;
@@ -36,7 +37,7 @@ import org.jnode.plugin.ExtensionPointListener;
  * @author epr
  */
 final class PartitionTableTypeManager implements ExtensionPointListener {
-    private static final Logger log = Logger.getLogger(PartitionTableTypeManager.class);
+    private static final Logger log = LogManager.getLogger(PartitionTableTypeManager.class);
     
     /** All registered types */
     private final HashMap<String, PartitionTableType> types =

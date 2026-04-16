@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.IOUtils;
 import org.jnode.apps.vmware.disk.descriptor.Descriptor;
@@ -39,7 +40,7 @@ import org.jnode.apps.vmware.disk.handler.UnsupportedFormatException;
  * 
  */
 public class SparseExtentFactory extends ExtentFactory {
-    private static final Logger LOG = Logger.getLogger(SparseExtentFactory.class);
+    private static final Logger LOG = LogManager.getLogger(SparseExtentFactory.class);
 
     protected SparseFileDescriptor createFileDescriptor(File file, RandomAccessFile raf)
         throws IOException, UnsupportedFormatException {

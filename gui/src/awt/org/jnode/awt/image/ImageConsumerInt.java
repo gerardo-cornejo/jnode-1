@@ -23,6 +23,7 @@ package org.jnode.awt.image;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.image.ColorModel;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.system.resource.MemoryResource;
 
@@ -36,7 +37,7 @@ public class ImageConsumerInt extends AbstractMemoryImageConsumer {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(ImageConsumerInt.class);
+    private static final Logger log = LogManager.getLogger(ImageConsumerInt.class);
 
     /**
      * @param target

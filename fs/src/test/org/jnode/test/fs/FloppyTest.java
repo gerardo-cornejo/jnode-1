@@ -23,6 +23,7 @@ package org.jnode.test.fs;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.ApiNotFoundException;
 import org.jnode.driver.Device;
@@ -39,7 +40,7 @@ public class FloppyTest {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(FloppyTest.class);
+    private static final Logger log = LogManager.getLogger(FloppyTest.class);
 
     public static void main(String[] args) {
 

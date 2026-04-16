@@ -20,6 +20,7 @@
  
 package org.jnode.apps.vmware.disk.handler.sparse;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -30,7 +31,7 @@ import org.apache.log4j.Logger;
  */
 public class EntryArray {
     @SuppressWarnings("unused")
-    private static final Logger LOG = Logger.getLogger(EntryArray.class);
+    private static final Logger LOG = LogManager.getLogger(EntryArray.class);
 
     private final int[] entries;
 

@@ -20,6 +20,7 @@
  
 package org.jnode.apps.vmware.disk.handler.sparse;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -29,7 +30,7 @@ import org.apache.log4j.Logger;
  * 
  */
 public class SparseExtentHeader {
-    static final Logger LOG = Logger.getLogger(SparseExtentHeader.class);
+    static final Logger LOG = LogManager.getLogger(SparseExtentHeader.class);
 
     // flags
     private boolean validNewLineDetectionTest;

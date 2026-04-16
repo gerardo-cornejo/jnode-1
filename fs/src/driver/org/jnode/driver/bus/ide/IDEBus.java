@@ -22,6 +22,7 @@ package org.jnode.driver.bus.ide;
 
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Bus;
 import org.jnode.driver.Device;
@@ -48,7 +49,7 @@ public class IDEBus extends Bus implements IDEConstants, IRQHandler,
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(IDEBus.class);
+    private static final Logger log = LogManager.getLogger(IDEBus.class);
 
     private final IRQResource irqRes;
 

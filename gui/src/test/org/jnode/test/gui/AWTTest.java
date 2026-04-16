@@ -41,7 +41,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
 
-//import org.apache.log4j.Logger;
+//import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  * @author epr
@@ -54,7 +55,7 @@ public class AWTTest extends Frame {
         /**
          * My logger
          */
-//      private static final Logger log = Logger.getLogger(TestComponent.class);
+//      private static final Logger log = LogManager.getLogger(TestComponent.class);
         private final boolean useDoubleBuffer;
 
         public TestComponent(boolean useDoubleBuffer) {

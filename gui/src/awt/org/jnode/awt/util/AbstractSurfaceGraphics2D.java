@@ -37,6 +37,7 @@ import java.awt.image.PixelGrabber;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.JNodeToolkit;
 import org.jnode.driver.video.Surface;
@@ -49,7 +50,7 @@ import org.jnode.driver.video.util.AbstractSurface;
 public abstract class AbstractSurfaceGraphics2D extends AbstractGraphics2D {
 
     private AbstractSurface surface;
-    private static final Logger log = Logger.getLogger(AbstractSurfaceGraphics2D.class);
+    private static final Logger log = LogManager.getLogger(AbstractSurfaceGraphics2D.class);
     private int mode = Surface.PAINT_MODE;
 
     private int width;

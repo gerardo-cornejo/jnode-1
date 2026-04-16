@@ -43,11 +43,12 @@ import java.util.HashMap;
 import java.util.PropertyResourceBundle;
 
 import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 
 public class BDFFontContainer {
-	private static final Logger log = Logger.getLogger(BDFFontContainer.class);
+	private static final Logger log = LogManager.getLogger(BDFFontContainer.class);
 	static
 	{
 		log.setLevel(Level.DEBUG);

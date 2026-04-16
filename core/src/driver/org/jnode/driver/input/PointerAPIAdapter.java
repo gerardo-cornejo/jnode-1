@@ -22,6 +22,7 @@ package org.jnode.driver.input;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -32,7 +33,7 @@ public class PointerAPIAdapter implements PointerAPI {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(PointerAPIAdapter.class);
+    private static final Logger log = LogManager.getLogger(PointerAPIAdapter.class);
 
     /**
      * All listeners

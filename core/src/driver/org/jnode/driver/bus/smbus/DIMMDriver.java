@@ -22,6 +22,7 @@ package org.jnode.driver.bus.smbus;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Driver;
 import org.jnode.driver.DriverException;
@@ -47,7 +48,7 @@ import org.jnode.driver.DriverException;
 
 public class DIMMDriver extends Driver {
 
-    private static final Logger log = Logger.getLogger(DIMMDriver.class);
+    private static final Logger log = LogManager.getLogger(DIMMDriver.class);
     private SMBus bus;
     private byte address;
     private DIMM dimmDevice;

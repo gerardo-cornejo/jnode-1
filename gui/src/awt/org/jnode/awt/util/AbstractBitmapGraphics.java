@@ -23,6 +23,7 @@ package org.jnode.awt.util;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.Raster;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.system.resource.MemoryResource;
 import org.jnode.system.resource.MultiMediaMemoryResource;
@@ -35,7 +36,7 @@ public abstract class AbstractBitmapGraphics extends BitmapGraphics {
     /**
      * My logger
      */
-    protected static final Logger log = Logger.getLogger(AbstractBitmapGraphics.class);
+    protected static final Logger log = LogManager.getLogger(AbstractBitmapGraphics.class);
 
     protected final MultiMediaMemoryResource mem;
 

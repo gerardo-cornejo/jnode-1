@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.ExtentDeclaration;
 import org.jnode.apps.vmware.disk.IOUtils;
@@ -50,7 +51,7 @@ import org.jnode.util.ByteBufferInputStream;
  * 
  */
 public abstract class DescriptorRW {
-    private static final Logger LOG = Logger.getLogger(DescriptorRW.class);
+    private static final Logger LOG = LogManager.getLogger(DescriptorRW.class);
 
     private static final String VERSION = "version";
     private static final String CID = "CID";

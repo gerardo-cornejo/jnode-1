@@ -29,6 +29,7 @@ import java.util.Locale;
 import java.util.Properties;
 import javax.naming.NameNotFoundException;
 import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.jnode.annotation.Internal;

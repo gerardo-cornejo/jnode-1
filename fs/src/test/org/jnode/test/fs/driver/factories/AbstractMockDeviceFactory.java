@@ -20,11 +20,12 @@
  
 package org.jnode.test.fs.driver.factories;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jmock.MockObjectTestCase;
 
 public abstract class AbstractMockDeviceFactory {
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = LogManager.getLogger(getClass());
 
     protected MockObjectTestCase testCase;
 

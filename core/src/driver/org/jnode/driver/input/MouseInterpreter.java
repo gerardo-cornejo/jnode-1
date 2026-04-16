@@ -22,6 +22,7 @@ package org.jnode.driver.input;
 
 import java.io.PrintWriter;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DeviceException;
 import org.jnode.driver.DriverException;
@@ -38,7 +39,7 @@ public class MouseInterpreter implements PointerInterpreter {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(MouseInterpreter.class);
+    private static final Logger log = LogManager.getLogger(MouseInterpreter.class);
 
     private byte[] data; // will be defined as 3 or 4 bytes, according to the protocol
     private int pos = 0;

@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.naming.NameNotFoundException;
 import junit.framework.TestCase;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.emu.naming.BasicNameSpace;
@@ -58,7 +59,7 @@ import org.junit.runners.Parameterized.Parameters;
  */
 @RunWith(Parameterized.class)
 public abstract class AbstractFSTest extends TestCase {
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = LogManager.getLogger(getClass());
     private static boolean setup = false;
 
     //public static final int FILE_SIZE_IN_WORDS = 256 * 1024; // 512 Ko = 256 K Words

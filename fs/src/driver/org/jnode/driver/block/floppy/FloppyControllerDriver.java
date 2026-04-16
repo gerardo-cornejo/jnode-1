@@ -23,6 +23,7 @@ package org.jnode.driver.block.floppy;
 import java.nio.channels.ClosedByInterruptException;
 import java.util.ArrayList;
 import javax.naming.NamingException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
 import org.jnode.driver.DeviceManager;
@@ -42,7 +43,7 @@ public class FloppyControllerDriver extends Driver {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(FloppyControllerDriver.class);
+    private static final Logger log = LogManager.getLogger(FloppyControllerDriver.class);
     /**
      * The controller
      */

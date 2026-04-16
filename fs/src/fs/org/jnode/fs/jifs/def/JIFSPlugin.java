@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
 import org.jnode.driver.DeviceException;
@@ -51,7 +52,7 @@ public class JIFSPlugin extends Plugin {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(JIFSPlugin.class);
+    private static final Logger log = LogManager.getLogger(JIFSPlugin.class);
     
     /**
      * Manager of Extensions

@@ -33,6 +33,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.jpartition.ErrorReporter;
 import org.jnode.apps.jpartition.utils.device.DeviceUtils;
@@ -41,7 +42,7 @@ import org.jnode.driver.bus.ide.IDEDevice;
 @SuppressWarnings("serial")
 public class FileDeviceView extends JFrame {
     @SuppressWarnings("unused")
-    private static final Logger log = Logger.getLogger(FileDeviceView.class);
+    private static final Logger log = LogManager.getLogger(FileDeviceView.class);
 
     private final ErrorReporter errorReporter;
 

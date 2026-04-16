@@ -20,6 +20,7 @@
  
 package org.jnode.apps.vmware.disk.handler.sparse;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -29,7 +30,7 @@ import org.apache.log4j.Logger;
  * 
  */
 public class AllocationTable {
-    private static final Logger LOG = Logger.getLogger(AllocationTable.class);
+    private static final Logger LOG = LogManager.getLogger(AllocationTable.class);
 
     private final GrainDirectory grainDirectory;
     private final GrainTable[] grainTables;
@@ -68,7 +69,7 @@ public class AllocationTable {
     public GrainTable getGrainTable(int tableNum) {
         if ((tableNum < 0) || (tableNum >= grainTables.length)) {
             // TODO fix the bug
-            LOG.fatal("getGrainTable: FATAL: index out of bounds, actual=" + tableNum + ", max=" +
+            LOG.error("getGrainTable: FATAL: index out of bounds, actual=" + tableNum + ", max=" +
                     (grainTables.length - 1) + ", using max");
             tableNum = (grainTables.length - 1);
         }

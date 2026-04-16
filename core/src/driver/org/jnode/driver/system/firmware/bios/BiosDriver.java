@@ -23,6 +23,7 @@ package org.jnode.driver.system.firmware.bios;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
@@ -47,7 +48,7 @@ import org.vmmagic.unboxed.Address;
  */
 final class BiosDriver extends Driver implements FirmwareAPI {
 
-    private static final Logger log = Logger.getLogger(BiosDriver.class);
+    private static final Logger log = LogManager.getLogger(BiosDriver.class);
     private AcpiRSDPInfo info;
     private AcpiDevice acpiDevice;
 

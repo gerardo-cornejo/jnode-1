@@ -22,11 +22,12 @@ package org.jnode.fs.hfsplus.tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.util.BigEndian;
 
 public abstract class AbstractNode<K extends Key, T extends NodeRecord> implements Node<T> {
-    private final Logger log = Logger.getLogger(getClass());
+    private final Logger log = LogManager.getLogger(getClass());
     protected NodeDescriptor descriptor;
     protected List<T> records;
     protected List<Integer> offsets;

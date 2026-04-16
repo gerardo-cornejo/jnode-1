@@ -29,6 +29,7 @@ import java.security.PrivilegedExceptionAction;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.ApiNotFoundException;
 import org.jnode.driver.Device;
@@ -51,7 +52,7 @@ import org.jnode.plugin.URLPluginLoader;
  */
 public class DHCPClient extends AbstractDHCPClient {
 
-    private static final Logger log = Logger.getLogger(DHCPClient.class);
+    private static final Logger log = LogManager.getLogger(DHCPClient.class);
 
     private Device device;
     private NetDeviceAPI api;

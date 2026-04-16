@@ -31,6 +31,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceUtils;
@@ -62,7 +63,7 @@ public class FBTest extends AbstractCommand {
         registerArguments(ARG_DEVICE, ARG_LOOPS, ARG_TESTS);
     }
 
-    private static final Logger log = Logger.getLogger(FBTest.class);
+    private static final Logger log = LogManager.getLogger(FBTest.class);
 
     Surface g;
     private int width;

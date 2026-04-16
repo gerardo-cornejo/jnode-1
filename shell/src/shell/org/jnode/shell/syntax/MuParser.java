@@ -24,6 +24,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.console.CompletionInfo;
 import org.jnode.shell.CommandLine;
@@ -65,7 +66,7 @@ public class MuParser {
     public static final int DEFAULT_STEP_LIMIT = 10000;
     
     private static final boolean DEBUG = false;
-    private static final Logger log = Logger.getLogger(MuParser.class);
+    private static final Logger log = LogManager.getLogger(MuParser.class);
     
     private static class ChoicePoint {
         public final int sourcePos;

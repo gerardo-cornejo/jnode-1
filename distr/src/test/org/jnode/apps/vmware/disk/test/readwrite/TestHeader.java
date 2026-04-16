@@ -23,6 +23,7 @@ package org.jnode.apps.vmware.disk.test.readwrite;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.VMWareDisk;
 import org.jnode.apps.vmware.disk.test.Utils;
@@ -36,7 +37,7 @@ import org.junit.Test;
  * 
  */
 public class TestHeader extends BaseReadWriteTest {
-    private static final Logger LOG = Logger.getLogger(TestHeader.class);
+    private static final Logger LOG = LogManager.getLogger(TestHeader.class);
 
     /**
      * Construct a test class for a VMware disk headers stored in a file.

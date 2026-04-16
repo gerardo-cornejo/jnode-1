@@ -106,10 +106,11 @@ public class Log4jCommand extends AbstractCommand {
         } else if (argList.isSet()) {
             // List current loggers and their levels.  Effective levels are shown
             // in parentheses.
-            Enumeration<?> en = LogManager.getCurrentLoggers();
+            @SuppressWarnings("unchecked")
+            Enumeration<Logger> en = LogManager.getCurrentLoggers();
             while (en.hasMoreElements()) {
-                Logger logger = (Logger) en.nextElement();
-                String level = (logger.getLevel() == null) ? 
+                Logger logger = en.nextElement();
+                String level = (logger.getLevel() == null) ?
                         ('(' + logger.getEffectiveLevel().toString() + ')') :
                             logger.getLevel().toString();
                 getOutput().getPrintWriter().println(logger.getName() + ": " + level);

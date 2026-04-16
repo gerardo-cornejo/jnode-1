@@ -23,6 +23,7 @@ package org.jnode.apps.vmware.disk;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.descriptor.Descriptor;
 import org.jnode.apps.vmware.disk.handler.ExtentFactory;
@@ -37,7 +38,7 @@ import org.jnode.apps.vmware.disk.handler.UnsupportedFormatException;
  * 
  */
 public class VMWareDisk {
-    private static final Logger LOG = Logger.getLogger(VMWareDisk.class);
+    private static final Logger LOG = LogManager.getLogger(VMWareDisk.class);
 
     private final Descriptor descriptor;
     private final IOHandler handler;

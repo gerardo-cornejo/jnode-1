@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.fs.FileSystemType;
 import org.jnode.plugin.ConfigurationElement;
@@ -40,7 +41,7 @@ import org.jnode.plugin.ExtensionPointListener;
 final class FileSystemTypeManager implements ExtensionPointListener {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(FileSystemTypeManager.class);
+    private static final Logger log = LogManager.getLogger(FileSystemTypeManager.class);
     /** All registered file system types */
     private final Map<Class<?>, FileSystemType<?>> types =
             new HashMap<Class<?>, FileSystemType<?>>();

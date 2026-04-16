@@ -39,6 +39,7 @@ import java.util.Map;
 
 import javax.naming.NamingException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.font.FontManager;
 import org.jnode.awt.font.FontProvider;
@@ -57,7 +58,7 @@ import org.jnode.plugin.PluginException;
  */
 public class DefaultFontManager implements FontManager, ExtensionPointListener {
 
-    private static final Logger log = Logger.getLogger(DefaultFontManager.class);    
+    private static final Logger log = LogManager.getLogger(DefaultFontManager.class);    
     private final ExtensionPoint providersEP;
     
     /**

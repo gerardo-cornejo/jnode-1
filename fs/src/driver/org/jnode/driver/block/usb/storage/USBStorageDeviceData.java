@@ -20,6 +20,7 @@
  
 package org.jnode.driver.block.usb.storage;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DriverException;
 import org.jnode.driver.bus.usb.InterfaceDescriptor;
@@ -32,7 +33,7 @@ final class USBStorageDeviceData implements USBStorageConstants {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(USBStorageDeviceData.class);
+    private static final Logger log = LogManager.getLogger(USBStorageDeviceData.class);
     /** */
     private USBDevice device;
     /** */

@@ -32,6 +32,7 @@ import java.awt.image.Raster;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.util.BitmapGraphics;
 import org.jnode.driver.DriverException;
@@ -57,7 +58,7 @@ import org.vmmagic.unboxed.Address;
 public class VESACore extends AbstractSurface implements HardwareCursorAPI {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(VESACore.class);
+    private static final Logger log = LogManager.getLogger(VESACore.class);
     private final VESADriver driver;
     private final MemoryResource videoRam;
     private final int videoRamSize;

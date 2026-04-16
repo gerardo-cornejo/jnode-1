@@ -20,6 +20,7 @@
  
 package org.jnode.driver.chipset.via;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Driver;
 import org.jnode.driver.DriverException;
@@ -34,7 +35,7 @@ public class Via82C686 extends Driver {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(Via82C686.class);
+    private static final Logger log = LogManager.getLogger(Via82C686.class);
 
     /**
      * Start the device

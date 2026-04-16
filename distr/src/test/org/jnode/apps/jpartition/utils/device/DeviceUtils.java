@@ -26,6 +26,7 @@ import javax.naming.NameAlreadyBoundException;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.jpartition.ErrorReporter;
 import org.jnode.apps.jpartition.swingview.FileDeviceView;
@@ -53,7 +54,7 @@ import org.jnode.util.OsUtils;
 
 public class DeviceUtils {
     private static final long DEFAULT_FILE_SIZE = 1024 * 1024;
-    private static final Logger log = Logger.getLogger(FileDeviceView.class);
+    private static final Logger log = LogManager.getLogger(FileDeviceView.class);
 
     private static boolean coreInitialized = false;
 

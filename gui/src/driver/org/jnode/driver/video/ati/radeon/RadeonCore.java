@@ -25,6 +25,7 @@ import java.security.PrivilegedAction;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.util.BitmapGraphics;
 import org.jnode.driver.DriverException;
@@ -50,7 +51,7 @@ import org.vmmagic.unboxed.Address;
 final class RadeonCore implements RadeonConstants {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(RadeonCore.class);
+    private static final Logger log = LogManager.getLogger(RadeonCore.class);
 
     /** The driver */
     private final RadeonDriver driver;

@@ -22,6 +22,7 @@ package org.jnode.driver.bus.ide;
 
 import java.security.PrivilegedExceptionAction;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DriverException;
@@ -49,7 +50,7 @@ public class DefaultIDEIO implements IDEIO {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(DefaultIDEIO.class);
+    private static final Logger log = LogManager.getLogger(DefaultIDEIO.class);
 
     /**
      * IDE Taskfile io space

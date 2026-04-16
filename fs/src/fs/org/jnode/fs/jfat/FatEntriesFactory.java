@@ -2,11 +2,12 @@ package org.jnode.fs.jfat;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 public class FatEntriesFactory {
 
-    private static final Logger log = Logger.getLogger(FatEntriesFactory.class);
+    private static final Logger log = LogManager.getLogger(FatEntriesFactory.class);
 
     private boolean label;
     private int index;

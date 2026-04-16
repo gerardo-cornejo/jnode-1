@@ -20,6 +20,7 @@
  
 package org.jnode.driver.bus.usb;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
@@ -72,7 +73,7 @@ public class USBHubMonitor implements USBConstants {
     /**
      * My logger
      */
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = LogManager.getLogger(getClass());
     /**
      * The hub device
      */

@@ -20,6 +20,7 @@
  
 package org.jnode.driver.video.ati.radeon;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.system.resource.MemoryResource;
 import org.jnode.util.NumberUtils;
@@ -31,7 +32,7 @@ import org.jnode.util.NumberUtils;
  */
 final class FBInfo implements RadeonConstants {
 
-    private static final Logger log = Logger.getLogger(FBInfo.class);
+    private static final Logger log = LogManager.getLogger(FBInfo.class);
 
     final boolean hasCRTC2;
 

@@ -20,6 +20,7 @@
  
 package org.jnode.test.support;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jmock.cglib.MockObjectTestCase;
 
@@ -35,7 +36,7 @@ public abstract class AbstractTest extends /*TestCase*/ MockObjectTestCase {
     public AbstractTest(Class<?> configClazz) {
         super();
         init(configClazz, null);
-        log = Logger.getLogger(getTestName());
+        log = LogManager.getLogger(getTestName());
     }
 
     /**
@@ -44,7 +45,7 @@ public abstract class AbstractTest extends /*TestCase*/ MockObjectTestCase {
     protected AbstractTest(Class<?> configClazz, String name) {
         super();
         init(configClazz, name);
-        log = Logger.getLogger(getTestName());
+        log = LogManager.getLogger(getTestName());
     }
 
     protected void init(Class<?> configClazz, String name) {

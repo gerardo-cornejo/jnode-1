@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.AbstractDeviceManager;
 import org.jnode.driver.Device;
@@ -35,7 +36,7 @@ import org.jnode.driver.DriverException;
  * @author Levente S\u00e1ntha
  */
 public class DeviceManager extends AbstractDeviceManager {
-    public static final Logger log = Logger.getLogger(DeviceManager.class);
+    public static final Logger log = LogManager.getLogger(DeviceManager.class);
 
     public static final DeviceManager INSTANCE = new DeviceManager();
 
@@ -102,7 +103,7 @@ public class DeviceManager extends AbstractDeviceManager {
 
             log.debug("StubDeviceManager initialized !");
         } catch (InterruptedException e) {
-            log.fatal("can't find devices", e);
+            log.error("can't find devices", e);
         }
     }
 

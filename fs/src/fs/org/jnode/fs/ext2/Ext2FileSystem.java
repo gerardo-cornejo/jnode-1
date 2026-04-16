@@ -27,6 +27,7 @@ import java.nio.charset.Charset;
 import java.security.AccessController;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.fs.FSDirectory;
@@ -66,7 +67,7 @@ public class Ext2FileSystem extends AbstractFileSystem<Ext2Entry> {
 
     private MultipleMountProtection multipleMountProtection;
 
-    private final Logger log = Logger.getLogger(getClass());
+    private final Logger log = LogManager.getLogger(getClass());
 
     // private Object groupDescriptorLock;
     // private Object superblockLock;

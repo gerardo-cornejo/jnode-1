@@ -21,6 +21,7 @@
 package org.jnode.driver.bus.usb.uhci;
 
 import java.util.ArrayList;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.bus.usb.USBConstants;
 import org.jnode.driver.bus.usb.USBDevice;
@@ -42,7 +43,7 @@ public class UHCIPipe implements USBPipe, USBConstants {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(UHCIPipe.class);
+    private static final Logger log = LogManager.getLogger(UHCIPipe.class);
     /**
      * The pipe manager
      */

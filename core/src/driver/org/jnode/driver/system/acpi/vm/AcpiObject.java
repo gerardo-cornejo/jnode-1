@@ -21,6 +21,7 @@
 package org.jnode.driver.system.acpi.vm;
 
 import java.io.PrintWriter;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -44,7 +45,7 @@ import org.apache.log4j.Logger;
 
 public class AcpiObject {
 
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = LogManager.getLogger(getClass());
     private NameSpace nameSpace = null;
 
     public AcpiObject() {

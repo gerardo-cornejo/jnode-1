@@ -23,6 +23,7 @@ package org.jnode.driver.input;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.channels.ByteChannel;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceException;
@@ -38,7 +39,7 @@ public abstract class AbstractPointerDriver extends AbstractInputDriver<PointerE
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(AbstractPointerDriver.class);
+    private static final Logger log = LogManager.getLogger(AbstractPointerDriver.class);
     private ByteChannel channel;
     private PointerInterpreter interpreter;
 

@@ -32,6 +32,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.debug.RemoteAppender;
 import org.jnode.debug.RemoteReceiver;

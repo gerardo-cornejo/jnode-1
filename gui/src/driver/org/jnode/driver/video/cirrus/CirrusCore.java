@@ -31,6 +31,7 @@ import java.security.PrivilegedExceptionAction;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.image.JNodeBufferedImage;
 import org.jnode.awt.util.BitmapGraphics;
@@ -62,7 +63,7 @@ import org.vmmagic.unboxed.Address;
 public class CirrusCore extends AbstractSurface implements CirrusConstants {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(CirrusCore.class);
+    private static final Logger log = LogManager.getLogger(CirrusCore.class);
 
     private static final boolean DEBUG = true;
 

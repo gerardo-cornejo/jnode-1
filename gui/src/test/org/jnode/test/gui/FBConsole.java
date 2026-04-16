@@ -26,6 +26,7 @@ import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceManager;
@@ -46,7 +47,7 @@ import org.jnode.shell.CommandShell;
  * @author Levente S\u00e1ntha
  */
 public class FBConsole {
-    private static final Logger log = Logger.getLogger(FBConsole.class);
+    private static final Logger log = LogManager.getLogger(FBConsole.class);
 
     public static void main(String[] args) throws Exception {
 

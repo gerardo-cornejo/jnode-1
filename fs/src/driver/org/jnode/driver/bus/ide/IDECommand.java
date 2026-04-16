@@ -20,6 +20,7 @@
  
 package org.jnode.driver.bus.ide;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.util.Command;
 import org.jnode.util.TimeUtils;
@@ -30,7 +31,7 @@ import org.jnode.util.TimeoutException;
  */
 public abstract class IDECommand extends Command implements IDEConstants {
 
-    protected static final Logger log = Logger.getLogger(IDECommand.class);
+    protected static final Logger log = LogManager.getLogger(IDECommand.class);
 
     /**
      * ID From master (true) or slave (false)

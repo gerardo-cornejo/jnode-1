@@ -23,6 +23,7 @@ package org.jnode.apps.vmware.disk.handler.sparse;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.IOUtils;
 import org.jnode.apps.vmware.disk.handler.UnsupportedFormatException;
@@ -34,7 +35,7 @@ import org.jnode.apps.vmware.disk.handler.UnsupportedFormatException;
  * 
  */
 public class SparseExtentHeaderRW {
-    static final Logger LOG = Logger.getLogger(SparseExtentHeaderRW.class);
+    static final Logger LOG = LogManager.getLogger(SparseExtentHeaderRW.class);
 
     private static final byte singleEndLineChar = '\n';
     private static final byte nonEndLineChar = ' ';

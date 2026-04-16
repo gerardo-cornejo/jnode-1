@@ -36,6 +36,7 @@ import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.JNodeAwtContext;
 
@@ -47,7 +48,7 @@ public final class DesktopFrame extends JFrame implements JNodeAwtContext {
     private static final String DESKTOP_BACKGROUND = "desktop.background";
     private static final Color DESKTOP_BACKGROUND_COLOR = new Color(110, 190, 235);
     private final JDesktopPane desktop;
-    private static final Logger log = Logger.getLogger(DesktopFrame.class);
+    private static final Logger log = LogManager.getLogger(DesktopFrame.class);
     private BufferedImage backgroundImage;
 
     /**

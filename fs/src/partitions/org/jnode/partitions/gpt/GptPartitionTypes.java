@@ -21,6 +21,7 @@
 package org.jnode.partitions.gpt;
 
 import java.util.UUID;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.util.NumberUtils;
 
@@ -128,7 +129,7 @@ public enum GptPartitionTypes {
     /**
      * Logger
      */
-    private static final Logger log = Logger.getLogger(GptPartitionTypes.class);
+    private static final Logger log = LogManager.getLogger(GptPartitionTypes.class);
 
     private UUID uuid;
     private String name;

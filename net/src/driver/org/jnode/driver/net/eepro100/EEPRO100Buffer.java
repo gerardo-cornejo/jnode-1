@@ -20,6 +20,7 @@
  
 package org.jnode.driver.net.eepro100;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.net.NetworkException;
 import org.jnode.net.SocketBuffer;
@@ -32,7 +33,7 @@ import org.jnode.util.NumberUtils;
 public class EEPRO100Buffer implements EEPRO100Constants {
 
     //---
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = LogManager.getLogger(getClass());
     private ResourceManager rm;
     private EEPRO100Registers regs;
     private EEPRO100RxFD rxPacket;

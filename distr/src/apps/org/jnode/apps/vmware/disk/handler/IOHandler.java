@@ -25,6 +25,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.vmware.disk.descriptor.Descriptor;
 import org.jnode.apps.vmware.disk.descriptor.DiskDatabase;
@@ -37,7 +38,7 @@ import org.jnode.apps.vmware.disk.extent.Extent;
  * 
  */
 public abstract class IOHandler {
-    private static final Logger LOG = Logger.getLogger(IOHandler.class);
+    private static final Logger LOG = LogManager.getLogger(IOHandler.class);
 
     /**
      * 

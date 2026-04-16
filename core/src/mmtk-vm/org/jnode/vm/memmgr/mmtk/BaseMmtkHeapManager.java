@@ -237,9 +237,9 @@ public abstract class BaseMmtkHeapManager extends VmHeapManager implements
             heapResource = rm.claimMemoryResource(ResourceOwner.SYSTEM, start,
                     size, ResourceManager.MEMMODE_NORMAL);
         } catch (NameNotFoundException ex) {
-            BootLogInstance.get().fatal("Cannot find resource manager", ex);
+            BootLogInstance.get().error("Cannot find resource manager", ex);
         } catch (ResourceNotFreeException ex) {
-            BootLogInstance.get().fatal("Cannot claim available heap region", ex);
+            BootLogInstance.get().error("Cannot claim available heap region", ex);
         }
 
     }

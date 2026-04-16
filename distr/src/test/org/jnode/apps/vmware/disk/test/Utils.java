@@ -22,6 +22,7 @@ package org.jnode.apps.vmware.disk.test;
 
 import java.io.File;
 import java.io.IOException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -31,7 +32,7 @@ import org.apache.log4j.Logger;
  * 
  */
 public class Utils {
-    private static final Logger LOG = Logger.getLogger(Utils.class);
+    private static final Logger LOG = LogManager.getLogger(Utils.class);
 
     private static final String TEMP_DIR = "VMWareDisk";
     private static final File TEMP_DIR_FILE;

@@ -22,6 +22,7 @@ package org.jnode.driver.net._3c90x;
 
 import java.security.PrivilegedExceptionAction;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DriverException;
@@ -45,7 +46,7 @@ public class _3c90xDriver extends AbstractEthernetDriver {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(_3c90xDriver.class);
+    private static final Logger log = LogManager.getLogger(_3c90xDriver.class);
 
     /**
      * The actual device driver

@@ -20,6 +20,7 @@
  
 package org.jnode.driver.video.cirrus;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.video.ddc.DisplayDataChannelAPI;
 import org.jnode.system.resource.IOResource;
@@ -31,7 +32,7 @@ import org.jnode.system.resource.MemoryResource;
 public final class CirrusMMIO implements CirrusConstants, DisplayDataChannelAPI {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(CirrusMMIO.class);
+    private static final Logger log = LogManager.getLogger(CirrusMMIO.class);
     
     @SuppressWarnings("unused")
     private final MemoryResource mmio;

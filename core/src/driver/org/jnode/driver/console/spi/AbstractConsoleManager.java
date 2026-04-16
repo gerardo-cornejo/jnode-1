@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.bootlog.BootLogInstance;
 import org.jnode.driver.ApiNotFoundException;
@@ -59,7 +60,7 @@ public abstract class AbstractConsoleManager implements ConsoleManager {
     /**
      * My logger
      */
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = LogManager.getLogger(getClass());
 
     /**
      * All registered consoles

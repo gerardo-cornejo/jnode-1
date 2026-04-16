@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.ApiNotFoundException;
 import org.jnode.driver.Device;
@@ -146,7 +147,7 @@ public class MouseHandler implements PointerListener {
     private final long[] buttonClickTime = new long[3];
     private boolean postClicked = false;
 
-    private static final Logger log = Logger.getLogger(MouseHandler.class);
+    private static final Logger log = LogManager.getLogger(MouseHandler.class);
 
     private Component lastSource;
     private Component dragSource;

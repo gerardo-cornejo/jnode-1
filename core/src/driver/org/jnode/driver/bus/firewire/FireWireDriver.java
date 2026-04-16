@@ -21,6 +21,7 @@
 package org.jnode.driver.bus.firewire;
 
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
@@ -39,7 +40,7 @@ public class FireWireDriver extends Driver {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(FireWireDriver.class);
+    private static final Logger log = LogManager.getLogger(FireWireDriver.class);
     private FireWireBus bus;
 
     public FireWireDriver() {

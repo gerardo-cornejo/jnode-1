@@ -24,6 +24,7 @@ import java.security.PrivilegedExceptionAction;
 
 import javax.naming.NameNotFoundException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.DriverException;
 import org.jnode.driver.system.cmos.CMOSConstants;
@@ -50,7 +51,7 @@ public class DefaultFDC implements FDC {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(DefaultFDC.class);
+    private static final Logger log = LogManager.getLogger(DefaultFDC.class);
     /**
      * Floppy IRQ
      */

@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import javax.imageio.ImageIO;
 import javax.naming.NameNotFoundException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.ApiNotFoundException;
 import org.jnode.driver.Device;
@@ -143,7 +144,7 @@ public class KeyboardHandler implements KeyboardListener {
     /**
      * My logger
      */
-    private static final Logger log = Logger.getLogger(KeyboardHandler.class);
+    private static final Logger log = LogManager.getLogger(KeyboardHandler.class);
 
     /**
      * The queue where to post the events

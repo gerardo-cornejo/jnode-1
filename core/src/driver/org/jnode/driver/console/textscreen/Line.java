@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.SortedSet;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.console.CompletionInfo;
 import org.jnode.driver.console.InputCompleter;
@@ -387,7 +388,7 @@ class Line {
             }
             console.setCursorVisible(true);
         } catch (Exception e) {
-            Logger.getLogger(Line.class).debug("Exception in Line.refreshCurrentLine()", e);
+            LogManager.getLogger(Line.class).debug("Exception in Line.refreshCurrentLine()", e);
         }
     }
 

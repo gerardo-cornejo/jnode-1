@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceAlreadyRegisteredException;
@@ -51,7 +52,7 @@ import org.jnode.plugin.PluginException;
 public class FileSystemPlugin extends Plugin implements FileSystemService {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(FileSystemPlugin.class);
+    private static final Logger log = LogManager.getLogger(FileSystemPlugin.class);
 
     /** Manager of fs types */
     private final FileSystemTypeManager fsTypeManager;

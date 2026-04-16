@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.fs.FSAccessRights;
@@ -46,7 +47,7 @@ import org.jnode.java.io.VMFileHandle;
 final class FileSystemAPIImpl implements VMFileSystemAPI {
 
     /** My logger */
-    private static final Logger log = Logger.getLogger(FileSystemAPIImpl.class);
+    private static final Logger log = LogManager.getLogger(FileSystemAPIImpl.class);
 
     /** My filesystem manager */
     @SuppressWarnings("unused")

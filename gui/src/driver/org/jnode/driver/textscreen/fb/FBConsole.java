@@ -22,6 +22,7 @@ package org.jnode.driver.textscreen.fb;
 
 import java.util.Collection;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.Device;
 import org.jnode.driver.DeviceManagerListener;
@@ -35,7 +36,7 @@ import org.jnode.naming.InitialNaming;
  * @author Levente S\u00e1ntha
  */
 class FBConsole {
-    private static final Logger log = Logger.getLogger(FBConsole.class);
+    private static final Logger log = LogManager.getLogger(FBConsole.class);
 
     public static void start() throws Exception {
         final Collection<Device> devs = DeviceUtils.getDevicesByAPI(FrameBufferAPI.class);

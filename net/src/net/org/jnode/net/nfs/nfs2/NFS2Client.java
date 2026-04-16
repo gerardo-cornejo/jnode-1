@@ -36,6 +36,7 @@ import org.acplt.oncrpc.XdrAble;
 import org.acplt.oncrpc.XdrDecodingStream;
 import org.acplt.oncrpc.XdrEncodingStream;
 import org.acplt.oncrpc.XdrVoid;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.net.nfs.Protocol;
 
@@ -104,7 +105,7 @@ public class NFS2Client {
 
     private static final int PROCEDURE_GET_FILE_SYSTEM_ATTRIBUTE = 17;
 
-    private static final Logger LOGGER = Logger.getLogger(NFS2Client.class);
+    private static final Logger LOGGER = LogManager.getLogger(NFS2Client.class);
 
     private List<OncRpcClient> rpcClientPool;
 

@@ -23,6 +23,7 @@ package org.jnode.test.support;
 import java.net.URL;
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.NamingException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.jmock.MockObjectTestCase;
@@ -40,7 +41,7 @@ import org.jnode.emu.naming.BasicNameSpace;
 
 
 public class ContextManager {
-    private static final Logger log = Logger.getLogger(ContextManager.class);
+    private static final Logger log = LogManager.getLogger(ContextManager.class);
     private static ContextManager instance;
 
     private boolean initialized = false;
@@ -60,7 +61,7 @@ public class ContextManager {
                 initLog4j();
                 initNaming();
             } catch (PluginException e) {
-                log.fatal("error in initNaming", e);
+                log.error("error in initNaming", e);
             }
 
             initialized = true;
@@ -116,9 +117,9 @@ public class ContextManager {
 //            };
 //            namespace.bind(CMOSService.NAME, cmos);                        
         } catch (NameAlreadyBoundException e) {
-            log.fatal("can't register stub services", e);
+            log.error("can't register stub services", e);
         } catch (NamingException e) {
-            log.fatal("can't register stub services", e);
+            log.error("can't register stub services", e);
         }
     }
 

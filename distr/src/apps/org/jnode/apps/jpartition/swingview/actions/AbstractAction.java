@@ -20,6 +20,7 @@
  
 package org.jnode.apps.jpartition.swingview.actions;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.apps.jpartition.ErrorReporter;
 import org.jnode.apps.jpartition.model.Bounded;
@@ -29,7 +30,7 @@ abstract class AbstractAction<T extends DiskAreaView<? extends Bounded>> extends
         javax.swing.AbstractAction {
     private static final long serialVersionUID = -8091888570743940797L;
 
-    protected final Logger log = Logger.getLogger(getClass());
+    protected final Logger log = LogManager.getLogger(getClass());
 
     protected final ErrorReporter errorReporter;
     protected final T view;

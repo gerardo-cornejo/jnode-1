@@ -26,6 +26,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.io.IOException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.font.TextRenderer;
 import org.jnode.awt.font.spi.ShapedGlyph;
@@ -43,7 +44,7 @@ public class TTFSimpleTextRenderer implements TextRenderer {
     /**
      * My logger
      */
-    private final Logger log = Logger.getLogger(getClass());
+    private final Logger log = LogManager.getLogger(getClass());
 
     private final TTFFontData fontData;
 

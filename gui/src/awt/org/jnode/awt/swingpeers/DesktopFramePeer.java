@@ -48,6 +48,7 @@ import java.awt.image.ImageProducer;
 import java.awt.image.VolatileImage;
 import java.awt.peer.ContainerPeer;
 import java.awt.peer.FramePeer;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.awt.JNodeGenericPeer;
 import org.jnode.awt.JNodeGraphics2D;
@@ -63,7 +64,7 @@ final class DesktopFramePeer extends JNodeGenericPeer<SwingToolkit, DesktopFrame
 
     private final SwingToolkit toolkit;
 
-    private static final Logger log = Logger.getLogger(DesktopFramePeer.class);
+    private static final Logger log = LogManager.getLogger(DesktopFramePeer.class);
 
     private static final Point TOP_LEFT = new Point(0, 0);
 
