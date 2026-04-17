@@ -1,6 +1,9 @@
 
 # /
 /build
+/builder
+/.idea
+/gui/target
 /*/build
 .classpath
 .project
