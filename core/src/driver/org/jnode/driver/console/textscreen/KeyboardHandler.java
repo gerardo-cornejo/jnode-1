@@ -65,12 +65,13 @@ public abstract class KeyboardHandler {
 
     /**
      * Get the next KeyboardEvent from the internal queue (and wait if none is
-     * available).
-     * 
-     * @return the next event
+     * available). Returns null on 500ms timeout to allow callers to check for
+     * system shutdown without blocking forever.
+     *
+     * @return the next event, or null if 500ms elapsed with no event
      */
     public final KeyboardEvent getEvent() {
-        return queue.get();
+        return queue.get(true, 500);
     }
 
     public abstract void close() throws IOException;

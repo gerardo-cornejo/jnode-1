@@ -329,7 +329,8 @@ public class TaskBar extends JPanel {
                     }
                 }
             };
-            final Thread t = new Thread(runner);
+            final Thread t = new Thread(runner, "App-" + className);
+            t.setDaemon(true);
             t.start();
         } catch (SecurityException ex) {
             log.error("Security exception in starting class " + className, ex);

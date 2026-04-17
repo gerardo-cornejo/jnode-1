@@ -31,6 +31,7 @@ import org.jnode.driver.input.KeyboardEvent;
 import org.jnode.system.event.FocusEvent;
 import org.jnode.system.event.FocusListener;
 import org.jnode.util.ConsoleStream;
+import org.jnode.vm.VmSystem;
 
 
 /**
@@ -180,8 +181,7 @@ public class KeyboardReader extends Reader
      * @return true if the event should commit the characters in the
      *    input (line editing) buffer to the Reader's character stream.
      */
-    private boolean processEvent() throws IOException {
-        KeyboardEvent event = keyboardHandler.getEvent();
+    private boolean processEvent(KeyboardEvent event) throws IOException {
         if (!event.isConsumed()) {
             KeyboardReaderAction action = bindings.getKeyboardEventAction(event);
             boolean breakChar = false;
@@ -336,7 +336,17 @@ public class KeyboardReader extends Reader
         currentPrompt = sb.toString();
 
         currentLine.start();
-        while (!processEvent()) { /* */
+        while (true) {
+            KeyboardEvent event = keyboardHandler.getEvent();
+            if (event == null) {
+                if (VmSystem.isShuttingDown()) {
+                    return false;
+                }
+                continue;
+            }
+            if (processEvent(event)) {
+                break;
+            }
         }
         buffer = currentLine.consumeChars();
         lim = buffer.length;

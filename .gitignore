@@ -18,4 +18,5 @@ classlib.pack.gz
 
 /.metadata
 /netbeans/nbproject/private/
-gui/target
+/gui/target/*
+/core/target/*

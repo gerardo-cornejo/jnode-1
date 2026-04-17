@@ -1150,11 +1150,14 @@ public abstract class JNodeToolkit extends ClasspathToolkit implements FrameBuff
     }
 
     static void startAwt() {
+        final JNodeToolkit jtk;
         if (JNodeToolkit.isGuiActive()) {
-            ((JNodeToolkit) Toolkit.getDefaultToolkit()).joinGUI();
-            JNodeToolkit.waitUntilStopped();
+            jtk = (JNodeToolkit) Toolkit.getDefaultToolkit();
+            jtk.joinGUI();
+            jtk.doWaitUntilStopped();
         } else {
             JNodeToolkit.startGui();
+            jtk = (JNodeToolkit) Toolkit.getDefaultToolkit();
             try {
                 final String desktopClassName = System.getProperty("jnode.desktop");
                 if (desktopClassName != null) {
@@ -1162,7 +1165,8 @@ public abstract class JNodeToolkit extends ClasspathToolkit implements FrameBuff
                         Thread.currentThread().getContextClassLoader().loadClass(desktopClassName);
                     final Object desktop = desktopClass.newInstance();
                     if (desktop instanceof Runnable) {
-                        final Thread t = new Thread((Runnable) desktop);
+                        final Thread t = new Thread((Runnable) desktop, "Desktop");
+                        t.setDaemon(true);
                         t.start();
                     }
                 }
@@ -1173,10 +1177,10 @@ public abstract class JNodeToolkit extends ClasspathToolkit implements FrameBuff
             } catch (IllegalAccessException ex) {
                 log.error("Cannot access desktop class", ex);
             } finally {
-                JNodeToolkit.waitUntilStopped();
+                jtk.doWaitUntilStopped();
             }
         }
-        ((JNodeToolkit) Toolkit.getDefaultToolkit()).runExitAction();
+        jtk.runExitAction();
     }
 
     /**
@@ -1195,7 +1199,15 @@ public abstract class JNodeToolkit extends ClasspathToolkit implements FrameBuff
 
     private synchronized void runExitAction() {
         if (exitAction != null) {
-            exitAction.run();
+            final Runnable action = exitAction;
+            final Thread t = new Thread(action, "ExitAction");
+            t.setDaemon(false);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException ex) {
+                // ignore
+            }
         }
     }
 
