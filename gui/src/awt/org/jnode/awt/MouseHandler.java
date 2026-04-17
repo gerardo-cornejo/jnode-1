@@ -179,10 +179,12 @@ public class MouseHandler implements PointerListener {
         this.hwCursor = hwCursor;
         this.screenSize = screenSize;
 
+        this.x = screenSize.width / 2;
+        this.y = screenSize.height / 2;
         if (hwCursor != null) {
             hwCursor.setCursorImage(JNodeCursors.ARROW);
             hwCursor.setCursorVisible(true);
-            hwCursor.setCursorPosition(0, 0);
+            hwCursor.setCursorPosition(this.x, this.y);
         }
         this.pointerAPI = new PointerAPIHandler();
         pointerAPI.addPointerListener(this);

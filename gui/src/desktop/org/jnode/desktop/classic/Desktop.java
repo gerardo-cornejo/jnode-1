@@ -17,7 +17,7 @@
  * along with this library; If not, write to the Free Software Foundation, Inc., 
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
- 
+
 package org.jnode.desktop.classic;
 
 import java.awt.AWTError;
@@ -69,8 +69,8 @@ public class Desktop implements Runnable {
     TaskBar taskBar;
     JPopupMenu desktopMenu;
     JDesktopPane desktopPane;
-    //Due to this reference to DesktopFrame desktop plugin needs swingpeers
-    //todo abstract out this dependency in the future
+    // Due to this reference to DesktopFrame desktop plugin needs swingpeers
+    // todo abstract out this dependency in the future
     JNodeAwtContext desktopFrame;
 
     /**
@@ -87,7 +87,6 @@ public class Desktop implements Runnable {
                     throw new AWTError("Need to be loaded using a plugin classloader");
                 }
                 Desktop.this.taskBar = new TaskBar(Desktop.this, appsEP);
-
 
                 final JNodeToolkit tk = JNodeToolkit.getJNodeToolkit();
                 desktopFrame = tk.getAwtContext();
@@ -109,11 +108,14 @@ public class Desktop implements Runnable {
                         } else {
                             Point p = taskBar.startButton.getLocationOnScreen();
                             int h = taskBar.startMenu.getPreferredSize().height;
-                            taskBar.startMenu.show(desktopPane, 0, p.y - h);
+                            javax.swing.SwingUtilities.convertPointFromScreen(p, desktopPane);
+                            int menuY = p.y - h;
+                            if (menuY < 0)
+                                menuY = p.y;
+                            taskBar.startMenu.show(desktopPane, p.x, menuY);
                         }
                     }
                 });
-
 
                 taskBar.quitMI.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
@@ -145,14 +147,13 @@ public class Desktop implements Runnable {
                     }
                 });
 
-
                 ActionListener desktopColorAction = new ActionListener() {
                     private JFrame frame;
                     private JColorChooser colorChooser;
                     private Color oldColor;
 
                     public void actionPerformed(ActionEvent e) {
-                        //if (frame == null) {
+                        // if (frame == null) {
                         frame = new JFrame("Desktop color");
                         colorChooser = new JColorChooser();
                         frame.add(colorChooser, BorderLayout.CENTER);
@@ -183,7 +184,7 @@ public class Desktop implements Runnable {
                         buttons.add(apply);
                         buttons.add(cancel);
                         frame.add(buttons, BorderLayout.SOUTH);
-                        //}
+                        // }
 
                         oldColor = desktopPane.getBackground();
                         colorChooser.setColor(oldColor);
@@ -216,11 +217,11 @@ public class Desktop implements Runnable {
                 JMenuItem desktopColor = new JMenuItem("Desktop color");
                 desktopColor.addActionListener(desktopColorAction);
                 desktopMenu.add(desktopColor);
-                
+
                 for (JMenuItem item : taskBar.chgSizeMenuItem) {
                     desktopMenu.add(item);
                 }
-                
+
                 desktopPane.addMouseListener(new MouseAdapter() {
                     public void mousePressed(MouseEvent event) {
                         if (event.getButton() == MouseEvent.BUTTON2) {
@@ -234,8 +235,8 @@ public class Desktop implements Runnable {
                 });
 
                 // Update
-                desktopPane.doLayout();
-                desktopPane.repaint();
+                // desktopPane.doLayout();
+                // desktopPane.repaint();
             }
         });
     }
@@ -259,7 +260,7 @@ public class Desktop implements Runnable {
             final Component c = event.getChild();
             if (c instanceof JInternalFrame) {
                 taskBar.windowBar.removeFrame((JInternalFrame) c);
-            } 
+            }
         }
     }
 
@@ -290,8 +291,10 @@ public class Desktop implements Runnable {
     }
 
     void enableBackgroundImage(boolean b) {
-        if (b) desktopFrame.setBackgroundImage(loadImage("JNode_logo_trans.png"));
-        else desktopFrame.setBackgroundImage(null);
+        if (b)
+            desktopFrame.setBackgroundImage(loadImage("JNode_logo_trans.png"));
+        else
+            desktopFrame.setBackgroundImage(null);
         desktopPane.repaint();
     }
 

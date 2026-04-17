@@ -53,6 +53,12 @@ public class JNodeFrameBufferDevice extends GraphicsDevice implements DeviceList
             configs[i] = new JNodeGraphicsConfiguration(this, fbConfigs[i]);
         }
         defaultConfig = configs[0];
+        for (GraphicsConfiguration c : configs) {
+            if ("1280x800/32".equals(c.toString())) {
+                defaultConfig = c;
+                break;
+            }
+        }
     }
 
     /**

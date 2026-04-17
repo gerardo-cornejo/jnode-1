@@ -87,9 +87,23 @@ public class TaskBar extends JPanel {
         layout.setVgap(0);
         setLayout(layout);
         setBorder(new BevelBorder(BevelBorder.RAISED));
-        startButton = new JButton("JNode", new ImageIcon(Desktop.loadImage("jnode_icon.png")));
+        startButton = new JButton("JNode");
         startButton.setToolTipText("JNode Menu");
         startButton.setBorder(new EmptyBorder(1, 3, 1, 3));
+
+        final JButton btn = startButton;
+        new Thread(new Runnable() {
+            public void run() {
+                final java.awt.image.BufferedImage img = Desktop.loadImage("jnode_icon.png");
+                if (img != null) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            btn.setIcon(new ImageIcon(img));
+                        }
+                    });
+                }
+            }
+        }, "TaskBar-ImageLoader").start();
 
         add(startButton, BorderLayout.WEST);
         startMenu = new JPopupMenu();
@@ -210,45 +224,47 @@ public class TaskBar extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            if (lf == null) {
-                try {
-                    Class<?> c = Thread.currentThread().getContextClassLoader().loadClass(lfName);
-                    this.lf = (LookAndFeel) c.newInstance();
-                } catch (Exception ex) {
-                    log.error("Error crating look & feel " + lfName, ex);
-                    return;
-                }
-            }
-
-            try {
-                UIManager.setLookAndFeel(lf);
-            } catch (UnsupportedLookAndFeelException ex) {
-                log.error("", ex);
-                return;
-            }
-            final Color bg_color = desktop.desktopPane.getBackground();
-            //TODO review this, Classpath plaf code is still instable failures can occure
-            //so we try to minimise the effect of a failure
-            try {
-                SwingUtilities.updateComponentTreeUI(desktop.desktopFrame.getTopLevelRootComponent());
-            } catch (Exception x) {
-                log.error("", x);
-            }
-            try {
-                SwingUtilities.updateComponentTreeUI(startMenu);
-            } catch (Exception x) {
-                log.error("", x);
-            }
-            try {
-                SwingUtilities.updateComponentTreeUI(desktop.desktopMenu);
-            } catch (Exception x) {
-                log.error("", x);
-            }
-            SwingUtilities.invokeLater(new Runnable() {
+            new Thread(new Runnable() {
                 public void run() {
-                    desktop.desktopPane.setBackground(bg_color);
+                    if (lf == null) {
+                        try {
+                            Class<?> c = Thread.currentThread().getContextClassLoader().loadClass(lfName);
+                            lf = (LookAndFeel) c.newInstance();
+                        } catch (Exception ex) {
+                            log.error("Error crating look & feel " + lfName, ex);
+                            return;
+                        }
+                    }
+
+                    try {
+                        UIManager.setLookAndFeel(lf);
+                    } catch (UnsupportedLookAndFeelException ex) {
+                        log.error("", ex);
+                        return;
+                    }
+                    final Color bg_color = desktop.desktopPane.getBackground();
+                    try {
+                        SwingUtilities.updateComponentTreeUI(desktop.desktopFrame.getTopLevelRootComponent());
+                    } catch (Exception x) {
+                        log.error("", x);
+                    }
+                    try {
+                        SwingUtilities.updateComponentTreeUI(startMenu);
+                    } catch (Exception x) {
+                        log.error("", x);
+                    }
+                    try {
+                        SwingUtilities.updateComponentTreeUI(desktop.desktopMenu);
+                    } catch (Exception x) {
+                        log.error("", x);
+                    }
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            desktop.desktopPane.setBackground(bg_color);
+                        }
+                    });
                 }
-            });
+            }, "SetLF-" + lfName).start();
         }
     }
 
@@ -270,7 +286,7 @@ public class TaskBar extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            SwingUtilities.invokeLater(this);
+            new Thread(this, "ChangeRes-" + config.toString()).start();
         }
     }
 
@@ -278,7 +294,11 @@ public class TaskBar extends JPanel {
         final JMenuItem mi = new JMenuItem(label);
         mi.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                startApp(label, classname, mi);
+                new Thread(new Runnable() {
+                    public void run() {
+                        startApp(label, classname, mi);
+                    }
+                }, "Menu-AppStarter-" + label).start();
             }
         });
         return mi;

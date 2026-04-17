@@ -35,6 +35,12 @@ public class StartAwt implements Runnable {
      * @see java.lang.Runnable#run()
      */
     public void run() {
-        JNodeToolkit.startAwt();
+        Thread awtThread = new Thread(new Runnable() {
+            public void run() {
+                JNodeToolkit.startAwt();
+            }
+        }, "AWT-Starter");
+        awtThread.setDaemon(true);
+        awtThread.start();
     }
 }

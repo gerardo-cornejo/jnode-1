@@ -33,7 +33,10 @@
       "Bash(./build.sh cd-x86-lite *)",
       "Bash(export PATH=\"$JAVA_HOME/bin:$PATH\")",
       "Bash(cmd /c \"build-complete.bat 2>&1\")",
-      "Bash(awk '{print $9, \"\\(\" $5 \"\\)\"}')"
+      "Bash(awk '{print $9, \"\\(\" $5 \"\\)\"}')",
+      "Bash(export JAVA_HOME=\"C:/Users/gerardo.cornejo/.jdks/corretto-1.8.0_482\")",
+      "Bash(java -Xmx768M -Xms256M -jar core/lib/ant-launcher.jar -lib __TRACKED_VAR__/lib -lib core/lib -f all/build.xml cd-x86-lite)",
+      "Bash(\"C:/Users/gerardo.cornejo/.jdks/corretto-1.8.0_482/bin/java\" -Xmx768M -Xms256M -jar core/lib/ant-launcher.jar -lib \"C:/Users/gerardo.cornejo/.jdks/corretto-1.8.0_482/lib\" -lib core/lib -f all/build.xml cd-x86-lite)"
     ]
   }
 }

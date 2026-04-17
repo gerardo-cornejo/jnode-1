@@ -7,6 +7,7 @@ org\jnode\awt\swingpeers\SwingMenuComponentPeer.class
 org\jnode\driver\ps2\PS2Constants.class
 org\jnode\desktop\ControlBar.class
 org\jnode\driver\video\ati\radeon\RadeonDriver.class
+org\jnode\desktop\classic\TaskBar$6.class
 org\jnode\driver\ps2\PS2PointerDriver.class
 org\jnode\driver\bus\i2c\I2cAPI.class
 org\jnode\driver\video\ati\radeon\FPIBlock.class
@@ -69,6 +70,7 @@ org\jnode\driver\sound\command\PlayCommand$TuneArgument.class
 org\jnode\desktop\WindowBar$SelectionListener.class
 org\jnode\awt\JNodeRobotPeer.class
 org\jnode\awt\KeyboardHandler$7.class
+org\jnode\desktop\classic\TaskBar$1$1.class
 org\jnode\driver\video\cirrus\CirrusVGAState.class
 org\jnode\awt\swingpeers\SwingBaseWindowPeer$WindowEventDispatcher.class
 org\jnode\awt\swingpeers\DesktopFrame$1.class
@@ -345,12 +347,14 @@ org\jnode\awt\swingpeers\SwingJBaseWindow.class
 org\jnode\driver\video\ddc\EDID.class
 org\jnode\awt\KeyboardHandler$5.class
 org\jnode\awt\font\renderer\GlyphRenderer$Master.class
+org\jnode\desktop\classic\TaskBar$SetLFAction$1$1.class
 org\jnode\awt\swingpeers\SwingToolkit$1.class
 org\jnode\awt\swingpeers\SwingBaseMenuPeer.class
 org\jnode\awt\swingpeers\SwingToolkit.class
 org\jnode\awt\font\renderer\SummedAreaTable$Int.class
 org\jnode\desktop\classic\TaskBar.class
 org\jnode\driver\video\ati\radeon\CommonRegs.class
+org\jnode\awt\StartAwt$1.class
 org\jnode\driver\textscreen\swing\SwingPcTextScreen$SwingPcScreen$1.class
 org\jnode\desktop\classic\Desktop$1$2.class
 org\jnode\awt\JNodeToolkit.class
@@ -410,6 +414,7 @@ org\jnode\awt\KeyboardHandler$1.class
 org\jnode\awt\swingpeers\SwingCheckboxMenuItemPeer.class
 org\jnode\awt\swingpeers\SwingPanelPeer.class
 org\jnode\driver\video\FrameBufferException.class
+org\jnode\desktop\classic\TaskBar$5$1.class
 org\jnode\desktop\classic\Desktop$1$4$1.class
 org\jnode\awt\font\DefaultTextPipe.class
 org\jnode\awt\font\spi\ShapedGlyph.class
