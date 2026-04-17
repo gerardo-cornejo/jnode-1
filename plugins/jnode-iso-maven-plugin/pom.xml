@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jnode</groupId>
+        <artifactId>jnode-parent</artifactId>
+        <version>0.2.9-dev</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <artifactId>jnode-iso-maven-plugin</artifactId>
+    <name>JNode ISO Maven Plugin</name>
+    <description>Maven plugin for building bootable JNode ISO images</description>
+    <packaging>maven-plugin</packaging>
+
+    <dependencies>
+        <!-- Maven Plugin API -->
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.8.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>2.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JNode Builder Classes -->
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-builder</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Dependencies for ISO tasks -->
+        <dependency>
+            <groupId>gnu.classpath</groupId>
+            <artifactId>classpath</artifactId>
+            <version>0.99-jnode</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mmtk</groupId>
+            <artifactId>mmtk</artifactId>
+            <version>0.99-jnode</version>
+        </dependency>
+        <dependency>
+            <groupId>de.tu-darmstadt</groupId>
+            <artifactId>iso9660</artifactId>
+            <version>1.0-jnode</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.sabre</groupId>
+            <artifactId>sabre</artifactId>
+            <version>1.0-jnode</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.8</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.5</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <goalPrefix>jnode-iso</goalPrefix>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

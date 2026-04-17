@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jnode</groupId>
+        <artifactId>jnode-parent</artifactId>
+        <version>0.2.9-dev</version>
+        <relativePath>..</relativePath>
+    </parent>
+    <artifactId>jnode-all</artifactId>
+    <name>JNode Distribution Build</name>
+    <description>JNode ISO image and bootable distribution build (100% Maven with jnode-iso-maven-plugin)</description>
+    <packaging>pom</packaging>
+
+    <properties>
+        <jnode-ver>${project.version}</jnode-ver>
+        <build.dir>${project.basedir}/build</build.dir>
+        <my-build.dir>${build.dir}/x86</my-build.dir>
+        <cdroms.dir>${build.dir}/cdroms</cdroms.dir>
+    </properties>
+
+    <dependencies>
+        <!-- All JNode modules for building ISOs -->
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-builder</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-build-tools</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-shell</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-net</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-fs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-gui</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-distr</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Custom JARs needed for ISO building -->
+        <dependency>
+            <groupId>gnu.classpath</groupId>
+            <artifactId>classpath</artifactId>
+            <version>0.99-jnode</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mmtk</groupId>
+            <artifactId>mmtk</artifactId>
+            <version>0.99-jnode</version>
+        </dependency>
+        <dependency>
+            <groupId>de.tu-darmstadt</groupId>
+            <artifactId>iso9660</artifactId>
+            <version>1.0-jnode</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.sabre</groupId>
+            <artifactId>sabre</artifactId>
+            <version>1.0-jnode</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.8</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Maven Antrun Plugin for directory setup -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>prepare-iso-dirs</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${build.dir}" />
+                                <mkdir dir="${cdroms.dir}" />
+                                <mkdir dir="${my-build.dir}" />
+                                <echo message="========================================" />
+                                <echo message="JNode Maven Build System" />
+                                <echo message="========================================" />
+                                <echo message="Build directories prepared:" />
+                                <echo message="  Build: ${build.dir}" />
+                                <echo message="  CDROMs: ${cdroms.dir}" />
+                                <echo message="  x86:   ${my-build.dir}" />
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>iso-generation-reminder</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="========================================" />
+                                <echo message="Maven Compilation Complete!" />
+                                <echo message="========================================" />
+                                <echo message="" />
+                                <echo message="To generate the ISO image, run:" />
+                                <echo message="  cd ${project.basedir}/.." />
+                                <echo message="  ./build.sh cd-x86-lite" />
+                                <echo message="" />
+                                <echo message="ISO output will be at:" />
+                                <echo message="  ${cdroms.dir}/jnode-x86-lite.iso" />
+                                <echo message="" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- JNode ISO Maven Plugin for building bootable images -->
+            <plugin>
+                <groupId>org.jnode</groupId>
+                <artifactId>jnode-iso-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <bits>32</bits>
+                    <buildDir>${build.dir}</buildDir>
+                    <sourceDir>${project.basedir}/../core/src/native</sourceDir>
+                    <pluginDir>${build.dir}/plugins</pluginDir>
+                    <pluginListFile>${project.basedir}/../all/conf/system-plugin-list.xml</pluginListFile>
+                    <classListFile>${project.basedir}/../all/conf/core-classes.txt</classListFile>
+                    <x86ClassListFile>${project.basedir}/../all/conf/x86-classes.txt</x86ClassListFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- Profile for building ISO images (32-bit lite) -->
+        <profile>
+            <id>iso-x86-lite</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jnode</groupId>
+                        <artifactId>jnode-iso-maven-plugin</artifactId>
+                        <version>${project.version}</version>
+                        <executions>
+                            <execution>
+                                <id>build-iso-x86-lite</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build-bootimage</goal>
+                                    <goal>build-iso</goal>
+                                </goals>
+                                <configuration>
+                                    <bits>32</bits>
+                                    <variant>lite</variant>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Profile for building 64-bit ISO -->
+        <profile>
+            <id>iso-x86_64-lite</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jnode</groupId>
+                        <artifactId>jnode-iso-maven-plugin</artifactId>
+                        <version>${project.version}</version>
+                        <executions>
+                            <execution>
+                                <id>build-iso-x86_64-lite</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build-bootimage</goal>
+                                    <goal>build-iso</goal>
+                                </goals>
+                                <configuration>
+                                    <bits>64</bits>
+                                    <variant>lite</variant>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Profile for building full ISO with sources -->
+        <profile>
+            <id>iso-full</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jnode</groupId>
+                        <artifactId>jnode-iso-maven-plugin</artifactId>
+                        <version>${project.version}</version>
+                        <executions>
+                            <execution>
+                                <id>build-iso-full</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build-bootimage</goal>
+                                    <goal>build-iso</goal>
+                                </goals>
+                                <configuration>
+                                    <bits>32</bits>
+                                    <variant>full</variant>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jnode</groupId>
+        <artifactId>jnode-parent</artifactId>
+        <version>0.2.9-dev</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <artifactId>jnode-builder</artifactId>
+    <name>JNode Builder Tools</name>
+    <description>JNode build system tools and custom Ant tasks</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.10.15</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.javacc</groupId>
+            <artifactId>javacc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bcel</groupId>
+            <artifactId>bcel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>5.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/builder</sourceDirectory>
+        <plugins>
+            <!-- Phase 1: Generate JavaCC sources before compilation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>javacc-generate</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.build.directory}/generated-sources/javacc"/>
+                                <java classname="org.javacc.parser.Main" fork="true" failonerror="true">
+                                    <arg value="-OUTPUT_DIRECTORY=${project.build.directory}/generated-sources/javacc"/>
+                                    <arg value="${project.basedir}/src/builder/org/jnode/jnasm/assembler/gen/JNAsm.jj"/>
+                                    <classpath>
+                                        <path path="${project.basedir}/lib/javacc.jar"/>
+                                    </classpath>
+                                </java>
+                                <java classname="org.javacc.parser.Main" fork="true" failonerror="true">
+                                    <arg value="-OUTPUT_DIRECTORY=${project.build.directory}/generated-sources/javacc"/>
+                                    <arg value="${project.basedir}/src/builder/org/jnode/jnasm/preprocessor/gen/JNAsmPP.jj"/>
+                                    <classpath>
+                                        <path path="${project.basedir}/lib/javacc.jar"/>
+                                    </classpath>
+                                </java>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Source roots configuration -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/builder</source>
+                                <source>${project.basedir}/src/configure</source>
+                                <source>${project.build.directory}/generated-sources/javacc</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Compiler configuration: compile Ant tasks and generated JavaCC code -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <!-- Phase 2: Pre-compile TemplateTask.java as separate module -->
+                    <execution>
+                        <id>compile-template-task</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>org/jnode/ant/taskdefs/TemplateTask.java</include>
+                            </includes>
+                            <outputDirectory>${project.build.directory}/template-classes</outputDirectory>
+                            <compilerArgs>
+                                <arg>-nowarn</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </execution>
+                    <!-- Main compilation -->
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>org/jnode/ant/**/*.java</include>
+                                <include>org/javacc/**/*.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>org/jnode/ant/taskdefs/AnnotateTask.java</exclude>
+                                <exclude>org/jnode/ant/taskdefs/NativeCheckTask.java</exclude>
+                                <exclude>**/*-template.java</exclude>
+                                <exclude>**/package-info.java</exclude>
+                            </excludes>
+                            <compilerArgs>
+                                <arg>-nowarn</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Phase 3: Create template JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>template-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classesDirectory>${project.build.directory}/template-classes</classesDirectory>
+                            <classifier>template</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jnode</groupId>
+        <artifactId>jnode-parent</artifactId>
+        <version>0.2.9-dev</version>
+        <relativePath>..</relativePath>
+    </parent>
+    <artifactId>jnode-gui</artifactId>
+    <name>JNode GUI</name>
+    <description>JNode graphical user interface and AWT implementation</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-shell</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-textui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Add source roots -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>add-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/awt</source>
+                                <source>${project.basedir}/src/desktop</source>
+                                <source>${project.basedir}/src/driver</source>
+                                <source>${project.basedir}/src/font</source>
+                                <source>${project.basedir}/src/thinlet</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

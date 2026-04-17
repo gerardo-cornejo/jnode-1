@@ -3,19 +3,740 @@
   <component name="Ask2AgentMigrationStateService">
     <option name="migrationStatus" value="COMPLETED" />
   </component>
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Annotation profile for JNode Parent POM" enabled="true">
+        <sourceOutputDir name="../generated-sources/annotations" />
+        <sourceTestOutputDir name="../generated-test-sources/test-annotations" />
+        <module name="jnode-builder.main" />
+        <module name="jnode-builder.test" />
+      </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jnode-core" />
+        <module name="jnode-iso-maven-plugin" />
+        <module name="jnode-net" />
+        <module name="jnode-shell" />
+        <module name="jnode-cli" />
+        <module name="jnode-fs" />
+        <module name="jnode-textui" />
+        <module name="jnode-gui" />
+        <module name="jnode-distr" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="jnode-all" target="1.8" />
+      <module name="jnode-builder" target="1.8" />
+      <module name="jnode-builder.main" target="1.8" />
+      <module name="jnode-builder.test" target="1.8" />
+      <module name="jnode-cli" target="1.8" />
+      <module name="jnode-core" target="1.8" />
+      <module name="jnode-distr" target="1.8" />
+      <module name="jnode-fs" target="1.8" />
+      <module name="jnode-gui" target="1.8" />
+      <module name="jnode-iso-maven-plugin" target="1.8" />
+      <module name="jnode-net" target="1.8" />
+      <module name="jnode-parent" target="1.8" />
+      <module name="jnode-shell" target="1.8" />
+      <module name="jnode-textui" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/all/src/main/java" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/all/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/builder/src/builder" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/builder/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/cli/src/main/java" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/cli/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/core/src/main/java" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/core/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/distr/src/main/java" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/distr/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/fs/src/main/java" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/fs/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/gui/src/main/java" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/gui/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/net/src/main/java" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/net/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/plugins/jnode-iso-maven-plugin/src/main/java" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/plugins/jnode-iso-maven-plugin/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/shell/src/main/java" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/shell/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/textui/src/main/resources" charset="US-ASCII" />
+    <file url="file://$PROJECT_DIR$/textui/src/textui" charset="US-ASCII" />
+  </component>
   <component name="InspectionProjectProfileManager">
     <profile version="1.0">
       <option name="myName" value="Project Default" />
     </profile>
     <version value="1.0" />
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="jnode-builder" options="-nowarn" />
+      <module name="jnode-builder.main" options="-nowarn" />
+      <module name="jnode-builder.test" options="-nowarn -bootclasspath C:\Users\gerardo.cornejo\Desktop\jnode/all/lib/classlib.jar" />
+      <module name="jnode-cli" options="-nowarn -bootclasspath C:\Users\gerardo.cornejo\Desktop\jnode/all/lib/classlib.jar" />
+      <module name="jnode-core" options="-nowarn -bootclasspath C:\Users\gerardo.cornejo\Desktop\jnode\core/../all/lib/classlib.jar" />
+      <module name="jnode-distr" options="-nowarn -bootclasspath C:\Users\gerardo.cornejo\Desktop\jnode/all/lib/classlib.jar" />
+      <module name="jnode-fs" options="-nowarn -bootclasspath C:\Users\gerardo.cornejo\Desktop\jnode/all/lib/classlib.jar" />
+      <module name="jnode-gui" options="-nowarn -bootclasspath C:\Users\gerardo.cornejo\Desktop\jnode/all/lib/classlib.jar" />
+      <module name="jnode-iso-maven-plugin" options="-nowarn -bootclasspath C:\Users\gerardo.cornejo\Desktop\jnode/all/lib/classlib.jar" />
+      <module name="jnode-net" options="-nowarn -bootclasspath C:\Users\gerardo.cornejo\Desktop\jnode/all/lib/classlib.jar" />
+      <module name="jnode-shell" options="-nowarn -bootclasspath C:\Users\gerardo.cornejo\Desktop\jnode/all/lib/classlib.jar" />
+      <module name="jnode-textui" options="-nowarn -bootclasspath C:\Users\gerardo.cornejo\Desktop\jnode/all/lib/classlib.jar" />
+    </option>
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/jnode.iml" filepath="$PROJECT_DIR$/.idea/jnode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/all/jnode-all.iml" filepath="$PROJECT_DIR$/all/jnode-all.iml" />
+      <module fileurl="file://$PROJECT_DIR$/builder/jnode-builder.iml" filepath="$PROJECT_DIR$/builder/jnode-builder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/builder/jnode-builder.main.iml" filepath="$PROJECT_DIR$/builder/jnode-builder.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/builder/jnode-builder.test.iml" filepath="$PROJECT_DIR$/builder/jnode-builder.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cli/jnode-cli.iml" filepath="$PROJECT_DIR$/cli/jnode-cli.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/jnode-core.iml" filepath="$PROJECT_DIR$/core/jnode-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distr/jnode-distr.iml" filepath="$PROJECT_DIR$/distr/jnode-distr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fs/jnode-fs.iml" filepath="$PROJECT_DIR$/fs/jnode-fs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gui/jnode-gui.iml" filepath="$PROJECT_DIR$/gui/jnode-gui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/jnode-iso-maven-plugin/jnode-iso-maven-plugin.iml" filepath="$PROJECT_DIR$/plugins/jnode-iso-maven-plugin/jnode-iso-maven-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/net/jnode-net.iml" filepath="$PROJECT_DIR$/net/jnode-net.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jnode-parent.iml" filepath="$PROJECT_DIR$/jnode-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shell/jnode-shell.iml" filepath="$PROJECT_DIR$/shell/jnode-shell.iml" />
+      <module fileurl="file://$PROJECT_DIR$/textui/jnode-textui.iml" filepath="$PROJECT_DIR$/textui/jnode-textui.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="1.6" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_26" project-jdk-name="corretto-1.8" project-jdk-type="JavaSDK" />
+  <component name="RemoteRepositoriesConfiguration">
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Maven Central repository" />
+      <option name="url" value="https://repo1.maven.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jboss.community" />
+      <option name="name" value="JBoss Community repository" />
+      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+  </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+  </component>
+  <component name="libraryTable">
+    <library name="Maven: backport-util-concurrent:backport-util-concurrent:3.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="backport-util-concurrent" artifactId="backport-util-concurrent" version="3.1" baseVersion="3.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: classworlds:classworlds:1.1-alpha-2" type="java-imported" external-system-id="Maven">
+      <properties groupId="classworlds" artifactId="classworlds" version="1.1-alpha-2" baseVersion="1.1-alpha-2" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/classworlds/classworlds/1.1-alpha-2/classworlds-1.1-alpha-2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/classworlds/classworlds/1.1-alpha-2/classworlds-1.1-alpha-2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/classworlds/classworlds/1.1-alpha-2/classworlds-1.1-alpha-2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.enterprisedt:edtftpj:1.5.2" type="java-imported" external-system-id="Maven">
+      <properties groupId="com.enterprisedt" artifactId="edtftpj" version="1.5.2" baseVersion="1.5.2" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/enterprisedt/edtftpj/1.5.2/edtftpj-1.5.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/com/enterprisedt/edtftpj/1.5.2/edtftpj-1.5.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/enterprisedt/edtftpj/1.5.2/edtftpj-1.5.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.jcraft:jsch:0.1.24" type="java-imported" external-system-id="Maven">
+      <properties groupId="com.jcraft" artifactId="jsch" version="0.1.24" baseVersion="0.1.24" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/jcraft/jsch/0.1.24/jsch-0.1.24.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/com/jcraft/jsch/0.1.24/jsch-0.1.24-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/jcraft/jsch/0.1.24/jsch-0.1.24-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: commons-net:commons-net:3.3" type="java-imported" external-system-id="Maven">
+      <properties groupId="commons-net" artifactId="commons-net" version="3.3" baseVersion="3.3" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/commons-net/commons-net/3.3/commons-net-3.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/commons-net/commons-net/3.3/commons-net-3.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/commons-net/commons-net/3.3/commons-net-3.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: de.tu-darmstadt:iso9660:1.0-jnode" type="java-imported" external-system-id="Maven">
+      <properties groupId="de.tu-darmstadt" artifactId="iso9660" version="1.0-jnode" baseVersion="1.0-jnode" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/de/tu-darmstadt/iso9660/1.0-jnode/iso9660-1.0-jnode.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/de/tu-darmstadt/iso9660/1.0-jnode/iso9660-1.0-jnode-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/de/tu-darmstadt/iso9660/1.0-jnode/iso9660-1.0-jnode-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: dnsjava:dnsjava:1.6.6" type="java-imported" external-system-id="Maven">
+      <properties groupId="dnsjava" artifactId="dnsjava" version="1.6.6" baseVersion="1.6.6" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/dnsjava/dnsjava/1.6.6/dnsjava-1.6.6.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/dnsjava/dnsjava/1.6.6/dnsjava-1.6.6-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/dnsjava/dnsjava/1.6.6/dnsjava-1.6.6-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: gnu.classpath:classpath:0.99-jnode" type="java-imported" external-system-id="Maven">
+      <properties groupId="gnu.classpath" artifactId="classpath" version="0.99-jnode" baseVersion="0.99-jnode" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/gnu/classpath/classpath/0.99-jnode/classpath-0.99-jnode.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/gnu/classpath/classpath/0.99-jnode/classpath-0.99-jnode-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/gnu/classpath/classpath/0.99-jnode/classpath-0.99-jnode-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: gnu.classpath:mauve:1.0-jnode" type="java-imported" external-system-id="Maven">
+      <properties groupId="gnu.classpath" artifactId="mauve" version="1.0-jnode" baseVersion="1.0-jnode" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/gnu/classpath/mauve/1.0-jnode/mauve-1.0-jnode.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/gnu/classpath/mauve/1.0-jnode/mauve-1.0-jnode-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/gnu/classpath/mauve/1.0-jnode/mauve-1.0-jnode-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: javax.annotation:jsr250-api:1.0" type="java-imported" external-system-id="Maven">
+      <properties groupId="javax.annotation" artifactId="jsr250-api" version="1.0" baseVersion="1.0" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/annotation/jsr250-api/1.0/jsr250-api-1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/annotation/jsr250-api/1.0/jsr250-api-1.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/annotation/jsr250-api/1.0/jsr250-api-1.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: javax.enterprise:cdi-api:1.0" type="java-imported" external-system-id="Maven">
+      <properties groupId="javax.enterprise" artifactId="cdi-api" version="1.0" baseVersion="1.0" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/enterprise/cdi-api/1.0/cdi-api-1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/enterprise/cdi-api/1.0/cdi-api-1.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/enterprise/cdi-api/1.0/cdi-api-1.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: javax.inject:javax.inject:1" type="java-imported" external-system-id="Maven">
+      <properties groupId="javax.inject" artifactId="javax.inject" version="1" baseVersion="1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/inject/javax.inject/1/javax.inject-1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/inject/javax.inject/1/javax.inject-1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/inject/javax.inject/1/javax.inject-1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: jcifs:jcifs:1.2.6" type="java-imported" external-system-id="Maven">
+      <properties groupId="jcifs" artifactId="jcifs" version="1.2.6" baseVersion="1.2.6" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/jcifs/jcifs/1.2.6/jcifs-1.2.6.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/jcifs/jcifs/1.2.6/jcifs-1.2.6-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/jcifs/jcifs/1.2.6/jcifs-1.2.6-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: junit:junit:4.5" type="java-imported" external-system-id="Maven">
+      <properties groupId="junit" artifactId="junit" version="4.5" baseVersion="4.5" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.5/junit-4.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.5/junit-4.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/4.5/junit-4.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: log4j:log4j:1.2.8" type="java-imported" external-system-id="Maven">
+      <properties groupId="log4j" artifactId="log4j" version="1.2.8" baseVersion="1.2.8" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/log4j/log4j/1.2.8/log4j-1.2.8.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/log4j/log4j/1.2.8/log4j-1.2.8-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/log4j/log4j/1.2.8/log4j-1.2.8-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: net.java.dev.javacc:javacc:3.2-jnode" type="java-imported" external-system-id="Maven">
+      <properties groupId="net.java.dev.javacc" artifactId="javacc" version="3.2-jnode" baseVersion="3.2-jnode" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/javacc/javacc/3.2-jnode/javacc-3.2-jnode.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/javacc/javacc/3.2-jnode/javacc-3.2-jnode-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/net/java/dev/javacc/javacc/3.2-jnode/javacc-3.2-jnode-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: net.n3.nanoxml:nanoxml:2.2.3" type="java-imported" external-system-id="Maven">
+      <properties groupId="net.n3.nanoxml" artifactId="nanoxml" version="2.2.3" baseVersion="2.2.3" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/net/n3/nanoxml/nanoxml/2.2.3/nanoxml-2.2.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/net/n3/nanoxml/nanoxml/2.2.3/nanoxml-2.2.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/net/n3/nanoxml/nanoxml/2.2.3/nanoxml-2.2.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: net.sourceforge.sabre:sabre:1.0-jnode" type="java-imported" external-system-id="Maven">
+      <properties groupId="net.sourceforge.sabre" artifactId="sabre" version="1.0-jnode" baseVersion="1.0-jnode" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/net/sourceforge/sabre/sabre/1.0-jnode/sabre-1.0-jnode.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/net/sourceforge/sabre/sabre/1.0-jnode/sabre-1.0-jnode-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/net/sourceforge/sabre/sabre/1.0-jnode/sabre-1.0-jnode-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.acplt:remotetea-oncrpc:1.0-jnode" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.acplt" artifactId="remotetea-oncrpc" version="1.0-jnode" baseVersion="1.0-jnode" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/acplt/remotetea-oncrpc/1.0-jnode/remotetea-oncrpc-1.0-jnode.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/acplt/remotetea-oncrpc/1.0-jnode/remotetea-oncrpc-1.0-jnode-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/acplt/remotetea-oncrpc/1.0-jnode/remotetea-oncrpc-1.0-jnode-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.ant:ant-launcher:1.10.15" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.ant" artifactId="ant-launcher" version="1.10.15" baseVersion="1.10.15" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/ant/ant-launcher/1.10.15/ant-launcher-1.10.15.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/ant/ant-launcher/1.10.15/ant-launcher-1.10.15-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/ant/ant-launcher/1.10.15/ant-launcher-1.10.15-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.ant:ant:1.10.15" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.ant" artifactId="ant" version="1.10.15" baseVersion="1.10.15" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/ant/ant/1.10.15/ant-1.10.15.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/ant/ant/1.10.15/ant-1.10.15-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/ant/ant/1.10.15/ant-1.10.15-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.bcel:bcel:5.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.bcel" artifactId="bcel" version="5.1" baseVersion="5.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/bcel/bcel/5.1/bcel-5.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/bcel/bcel/5.1/bcel-5.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/bcel/bcel/5.1/bcel-5.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.commons:commons-compress:1.20" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.commons" artifactId="commons-compress" version="1.20" baseVersion="1.20" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-compress/1.20/commons-compress-1.20.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-compress/1.20/commons-compress-1.20-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-compress/1.20/commons-compress-1.20-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.commons:commons-lang3:3.8.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.commons" artifactId="commons-lang3" version="3.8.1" baseVersion="3.8.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.maven.plugin-tools:maven-plugin-annotations:3.6.0" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.maven.plugin-tools" artifactId="maven-plugin-annotations" version="3.6.0" baseVersion="3.6.0" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/plugin-tools/maven-plugin-annotations/3.6.0/maven-plugin-annotations-3.6.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/plugin-tools/maven-plugin-annotations/3.6.0/maven-plugin-annotations-3.6.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/plugin-tools/maven-plugin-annotations/3.6.0/maven-plugin-annotations-3.6.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.maven.wagon:wagon-provider-api:1.0-beta-6" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.maven.wagon" artifactId="wagon-provider-api" version="1.0-beta-6" baseVersion="1.0-beta-6" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/wagon/wagon-provider-api/1.0-beta-6/wagon-provider-api-1.0-beta-6.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/wagon/wagon-provider-api/1.0-beta-6/wagon-provider-api-1.0-beta-6-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/wagon/wagon-provider-api/1.0-beta-6/wagon-provider-api-1.0-beta-6-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.maven:maven-artifact-manager:2.2.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.maven" artifactId="maven-artifact-manager" version="2.2.1" baseVersion="2.2.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-artifact-manager/2.2.1/maven-artifact-manager-2.2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-artifact-manager/2.2.1/maven-artifact-manager-2.2.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-artifact-manager/2.2.1/maven-artifact-manager-2.2.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.maven:maven-artifact:3.8.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.maven" artifactId="maven-artifact" version="3.8.1" baseVersion="3.8.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-artifact/3.8.1/maven-artifact-3.8.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-artifact/3.8.1/maven-artifact-3.8.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-artifact/3.8.1/maven-artifact-3.8.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.maven:maven-model:3.8.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.maven" artifactId="maven-model" version="3.8.1" baseVersion="3.8.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-model/3.8.1/maven-model-3.8.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-model/3.8.1/maven-model-3.8.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-model/3.8.1/maven-model-3.8.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.maven:maven-plugin-api:3.8.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.maven" artifactId="maven-plugin-api" version="3.8.1" baseVersion="3.8.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-plugin-api/3.8.1/maven-plugin-api-3.8.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-plugin-api/3.8.1/maven-plugin-api-3.8.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-plugin-api/3.8.1/maven-plugin-api-3.8.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.maven:maven-plugin-registry:2.2.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.maven" artifactId="maven-plugin-registry" version="2.2.1" baseVersion="2.2.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-plugin-registry/2.2.1/maven-plugin-registry-2.2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-plugin-registry/2.2.1/maven-plugin-registry-2.2.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-plugin-registry/2.2.1/maven-plugin-registry-2.2.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.maven:maven-profile:2.2.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.maven" artifactId="maven-profile" version="2.2.1" baseVersion="2.2.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-profile/2.2.1/maven-profile-2.2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-profile/2.2.1/maven-profile-2.2.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-profile/2.2.1/maven-profile-2.2.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.maven:maven-project:2.2.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.maven" artifactId="maven-project" version="2.2.1" baseVersion="2.2.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-project/2.2.1/maven-project-2.2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-project/2.2.1/maven-project-2.2.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-project/2.2.1/maven-project-2.2.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.maven:maven-repository-metadata:2.2.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.maven" artifactId="maven-repository-metadata" version="2.2.1" baseVersion="2.2.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-repository-metadata/2.2.1/maven-repository-metadata-2.2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-repository-metadata/2.2.1/maven-repository-metadata-2.2.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-repository-metadata/2.2.1/maven-repository-metadata-2.2.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.maven:maven-settings:2.2.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.apache.maven" artifactId="maven-settings" version="2.2.1" baseVersion="2.2.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-settings/2.2.1/maven-settings-2.2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-settings/2.2.1/maven-settings-2.2.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/apache/maven/maven-settings/2.2.1/maven-settings-2.2.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.beanshell:bsh:2.0b5" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.beanshell" artifactId="bsh" version="2.0b5" baseVersion="2.0b5" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/beanshell/bsh/2.0b5/bsh-2.0b5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/beanshell/bsh/2.0b5/bsh-2.0b5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/beanshell/bsh/2.0b5/bsh-2.0b5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.codehaus.plexus:plexus-classworlds:2.6.0" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.codehaus.plexus" artifactId="plexus-classworlds" version="2.6.0" baseVersion="2.6.0" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.codehaus.plexus:plexus-component-annotations:1.5.5" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.codehaus.plexus" artifactId="plexus-component-annotations" version="1.5.5" baseVersion="1.5.5" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.codehaus.plexus" artifactId="plexus-container-default" version="1.0-alpha-9-stable-1" baseVersion="1.0-alpha-9-stable-1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-container-default/1.0-alpha-9-stable-1/plexus-container-default-1.0-alpha-9-stable-1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-container-default/1.0-alpha-9-stable-1/plexus-container-default-1.0-alpha-9-stable-1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-container-default/1.0-alpha-9-stable-1/plexus-container-default-1.0-alpha-9-stable-1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.codehaus.plexus:plexus-interpolation:1.11" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.codehaus.plexus" artifactId="plexus-interpolation" version="1.11" baseVersion="1.11" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-interpolation/1.11/plexus-interpolation-1.11.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-interpolation/1.11/plexus-interpolation-1.11-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-interpolation/1.11/plexus-interpolation-1.11-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.codehaus.plexus:plexus-utils:3.2.1" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.codehaus.plexus" artifactId="plexus-utils" version="3.2.1" baseVersion="3.2.1" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-utils/3.2.1/plexus-utils-3.2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-utils/3.2.1/plexus-utils-3.2.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-utils/3.2.1/plexus-utils-3.2.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.eclipse.sisu:org.eclipse.sisu.inject:0.3.4" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.eclipse.sisu" artifactId="org.eclipse.sisu.inject" version="0.3.4" baseVersion="0.3.4" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/sisu/org.eclipse.sisu.inject/0.3.4/org.eclipse.sisu.inject-0.3.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/sisu/org.eclipse.sisu.inject/0.3.4/org.eclipse.sisu.inject-0.3.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/sisu/org.eclipse.sisu.inject/0.3.4/org.eclipse.sisu.inject-0.3.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.eclipse.sisu:org.eclipse.sisu.plexus:0.3.4" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.eclipse.sisu" artifactId="org.eclipse.sisu.plexus" version="0.3.4" baseVersion="0.3.4" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/sisu/org.eclipse.sisu.plexus/0.3.4/org.eclipse.sisu.plexus-0.3.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/sisu/org.eclipse.sisu.plexus/0.3.4/org.eclipse.sisu.plexus-0.3.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/sisu/org.eclipse.sisu.plexus/0.3.4/org.eclipse.sisu.plexus-0.3.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jnode.thirdparty:bsf:1.0-jnode" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.jnode.thirdparty" artifactId="bsf" version="1.0-jnode" baseVersion="1.0-jnode" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jnode/thirdparty/bsf/1.0-jnode/bsf-1.0-jnode.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jnode/thirdparty/bsf/1.0-jnode/bsf-1.0-jnode-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jnode/thirdparty/bsf/1.0-jnode/bsf-1.0-jnode-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jnode.thirdparty:jawk-1.02:1.0-jnode" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.jnode.thirdparty" artifactId="jawk-1.02" version="1.0-jnode" baseVersion="1.0-jnode" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jnode/thirdparty/jawk-1.02/1.0-jnode/jawk-1.02-1.0-jnode.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jnode/thirdparty/jawk-1.02/1.0-jnode/jawk-1.02-1.0-jnode-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jnode/thirdparty/jawk-1.02/1.0-jnode/jawk-1.02-1.0-jnode-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jnode.thirdparty:telnetd:1.0-jnode" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.jnode.thirdparty" artifactId="telnetd" version="1.0-jnode" baseVersion="1.0-jnode" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jnode/thirdparty/telnetd/1.0-jnode/telnetd-1.0-jnode.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jnode/thirdparty/telnetd/1.0-jnode/telnetd-1.0-jnode-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/jnode/thirdparty/telnetd/1.0-jnode/telnetd-1.0-jnode-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.mmtk:mmtk:0.99-jnode" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.mmtk" artifactId="mmtk" version="0.99-jnode" baseVersion="0.99-jnode" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/mmtk/mmtk/0.99-jnode/mmtk-0.99-jnode.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/mmtk/mmtk/0.99-jnode/mmtk-0.99-jnode-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/mmtk/mmtk/0.99-jnode/mmtk-0.99-jnode-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.mozilla:rhino-jsr223:1.6r5" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.mozilla" artifactId="rhino-jsr223" version="1.6r5" baseVersion="1.6r5" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/mozilla/rhino-jsr223/1.6r5/rhino-jsr223-1.6r5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/mozilla/rhino-jsr223/1.6r5/rhino-jsr223-1.6r5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/mozilla/rhino-jsr223/1.6r5/rhino-jsr223-1.6r5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.ow2.asm:asm:5.0.4" type="java-imported" external-system-id="Maven">
+      <properties groupId="org.ow2.asm" artifactId="asm" version="5.0.4" baseVersion="5.0.4" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm/5.0.4/asm-5.0.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm/5.0.4/asm-5.0.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm/5.0.4/asm-5.0.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: xml-apis:xml-apis:1.0-jnode" type="java-imported" external-system-id="Maven">
+      <properties groupId="xml-apis" artifactId="xml-apis" version="1.0-jnode" baseVersion="1.0-jnode" />
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/xml-apis/xml-apis/1.0-jnode/xml-apis-1.0-jnode.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/xml-apis/xml-apis/1.0-jnode/xml-apis-1.0-jnode-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/xml-apis/xml-apis/1.0-jnode/xml-apis-1.0-jnode-sources.jar!/" />
+      </SOURCES>
+    </library>
   </component>
 </project>

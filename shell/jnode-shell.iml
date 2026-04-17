@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="$MODULE_DIR$/pom.xml" external.system.module.type="SINGLE_MODULE" external.system.module.version="223-2" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/emu" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/shell" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/annotations" isTestSource="false" generated="true" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="jnode-core" />
+    <orderEntry type="library" name="Maven: gnu.classpath:classpath:0.99-jnode" level="project" />
+    <orderEntry type="library" name="Maven: org.mmtk:mmtk:0.99-jnode" level="project" />
+    <orderEntry type="library" name="Maven: gnu.classpath:mauve:1.0-jnode" level="project" />
+    <orderEntry type="library" name="Maven: junit:junit:4.5" level="project" />
+    <orderEntry type="library" name="Maven: net.n3.nanoxml:nanoxml:2.2.3" level="project" />
+    <orderEntry type="library" name="Maven: org.beanshell:bsh:2.0b5" level="project" />
+    <orderEntry type="library" name="Maven: org.mozilla:rhino-jsr223:1.6r5" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.8" level="project" />
+  </component>
+</module>

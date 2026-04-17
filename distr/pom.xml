@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jnode</groupId>
+        <artifactId>jnode-parent</artifactId>
+        <version>0.2.9-dev</version>
+        <relativePath>..</relativePath>
+    </parent>
+    <artifactId>jnode-distr</artifactId>
+    <name>JNode Distribution</name>
+    <description>JNode distribution applications and tools</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-shell</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-cli</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-fs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-net</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-gui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.bcel</groupId>
+            <artifactId>bcel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode.thirdparty</groupId>
+            <artifactId>telnetd</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode.thirdparty</groupId>
+            <artifactId>bsf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode.thirdparty</groupId>
+            <artifactId>jawk-1.02</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Add source roots -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>add-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/apps</source>
+                                <source>${project.basedir}/src/emu</source>
+                                <source>${project.basedir}/src/install</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Exclude optional applications without dependencies -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>org/jnode/apps/jetty/JettyCommand.java</exclude>
+                        <exclude>org/jnode/apps/derby/DerbyCommand.java</exclude>
+                        <exclude>**/*-template.java</exclude>
+                        <exclude>**/package-info.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

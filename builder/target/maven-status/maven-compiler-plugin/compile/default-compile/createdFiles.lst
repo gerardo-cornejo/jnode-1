@@ -1,0 +1,15 @@
+org\jnode\ant\taskdefs\HotSwapHelper.class
+org\jnode\ant\taskdefs\classpath\CompareTask.class
+org\jnode\ant\taskdefs\Asm$IncludeDir.class
+org\jnode\ant\taskdefs\classpath\BaseDirs.class
+org\jnode\ant\taskdefs\HeaderTask.class
+org\jnode\ant\taskdefs\TemplateTask$Token.class
+org\jnode\ant\taskdefs\TemplateTask.class
+org\jnode\ant\taskdefs\Native2AsciiTask.class
+org\jnode\ant\taskdefs\classpath\PackageDirectory.class
+org\jnode\ant\taskdefs\Asm.class
+org\jnode\ant\taskdefs\Hotswap.class
+org\jnode\ant\taskdefs\classpath\Flags.class
+org\jnode\ant\taskdefs\FileSetTask.class
+org\jnode\ant\taskdefs\classpath\TargetedFileSet.class
+org\jnode\ant\taskdefs\classpath\SourceFile.class

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jnode</groupId>
+        <artifactId>jnode-parent</artifactId>
+        <version>0.2.9-dev</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <artifactId>jnode-core</artifactId>
+    <name>JNode Core</name>
+    <description>JNode core runtime system</description>
+
+    <dependencies>
+        <!-- Custom JARs -->
+        <dependency>
+            <groupId>gnu.classpath</groupId>
+            <artifactId>classpath</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mmtk</groupId>
+            <artifactId>mmtk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gnu.classpath</groupId>
+            <artifactId>mauve</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Generate VmSystemSettings.java and other template-based files -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-vm-settings</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.build.directory}/generated-sources/vm/org/jnode/vm"/>
+                                <mkdir dir="${project.build.directory}/generated-sources/vm/org/jnode/security"/>
+                                <!-- Copy template files as-is (no substitution needed since ENABLED=false) -->
+                                <copy file="${project.basedir}/src/template/org/jnode/vm/VmSystemSettings.java"
+                                      tofile="${project.build.directory}/generated-sources/vm/org/jnode/vm/VmSystemSettings.java"/>
+                                <copy file="${project.basedir}/src/template/org/jnode/security/JNodeSecurityManagerSettings.java"
+                                      tofile="${project.build.directory}/generated-sources/vm/org/jnode/security/JNodeSecurityManagerSettings.java"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Add multiple source roots -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>add-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/core</source>
+                                <source>${project.basedir}/src/classpath/ext</source>
+                                <source>${project.basedir}/src/classpath/vm</source>
+                                <source>${project.basedir}/src/classlib</source>
+                                <source>${project.basedir}/src/driver</source>
+                                <source>${project.basedir}/src/emu</source>
+                                <source>${project.basedir}/src/endorsed/nanoxml</source>
+                                <source>${project.basedir}/src/mmtk-vm</source>
+                                <source>${project.basedir}/src/openjdk</source>
+                                <source>${project.basedir}/src/testframework</source>
+                                <source>${project.basedir}/src/vmmagic</source>
+                                <source>${project.build.directory}/generated-sources/vm</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Compiler configuration with bootclasspath -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <!-- Core uses custom classlib.jar as bootclasspath -->
+                    <fork>true</fork>
+                    <encoding>US-ASCII</encoding>
+                    <excludes>
+                        <exclude>**/*-template.java</exclude>
+                        <exclude>**/package-info.java</exclude>
+                    </excludes>
+                    <compilerArgs>
+                        <arg>-nowarn</arg>
+                        <arg>-bootclasspath</arg>
+                        <arg>${project.basedir}/../all/lib/classlib.jar</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

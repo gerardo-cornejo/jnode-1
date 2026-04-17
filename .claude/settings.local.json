@@ -14,7 +14,26 @@
       "Bash(ls -lah net/lib/jsch*)",
       "Bash(ls -lah fs/lib/edtftpj* core/lib/commons-net*)",
       "Bash(ls -lah fs/lib/jcifs*)",
-      "Bash(ls -lah core/lib/junit*)"
+      "Bash(ls -lah core/lib/junit*)",
+      "Bash(bash ./install-local-jars.sh)",
+      "Bash(export JAVA_HOME=\"/c/Users/gerardo.cornejo/.jdks/corretto-1.8.0_482\")",
+      "Bash(export PATH=\"/c/Program Files/Apache NetBeans/java/maven/bin:$PATH\")",
+      "Bash(mvn help:describe -Dplugin=org.apache.maven.plugins:maven-compiler-plugin -Dfull)",
+      "Bash(mvn clean:*)",
+      "Bash(jar tf:*)",
+      "Bash(export JAVA_HOME=\"C:\\\\Users\\\\gerardo.cornejo\\\\.jdks\\\\corretto-1.8.0_482\")",
+      "Bash(\"/c/Program Files/JetBrains/IntelliJ IDEA 2026.1/plugins/maven/lib/maven3/bin/mvn\" clean install -DskipTests)",
+      "Bash(\"/c/Program Files/JetBrains/IntelliJ IDEA 2026.1/plugins/maven/lib/maven3/bin/mvn\" -Djnode.bits=32 -Djnode.variant=lite -f all/pom.xml jnode-iso:build-bootimage)",
+      "Bash(cd /tmp)",
+      "Bash(unzip -l \"c:\\\\Users\\\\gerardo.cornejo\\\\.m2\\\\repository\\\\gnu\\\\classpath\\\\classpath\\\\0.99-jnode\\\\classpath-0.99-jnode.jar\")",
+      "Bash(\"/c/Program Files/JetBrains/IntelliJ IDEA 2026.1/plugins/maven/lib/maven3/bin/mvn\" clean install -DskipTests -pl plugins/jnode-iso-maven-plugin)",
+      "Bash(mvn org.jnode:jnode-iso-maven-plugin:build-bootimage -Djnode.bits=32)",
+      "Bash(mvn org.jnode:jnode-iso-maven-plugin:build-bootimage -Djnode.bits=32 -X)",
+      "Read(//c/Users/gerardo.cornejo/**)",
+      "Bash(./build.sh cd-x86-lite *)",
+      "Bash(export PATH=\"$JAVA_HOME/bin:$PATH\")",
+      "Bash(cmd /c \"build-complete.bat 2>&1\")",
+      "Bash(awk '{print $9, \"\\(\" $5 \"\\)\"}')"
     ]
   }
 }

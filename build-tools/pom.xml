@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jnode</groupId>
+        <artifactId>jnode-parent</artifactId>
+        <version>0.2.9-dev</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+    <artifactId>jnode-build-tools</artifactId>
+    <name>JNode Build Tools</name>
+    <description>JNode build tools that depend on core (AsmConstBuilder, BootImageBuilder, etc.)</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-builder</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jnode</groupId>
+            <artifactId>jnode-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>../builder/src/builder</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>org/jnode/build/x86/AsmConstBuilder.java</include>
+                        <include>org/jnode/build/x86/BootImageBuilder.java</include>
+                        <include>org/jnode/build/x86/AbstractAsmConstBuilder.java</include>
+                        <include>org/jnode/build/x86/AbstractBootImageBuilder.java</include>
+                        <include>org/jnode/build/BuildObjectResolver.java</include>
+                        <include>org/jnode/jnasm/util/X86DualAssemblerFactory.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*-template.java</exclude>
+                        <exclude>**/package-info.java</exclude>
+                    </excludes>
+                    <compilerArgs>
+                        <arg>-nowarn</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

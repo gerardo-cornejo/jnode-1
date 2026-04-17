@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="$MODULE_DIR$/pom.xml" external.system.module.type="MAIN_ONLY" external.system.module.version="223-2" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <content url="file://$MODULE_DIR$/src/builder">
+      <sourceFolder url="file://$MODULE_DIR$/src/builder" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/src/builder">
+      <sourceFolder url="file://$MODULE_DIR$/src/builder" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/src/configure">
+      <sourceFolder url="file://$MODULE_DIR$/src/configure" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/src/main/resources">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/generated-sources/javacc">
+      <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/javacc" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.apache.ant:ant:1.10.15" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.10.15" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.javacc:javacc:3.2-jnode" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.bcel:bcel:5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.ow2.asm:asm:5.0.4" level="project" />
+    <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.0-jnode" level="project" />
+  </component>
+</module>

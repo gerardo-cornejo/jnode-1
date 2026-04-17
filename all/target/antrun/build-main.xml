@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="maven-antrun-" default="main">
+  <target name="main">
+    <echo message="========================================" />
+    <echo message="Maven Compilation Complete!" />
+    <echo message="========================================" />
+    <echo message="" />
+    <echo message="To generate the ISO image, run:" />
+    <echo message="  cd C:\Users\gerardo.cornejo\Desktop\jnode\all/.." />
+    <echo message="  ./build.sh cd-x86-lite" />
+    <echo message="" />
+    <echo message="ISO output will be at:" />
+    <echo message="  C:\Users\gerardo.cornejo\Desktop\jnode\all/build/cdroms/jnode-x86-lite.iso" />
+    <echo message="" />
+  </target>
+</project>

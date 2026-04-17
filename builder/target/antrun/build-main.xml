@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="maven-antrun-" default="main">
+  <target name="main">
+    <mkdir dir="C:\Users\gerardo.cornejo\Desktop\jnode\builder\target/generated-sources/javacc" />
+    <java fork="true" classname="org.javacc.parser.Main" failonerror="true">
+      <arg value="-OUTPUT_DIRECTORY=C:\Users\gerardo.cornejo\Desktop\jnode\builder\target/generated-sources/javacc" />
+      <arg value="C:\Users\gerardo.cornejo\Desktop\jnode\builder/src/builder/org/jnode/jnasm/assembler/gen/JNAsm.jj" />
+      <classpath>
+        <path path="C:\Users\gerardo.cornejo\Desktop\jnode\builder/lib/javacc.jar" />
+      </classpath>
+    </java>
+    <java fork="true" classname="org.javacc.parser.Main" failonerror="true">
+      <arg value="-OUTPUT_DIRECTORY=C:\Users\gerardo.cornejo\Desktop\jnode\builder\target/generated-sources/javacc" />
+      <arg value="C:\Users\gerardo.cornejo\Desktop\jnode\builder/src/builder/org/jnode/jnasm/preprocessor/gen/JNAsmPP.jj" />
+      <classpath>
+        <path path="C:\Users\gerardo.cornejo\Desktop\jnode\builder/lib/javacc.jar" />
+      </classpath>
+    </java>
+  </target>
+</project>

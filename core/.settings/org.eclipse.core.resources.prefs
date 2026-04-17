@@ -1,3 +1,14 @@
-#Sat Jan 15 15:53:22 CET 2005
-encoding/<project>=US-ASCII
 eclipse.preferences.version=1
+encoding//src/classlib=US-ASCII
+encoding//src/classpath/ext=US-ASCII
+encoding//src/classpath/vm=US-ASCII
+encoding//src/core=US-ASCII
+encoding//src/driver=US-ASCII
+encoding//src/emu=US-ASCII
+encoding//src/endorsed/nanoxml=US-ASCII
+encoding//src/mmtk-vm=US-ASCII
+encoding//src/openjdk=US-ASCII
+encoding//src/testframework=US-ASCII
+encoding//src/vmmagic=US-ASCII
+encoding//target/generated-sources/vm=US-ASCII
+encoding/<project>=US-ASCII
