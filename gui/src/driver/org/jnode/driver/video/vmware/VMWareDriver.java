@@ -79,6 +79,14 @@ public class VMWareDriver extends AbstractFrameBufferDriver implements
                 return kernel;
             }
         }
+        if (config instanceof VMWareConfiguration) {
+            final VMWareConfiguration vmConfig = (VMWareConfiguration) config;
+            if (kernel.isValidConfiguration(vmConfig)) {
+                kernel.open(vmConfig);
+                this.currentConfig = vmConfig;
+                return kernel;
+            }
+        }
         throw new UnknownConfigurationException();
     }
 
@@ -146,5 +154,9 @@ public class VMWareDriver extends AbstractFrameBufferDriver implements
         if (kernel != null) {
             kernel.showInfo(out);
         }
+    }
+
+    public synchronized FrameBufferConfiguration createCompatibleConfiguration(int width, int height) {
+        return (kernel == null) ? null : kernel.createCompatibleConfiguration(width, height);
     }
 }

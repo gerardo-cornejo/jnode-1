@@ -148,4 +148,32 @@ public final class UnsafeX86 {
      * Save the MSR's arrays of the current thread.
      */
     public static final native void saveMSRs();
+
+    /**
+     * Execute a low-bandwidth VMware backdoor command.
+     *
+     * <p>The {@code registers} array must contain at least six elements with
+     * the input values for EAX, EBX, ECX, EDX, ESI and EDI. On return, the
+     * same array contains the values returned by the backdoor call.</p>
+     *
+     * @param registers register state for the backdoor transaction
+     * @return 1 on success, 0 if the argument array is invalid
+     */
+    public static final native int vmwareBackdoor(int[] registers);
+
+    /**
+     * Execute a high-bandwidth VMware backdoor write operation.
+     *
+     * @return 1 on success, 0 if the arguments are invalid
+     */
+    public static final native int vmwareBackdoorHighBandwidthOut(int[] registers, byte[] data,
+                                                                  int offset, int length);
+
+    /**
+     * Execute a high-bandwidth VMware backdoor read operation.
+     *
+     * @return 1 on success, 0 if the arguments are invalid
+     */
+    public static final native int vmwareBackdoorHighBandwidthIn(int[] registers, byte[] data,
+                                                                 int offset, int length);
 }

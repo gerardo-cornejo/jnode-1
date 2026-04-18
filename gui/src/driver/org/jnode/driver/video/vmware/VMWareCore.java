@@ -30,6 +30,9 @@ import java.awt.image.DirectColorModel;
 import java.awt.image.Raster;
 import java.io.PrintWriter;
 import java.security.PrivilegedExceptionAction;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import javax.naming.NameNotFoundException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -280,13 +283,25 @@ public class VMWareCore extends AbstractSurface implements VMWareConstants, PCI_
 
     public FrameBufferConfiguration[] getConfigs() {
         final ColorModel cm = new DirectColorModel(bitsPerPixel, redMask, greenMask, blueMask, alphaMask);
-        return new FrameBufferConfiguration[]{
-            new VMWareConfiguration(800, 600, cm),
-            new VMWareConfiguration(1024, 768, cm),
-            new VMWareConfiguration(1280, 1024, cm),
-            new VMWareConfiguration(640, 480, cm),
-            new VMWareConfiguration(1280, 800, cm),
-        };
+        final LinkedHashSet<String> seen = new LinkedHashSet<String>();
+        final List<FrameBufferConfiguration> result = new ArrayList<FrameBufferConfiguration>();
+        addConfiguration(result, seen, 640, 480, cm);
+        addConfiguration(result, seen, 800, 600, cm);
+        addConfiguration(result, seen, 1024, 768, cm);
+        addConfiguration(result, seen, 1152, 864, cm);
+        addConfiguration(result, seen, 1280, 720, cm);
+        addConfiguration(result, seen, 1280, 768, cm);
+        addConfiguration(result, seen, 1280, 800, cm);
+        addConfiguration(result, seen, 1280, 960, cm);
+        addConfiguration(result, seen, 1280, 1024, cm);
+        addConfiguration(result, seen, 1366, 768, cm);
+        addConfiguration(result, seen, 1440, 900, cm);
+        addConfiguration(result, seen, 1600, 900, cm);
+        addConfiguration(result, seen, 1600, 1200, cm);
+        addConfiguration(result, seen, 1680, 1050, cm);
+        addConfiguration(result, seen, 1920, 1080, cm);
+        addConfiguration(result, seen, maxWidth, maxHeight, cm);
+        return result.toArray(new FrameBufferConfiguration[result.size()]);
     }
 
     /**
@@ -766,6 +781,25 @@ public class VMWareCore extends AbstractSurface implements VMWareConstants, PCI_
         return this.maxWidth;
     }
 
+    boolean isValidConfiguration(FrameBufferConfiguration config) {
+        if (config == null) {
+            return false;
+        }
+        final int width = config.getScreenWidth();
+        final int height = config.getScreenHeight();
+        return width > 0 && height > 0 && width <= maxWidth && height <= maxHeight;
+    }
+
+    FrameBufferConfiguration createCompatibleConfiguration(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            return null;
+        }
+        final int boundedWidth = Math.min(width, maxWidth);
+        final int boundedHeight = Math.min(height, maxHeight);
+        final ColorModel cm = new DirectColorModel(bitsPerPixel, redMask, greenMask, blueMask, alphaMask);
+        return new VMWareConfiguration(boundedWidth, boundedHeight, cm);
+    }
+
     /**
      * Gets the number of bits per pixel
      */
@@ -1058,6 +1092,17 @@ public class VMWareCore extends AbstractSurface implements VMWareConstants, PCI_
     @Override
     public int[] getRGBPixels(Rectangle region) {
         return bitmapGraphics.doGetPixels(region);
+    }
+
+    private void addConfiguration(List<FrameBufferConfiguration> result, LinkedHashSet<String> seen,
+                                  int width, int height, ColorModel cm) {
+        if (width <= 0 || height <= 0 || width > maxWidth || height > maxHeight) {
+            return;
+        }
+        final String key = width + "x" + height;
+        if (seen.add(key)) {
+            result.add(new VMWareConfiguration(width, height, cm));
+        }
     }
 
     @Override

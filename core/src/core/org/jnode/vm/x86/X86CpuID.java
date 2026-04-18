@@ -212,17 +212,18 @@ public class X86CpuID extends CpuID {
             return false;
 
         int[] regs = new int[4];
-        UnsafeX86.getCPUID(Word.fromIntZeroExtend(0x40000001), regs);
-        if (regs[0] != 0x31237648)
-            return false;
-        // Found 'Hv#1' Hypervisor vendor neutral identification 
         UnsafeX86.getCPUID(Word.fromIntZeroExtend(0x40000000), regs);
         final StringBuilder buf = new StringBuilder();
         intToString(buf, regs[1]); // ebx
         intToString(buf, regs[2]); // ecx
         intToString(buf, regs[3]); // edx
         hypervisorVendor = buf.toString().trim();
-        return true;
+        UnsafeX86.getCPUID(Word.fromIntZeroExtend(0x40000001), regs);
+        return (regs[0] == 0x31237648);
+    }
+
+    public String getHypervisorVendor() {
+        return hypervisorVendor;
     }
 
     /**

@@ -51,6 +51,10 @@ import java.awt.Toolkit;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.im.InputMethodHighlight;
@@ -74,6 +78,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -92,6 +97,7 @@ import org.jnode.driver.video.FrameBufferAPI;
 import org.jnode.driver.video.FrameBufferAPIOwner;
 import org.jnode.driver.video.Surface;
 import org.jnode.driver.video.UnknownConfigurationException;
+import org.jnode.driver.video.vmware.VMWareDriver;
 import org.jnode.naming.InitialNaming;
 import org.jnode.annotation.SharedStatics;
 import sun.awt.AppContext;
@@ -122,6 +128,7 @@ public abstract class JNodeToolkit extends ClasspathToolkit implements FrameBuff
     private final Dimension screenSize = new Dimension(640, 480);
     private Frame top;
     private Runnable exitAction;
+    private VMWareIntegrationService vmwareIntegrationService;
     @SuppressWarnings("unused")
     private Insets screenInsets;
 
@@ -354,6 +361,12 @@ public abstract class JNodeToolkit extends ClasspathToolkit implements FrameBuff
             final KeyboardHandler keyboardHandler = this.keyboardHandler;
             final MouseHandler mouseHandler = this.mouseHandler;
             final Surface graphics = this.graphics;
+            final VMWareIntegrationService integrationService = this.vmwareIntegrationService;
+
+            if (integrationService != null) {
+                integrationService.stop();
+                this.vmwareIntegrationService = null;
+            }
 
             if (keyboardHandler != null) {
                 keyboardHandler.close();
@@ -734,6 +747,7 @@ public abstract class JNodeToolkit extends ClasspathToolkit implements FrameBuff
                         return null;
                     }
                 });
+                startVMWareIntegration();
                 this.refCount = rc;
             } catch (DeviceException ex) {
                 decRefCount(true);
@@ -828,41 +842,35 @@ public abstract class JNodeToolkit extends ClasspathToolkit implements FrameBuff
         return device;
     }
 
-    private GraphicsConfiguration[] configs;
-
     public GraphicsConfiguration[] getConfigurations() {
-        if (configs == null) {
-            final GraphicsConfiguration[] configurations = getDevice().getConfigurations();
+        final GraphicsConfiguration[] configurations = getDevice().getConfigurations();
+        final GraphicsConfiguration[] sorted = new GraphicsConfiguration[configurations.length];
+        System.arraycopy(configurations, 0, sorted, 0, configurations.length);
+        Arrays.sort(sorted, new Comparator<GraphicsConfiguration>() {
+            @Override
+            public int compare(GraphicsConfiguration o1, GraphicsConfiguration o2) {
+                final Rectangle b1 = o1.getBounds();
+                final Rectangle b2 = o2.getBounds();
 
-            configs = new GraphicsConfiguration[configurations.length];
-            System.arraycopy(configurations, 0, configs, 0, configurations.length);
-            Arrays.sort(configs, new Comparator<GraphicsConfiguration>() {
-                @Override
-                public int compare(GraphicsConfiguration o1, GraphicsConfiguration o2) {
-                    final Rectangle b1 = o1.getBounds();
-                    final Rectangle b2 = o2.getBounds();
-
-                    int comp;
-                    if (b1.getWidth() > b2.getWidth()) {
+                int comp;
+                if (b1.getWidth() > b2.getWidth()) {
+                    comp = +1;
+                } else if (b1.getWidth() < b2.getWidth()) {
+                    comp = -1;
+                } else {
+                    if (b1.getHeight() > b2.getHeight()) {
                         comp = +1;
-                    } else if (b1.getWidth() < b2.getWidth()) {
+                    } else if (b1.getHeight() < b2.getHeight()) {
                         comp = -1;
                     } else {
-                        if (b1.getHeight() > b2.getHeight()) {
-                            comp = +1;
-                        } else if (b1.getHeight() < b2.getHeight()) {
-                            comp = -1;
-                        } else {
-                            comp = 0;
-                        }
+                        comp = 0;
                     }
-
-                    return comp;
                 }
 
-            });
-        }
-        return configs;
+                return comp;
+            }
+        });
+        return sorted;
     }
 
     public Dimension changeScreenSize(JNodeGraphicsConfiguration config) {
@@ -899,6 +907,44 @@ public abstract class JNodeToolkit extends ClasspathToolkit implements FrameBuff
         } catch (Exception e) {
             throw (AWTError) new AWTError(e.getMessage()).initCause(e);
         }
+    }
+
+    public Dimension changeScreenSize(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            return getScreenSize();
+        }
+        if (screenSize.width == width && screenSize.height == height) {
+            return getScreenSize();
+        }
+
+        final JNodeFrameBufferDevice device = getDevice();
+        JNodeGraphicsConfiguration target = null;
+        int bestScore = Integer.MAX_VALUE;
+        for (GraphicsConfiguration configuration : device.getConfigurations()) {
+            final JNodeGraphicsConfiguration jgc = (JNodeGraphicsConfiguration) configuration;
+            final Rectangle bounds = jgc.getBounds();
+            if (bounds.width == width && bounds.height == height) {
+                target = jgc;
+                break;
+            }
+            final int score = Math.abs(bounds.width - width) + Math.abs(bounds.height - height);
+            if (score < bestScore) {
+                bestScore = score;
+                target = jgc;
+            }
+        }
+
+        if ((target == null || target.getBounds().width != width || target.getBounds().height != height) &&
+            api instanceof VMWareDriver) {
+            final VMWareDriver vmwareDriver = (VMWareDriver) api;
+            final org.jnode.driver.video.FrameBufferConfiguration fbConfig =
+                vmwareDriver.createCompatibleConfiguration(width, height);
+            if (fbConfig != null) {
+                target = new JNodeGraphicsConfiguration(device, fbConfig);
+            }
+        }
+
+        return (target == null) ? getScreenSize() : changeScreenSize(target);
     }
 
     BufferedImage backBuffer;
@@ -1002,6 +1048,69 @@ public abstract class JNodeToolkit extends ClasspathToolkit implements FrameBuff
     protected abstract void onInitialize();
 
     protected abstract void onResize();
+
+    private void startVMWareIntegration() {
+        if (vmwareIntegrationService == null) {
+            final VMWareIntegrationService service = new VMWareIntegrationService(this);
+            if (service.start()) {
+                vmwareIntegrationService = service;
+            }
+        }
+    }
+
+    public boolean exportTransferable(Transferable transferable) {
+        if (transferable == null) {
+            return false;
+        }
+        try {
+            if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                @SuppressWarnings("unchecked")
+                final List<File> files = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                final String text = fileListToUriList(files);
+                if (text == null) {
+                    return false;
+                }
+                systemClipboard.setContents(new VMWareTransferable(files, text), null);
+                if (vmwareIntegrationService != null) {
+                    vmwareIntegrationService.pushClipboardText(text);
+                }
+                return true;
+            }
+            if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                final Object data = transferable.getTransferData(DataFlavor.stringFlavor);
+                if (data instanceof String) {
+                    final String text = (String) data;
+                    systemClipboard.setContents(new StringSelection(text), null);
+                    if (vmwareIntegrationService != null) {
+                        vmwareIntegrationService.pushClipboardText(text);
+                    }
+                    return true;
+                }
+            }
+        } catch (UnsupportedFlavorException ex) {
+            log.debug("Unsupported transferable flavor", ex);
+        } catch (IOException ex) {
+            log.debug("I/O error exporting transferable", ex);
+        }
+        return false;
+    }
+
+    private String fileListToUriList(List<File> files) {
+        if (files == null || files.isEmpty()) {
+            return null;
+        }
+        final StringBuilder builder = new StringBuilder();
+        for (File file : files) {
+            if (file == null) {
+                continue;
+            }
+            if (builder.length() > 0) {
+                builder.append("\r\n");
+            }
+            builder.append(file.toURI().toASCIIString());
+        }
+        return builder.length() == 0 ? null : builder.toString();
+    }
 
     public abstract boolean isWindow(Component comp);
 

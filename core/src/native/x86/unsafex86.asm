@@ -165,6 +165,166 @@ GLABEL Q53org5jnode2vm3x869UnsafeX8623restoreMSRs2e2829V
 	SYSCALL SC_RESTORE_MSRS
 	ret
 
+; int vmwareBackdoor(int[] registers);
+GLABEL Q53org5jnode2vm3x869UnsafeX8623vmwareBackdoor2e285bI29I
+	mov AAX,[ASP+SLOT_SIZE]		; registers array
+	test AAX,AAX
+	jz vmwareBackdoor_invalid
+	mov ecx,[AAX+VmArray_LENGTH_OFFSET*SLOT_SIZE]
+	cmp ecx,6
+	jb vmwareBackdoor_invalid
+
+	push ABP
+	mov ABP,AAX
+	push ABX
+	push ASI
+	push ADI
+
+	mov eax,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+0]
+	mov ebx,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+4]
+	mov ecx,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+8]
+	mov edx,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+12]
+	mov esi,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+16]
+	mov edi,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+20]
+
+	in eax,dx
+
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+0],eax
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+4],ebx
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+8],ecx
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+12],edx
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+16],esi
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+20],edi
+
+	pop ADI
+	pop ASI
+	pop ABX
+	pop ABP
+	mov eax,1
+	ret SLOT_SIZE
+
+vmwareBackdoor_invalid:
+	xor eax,eax
+	ret SLOT_SIZE
+
+; int vmwareBackdoorHighBandwidthOut(int[] registers, byte[] data, int offset, int length);
+GLABEL Q53org5jnode2vm3x869UnsafeX8623vmwareBackdoorHighBandwidthOut2e285bI5bBII29I
+	mov AAX,[ASP+(4*SLOT_SIZE)]		; registers array
+	test AAX,AAX
+	jz vmwareBackdoorHBOut_invalid
+	mov ecx,[AAX+VmArray_LENGTH_OFFSET*SLOT_SIZE]
+	cmp ecx,6
+	jb vmwareBackdoorHBOut_invalid
+
+	mov ABX,[ASP+(3*SLOT_SIZE)]		; data array
+	test ABX,ABX
+	jz vmwareBackdoorHBOut_invalid
+
+	mov ecx,[ASP+(2*SLOT_SIZE)]		; offset
+	test ecx,ecx
+	js vmwareBackdoorHBOut_invalid
+	mov edx,[ASP+(1*SLOT_SIZE)]		; length
+	test edx,edx
+	js vmwareBackdoorHBOut_invalid
+	mov esi,[ABX+VmArray_LENGTH_OFFSET*SLOT_SIZE]
+	sub esi,ecx
+	cmp esi,edx
+	jb vmwareBackdoorHBOut_invalid
+
+	push ABP
+	mov ABP,AAX
+	push ABX
+	push ASI
+	push ADI
+
+	mov eax,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+0]
+	mov ebx,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+4]
+	mov ecx,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+8]
+	mov edx,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+12]
+	mov esi,[ABX+VmArray_DATA_OFFSET*SLOT_SIZE]
+	add esi,[ASP+(6*SLOT_SIZE)]
+	mov edi,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+20]
+
+	cld
+	rep outsb
+
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+0],eax
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+4],ebx
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+8],ecx
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+12],edx
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+16],esi
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+20],edi
+
+	pop ADI
+	pop ASI
+	pop ABX
+	pop ABP
+	mov eax,1
+	ret SLOT_SIZE*4
+
+vmwareBackdoorHBOut_invalid:
+	xor eax,eax
+	ret SLOT_SIZE*4
+
+; int vmwareBackdoorHighBandwidthIn(int[] registers, byte[] data, int offset, int length);
+GLABEL Q53org5jnode2vm3x869UnsafeX8623vmwareBackdoorHighBandwidthIn2e285bI5bBII29I
+	mov AAX,[ASP+(4*SLOT_SIZE)]		; registers array
+	test AAX,AAX
+	jz vmwareBackdoorHBIn_invalid
+	mov ecx,[AAX+VmArray_LENGTH_OFFSET*SLOT_SIZE]
+	cmp ecx,6
+	jb vmwareBackdoorHBIn_invalid
+
+	mov ABX,[ASP+(3*SLOT_SIZE)]		; data array
+	test ABX,ABX
+	jz vmwareBackdoorHBIn_invalid
+
+	mov ecx,[ASP+(2*SLOT_SIZE)]		; offset
+	test ecx,ecx
+	js vmwareBackdoorHBIn_invalid
+	mov edx,[ASP+(1*SLOT_SIZE)]		; length
+	test edx,edx
+	js vmwareBackdoorHBIn_invalid
+	mov esi,[ABX+VmArray_LENGTH_OFFSET*SLOT_SIZE]
+	sub esi,ecx
+	cmp esi,edx
+	jb vmwareBackdoorHBIn_invalid
+
+	push ABP
+	mov ABP,AAX
+	push ABX
+	push ASI
+	push ADI
+
+	mov eax,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+0]
+	mov ebx,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+4]
+	mov ecx,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+8]
+	mov edx,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+12]
+	mov esi,[ABP+VmArray_DATA_OFFSET*SLOT_SIZE+16]
+	mov edi,[ABX+VmArray_DATA_OFFSET*SLOT_SIZE]
+	add edi,[ASP+(5*SLOT_SIZE)]
+
+	cld
+	rep insb
+
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+0],eax
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+4],ebx
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+8],ecx
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+12],edx
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+16],esi
+	mov [ABP+VmArray_DATA_OFFSET*SLOT_SIZE+20],edi
+
+	pop ADI
+	pop ASI
+	pop ABX
+	pop ABP
+	mov eax,1
+	ret SLOT_SIZE*4
+
+vmwareBackdoorHBIn_invalid:
+	xor eax,eax
+	ret SLOT_SIZE*4
+
 ;    /**
 ;     * Read a model specific register
 ;     */

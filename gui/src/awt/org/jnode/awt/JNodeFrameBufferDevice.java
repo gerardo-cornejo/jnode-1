@@ -35,7 +35,6 @@ public class JNodeFrameBufferDevice extends GraphicsDevice implements DeviceList
 
     private final FrameBufferAPI api;
     private final Device device;
-    private final GraphicsConfiguration[] configs;
     private boolean stopped = false;
     private GraphicsConfiguration defaultConfig;
 
@@ -47,11 +46,7 @@ public class JNodeFrameBufferDevice extends GraphicsDevice implements DeviceList
         } catch (ApiNotFoundException ex) {
             throw new IllegalArgumentException("Not a FrameBuffer device " + device.getId());
         }
-        final FrameBufferConfiguration[] fbConfigs = api.getConfigurations();
-        configs = new JNodeGraphicsConfiguration[fbConfigs.length];
-        for (int i = 0; i < fbConfigs.length; i++) {
-            configs[i] = new JNodeGraphicsConfiguration(this, fbConfigs[i]);
-        }
+        final GraphicsConfiguration[] configs = buildConfigurations();
         defaultConfig = configs[0];
         for (GraphicsConfiguration c : configs) {
             if ("1280x800/32".equals(c.toString())) {
@@ -66,7 +61,7 @@ public class JNodeFrameBufferDevice extends GraphicsDevice implements DeviceList
      * @see java.awt.GraphicsDevice#getConfigurations()
      */
     public GraphicsConfiguration[] getConfigurations() {
-        return configs;
+        return buildConfigurations();
     }
 
     /**
@@ -74,6 +69,12 @@ public class JNodeFrameBufferDevice extends GraphicsDevice implements DeviceList
      * @see java.awt.GraphicsDevice#getDefaultConfiguration()
      */
     public GraphicsConfiguration getDefaultConfiguration() {
+        for (GraphicsConfiguration configuration : getConfigurations()) {
+            if (configuration.toString().equals(defaultConfig.toString())) {
+                defaultConfig = configuration;
+                return configuration;
+            }
+        }
         return defaultConfig;
     }
 
@@ -108,6 +109,15 @@ public class JNodeFrameBufferDevice extends GraphicsDevice implements DeviceList
 
     public Device getDevice() {
         return device;
+    }
+
+    private GraphicsConfiguration[] buildConfigurations() {
+        final FrameBufferConfiguration[] fbConfigs = api.getConfigurations();
+        final GraphicsConfiguration[] configs = new JNodeGraphicsConfiguration[fbConfigs.length];
+        for (int i = 0; i < fbConfigs.length; i++) {
+            configs[i] = new JNodeGraphicsConfiguration(this, fbConfigs[i]);
+        }
+        return configs;
     }
 
     /**

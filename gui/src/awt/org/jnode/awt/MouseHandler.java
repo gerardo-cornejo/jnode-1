@@ -23,6 +23,7 @@ package org.jnode.awt;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.IllegalComponentStateException;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
@@ -31,6 +32,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import javax.swing.SwingUtilities;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jnode.driver.ApiNotFoundException;
@@ -41,6 +43,7 @@ import org.jnode.driver.DeviceManager;
 import org.jnode.driver.input.PointerAPI;
 import org.jnode.driver.input.PointerEvent;
 import org.jnode.driver.input.PointerListener;
+import org.jnode.driver.input.VMWareBackdoor;
 import org.jnode.driver.video.HardwareCursor;
 import org.jnode.driver.video.HardwareCursorAPI;
 import javax.naming.NameNotFoundException;
@@ -155,6 +158,8 @@ public class MouseHandler implements PointerListener {
     private int x;
 
     private int y;
+    private volatile boolean vmwarePolling;
+    private Thread vmwarePollingThread;
 
     /**
      * Create a new instance.
@@ -194,6 +199,7 @@ public class MouseHandler implements PointerListener {
                 return null;
             }
         });
+        startVMWarePolling();
     }
 
     void setCursorImage(HardwareCursor ci) {
@@ -209,6 +215,7 @@ public class MouseHandler implements PointerListener {
      * Close this handler
      */
     public void close() {
+        stopVMWarePolling();
         if (pointerAPI != null) {
             pointerAPI.removePointerListener(this);            
         }
@@ -218,6 +225,92 @@ public class MouseHandler implements PointerListener {
             // if we stay in graphic mode
             hwCursor.setCursorVisible(false);
         }
+    }
+
+    private void startVMWarePolling() {
+        if (!VMWareBackdoor.isAvailable()) {
+            return;
+        }
+        if (!VMWareBackdoor.setAbsolutePointer(true)) {
+            return;
+        }
+        vmwarePolling = true;
+        vmwarePollingThread = new Thread(new Runnable() {
+            public void run() {
+                pollVMWarePointer();
+            }
+        }, "VMWare-Mouse");
+        vmwarePollingThread.setDaemon(true);
+        vmwarePollingThread.start();
+    }
+
+    private void stopVMWarePolling() {
+        vmwarePolling = false;
+        final Thread thread = vmwarePollingThread;
+        if (thread != null) {
+            thread.interrupt();
+            try {
+                thread.join(1000);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+            vmwarePollingThread = null;
+        }
+        if (VMWareBackdoor.isAvailable()) {
+            VMWareBackdoor.setAbsolutePointer(false);
+        }
+    }
+
+    private void pollVMWarePointer() {
+        int lastPolledButtons = Integer.MIN_VALUE;
+        int lastPolledX = Integer.MIN_VALUE;
+        int lastPolledY = Integer.MIN_VALUE;
+        int lastPolledZ = Integer.MIN_VALUE;
+        while (vmwarePolling) {
+            try {
+                final int[] regs = VMWareBackdoor.readAbsolutePointer();
+                if (regs != null) {
+                    final int buttons = convertVMWareButtons(regs[0] & 0xFFFF);
+                    final int absX = regs[1] & 0xFFFF;
+                    final int absY = regs[2] & 0xFFFF;
+                    final int wheel = (byte) (regs[3] & 0xFF);
+                    if (buttons != lastPolledButtons || absX != lastPolledX || absY != lastPolledY ||
+                        wheel != lastPolledZ) {
+                        lastPolledButtons = buttons;
+                        lastPolledX = absX;
+                        lastPolledY = absY;
+                        lastPolledZ = wheel;
+                        pointerStateChanged(buttons, absX, absY, wheel, true);
+                    }
+                }
+                Thread.sleep(15);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+                return;
+            } catch (Throwable ex) {
+                log.debug("VMware mouse polling error", ex);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException interrupted) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+        }
+    }
+
+    private int convertVMWareButtons(int vmwareButtons) {
+        int buttons = 0;
+        if ((vmwareButtons & (VMWareBackdoor.BUTTON_LEFT | VMWareBackdoor.BUTTON_LEFT_ALT)) != 0) {
+            buttons |= PointerEvent.BUTTON_LEFT;
+        }
+        if ((vmwareButtons & (VMWareBackdoor.BUTTON_RIGHT | VMWareBackdoor.BUTTON_RIGHT_ALT)) != 0) {
+            buttons |= PointerEvent.BUTTON_RIGHT;
+        }
+        if ((vmwareButtons & (VMWareBackdoor.BUTTON_MIDDLE | VMWareBackdoor.BUTTON_MIDDLE_ALT)) != 0) {
+            buttons |= PointerEvent.BUTTON_MIDDLE;
+        }
+        return buttons;
     }
 
     /**
@@ -311,8 +404,10 @@ public class MouseHandler implements PointerListener {
      */
     void pointerStateChanged(int buttons, int newX, int newY, int newZ, boolean absolute) {
         long time = System.currentTimeMillis();
-        final int newAbsX = absolute ? newX : x + newX;
-        final int newAbsY = absolute ? newY : y + newY;
+        final int scaledX = absolute ? scaleAbsoluteCoordinate(newX, screenSize.width) : newX;
+        final int scaledY = absolute ? scaleAbsoluteCoordinate(newY, screenSize.height) : newY;
+        final int newAbsX = absolute ? scaledX : x + newX;
+        final int newAbsY = absolute ? scaledY : y + newY;
         x = Math.min(screenSize.width - 1, Math.max(0, newAbsX));
         y = Math.min(screenSize.height - 1, Math.max(0, newAbsY));
         if (hwCursor != null) hwCursor.setCursorPosition(x, y);
@@ -387,6 +482,20 @@ public class MouseHandler implements PointerListener {
     }
 
     /**
+     * VMware absolute pointer reports coordinates normalized to 0..65535.
+     * Preserve existing absolute devices that already operate in screen space.
+     */
+    private int scaleAbsoluteCoordinate(int value, int screenBound) {
+        if (screenBound <= 1 || value < 0) {
+            return value;
+        }
+        if (value > 0xFFFF) {
+            return value;
+        }
+        return (value * (screenBound - 1)) / 0xFFFF;
+    }
+
+    /**
      * Post a mouse event with the given properties.
      *
      * @param source     the source component of the event
@@ -398,19 +507,18 @@ public class MouseHandler implements PointerListener {
      */
     private void postEvent(Component source, int id, long time, int clickCount, int button, int wheelAmt) {
         if (!source.isShowing()) return;
-//        final Window w = SwingUtilities.getWindowAncestor(source);
-//        Point pwo;
-//        if (w != null && w.isShowing()) {
-//            pwo = w.getLocationOnScreen();
-//        } else {
-//            pwo = new Point(0, 0);
-//        }
-
-        final Point p = source.getLocationOnScreen();
         final boolean popupTrigger = (button == MouseEvent.BUTTON2);
+        final Point componentPoint = new Point(x, y);
+        try {
+            SwingUtilities.convertPointFromScreen(componentPoint, source);
+        } catch (IllegalComponentStateException ex) {
+            final Point p = source.getLocationOnScreen();
+            componentPoint.x -= p.x;
+            componentPoint.y -= p.y;
+        }
 
-        final int ex = x - p.x; // - pwo.x;
-        final int ey = y - p.y; // - pwo.y;
+        final int ex = componentPoint.x;
+        final int ey = componentPoint.y;
         final int modifiers = getModifiers();
         MouseEvent event;
         if (id == MouseEvent.MOUSE_WHEEL) {

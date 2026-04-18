@@ -31,6 +31,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FileDialog;
 import java.awt.Font;
@@ -244,7 +245,7 @@ public final class SwingToolkit extends JNodeToolkit {
 
     public DragSourceContextPeer createDragSourceContextPeer(
         DragGestureEvent dge) {
-        return null;
+        return new SwingDragSourceContextPeer(this, dge);
     }
 
     protected FileDialogPeer createFileDialog(FileDialog target) {
@@ -584,7 +585,11 @@ public final class SwingToolkit extends JNodeToolkit {
     }
 
     protected void onResize() {
-        //nothing to do here yet
+        if (desktopFrame != null) {
+            final Dimension size = getScreenSize();
+            desktopFrame.adjustDesktopSize(size.width, size.height);
+            desktopFrame.getContentPane().repaint();
+        }
     }
 
     public boolean isWindow(Component comp) {

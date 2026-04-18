@@ -123,8 +123,20 @@ public final class DesktopFrame extends JFrame implements JNodeAwtContext {
 
     public void adjustDesktopSize(int width, int height) {
         setSize(width, height);
+        desktop.setLocation(0, 0);
+        desktop.setBounds(0, 0, width, height);
+        desktop.setPreferredSize(new Dimension(width, height));
+        getContentPane().setLocation(0, 0);
+        getContentPane().setBounds(0, 0, width, height);
+        getContentPane().setPreferredSize(new Dimension(width, height));
         VMAwtAPI.invalidateTree(this);
         validateTree();
+        doLayout();
+        getContentPane().invalidate();
+        validate();
+        desktop.revalidate();
+        desktop.repaint();
+        repaint();
     }
 
     /**
