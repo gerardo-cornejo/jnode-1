@@ -98,7 +98,13 @@ public abstract class AbstractPointerDriver extends AbstractInputDriver<PointerE
             return null;
         }
 
-        PointerInterpreter i = new MouseInterpreter();
+        PointerInterpreter i = new VMWareAbsolutePointerInterpreter();
+        if (i.probe(this)) {
+            log.info("Found " + i.getName());
+            return i;
+        }
+
+        i = new MouseInterpreter();
         if (i.probe(this)) {
             log.info("Found " + i.getName());
             return i;

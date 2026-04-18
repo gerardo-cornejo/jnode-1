@@ -148,12 +148,14 @@ final class VMWareIntegrationService implements Runnable {
         try {
             final int width = Integer.parseInt(parts[1]);
             final int height = Integer.parseInt(parts[2]);
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    toolkit.changeScreenSize(width, height);
-                }
-            });
+            if (width > 0 && height > 0) {
+                EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        toolkit.changeScreenSize(width, height);
+                    }
+                });
+            }
         } catch (NumberFormatException ex) {
             log.debug("Ignoring malformed Resolution_Set: " + message, ex);
         }
