@@ -36,7 +36,9 @@
       "Bash(awk '{print $9, \"\\(\" $5 \"\\)\"}')",
       "Bash(export JAVA_HOME=\"C:/Users/gerardo.cornejo/.jdks/corretto-1.8.0_482\")",
       "Bash(java -Xmx768M -Xms256M -jar core/lib/ant-launcher.jar -lib __TRACKED_VAR__/lib -lib core/lib -f all/build.xml cd-x86-lite)",
-      "Bash(\"C:/Users/gerardo.cornejo/.jdks/corretto-1.8.0_482/bin/java\" -Xmx768M -Xms256M -jar core/lib/ant-launcher.jar -lib \"C:/Users/gerardo.cornejo/.jdks/corretto-1.8.0_482/lib\" -lib core/lib -f all/build.xml cd-x86-lite)"
+      "Bash(\"C:/Users/gerardo.cornejo/.jdks/corretto-1.8.0_482/bin/java\" -Xmx768M -Xms256M -jar core/lib/ant-launcher.jar -lib \"C:/Users/gerardo.cornejo/.jdks/corretto-1.8.0_482/lib\" -lib core/lib -f all/build.xml cd-x86-lite)",
+      "Bash(grep -rn \"catch.*{$\" /c/Users/gerardo.cornejo/Desktop/jnode --include=\"*.java\")",
+      "Bash(find /c/Users/gerardo.cornejo/Desktop/jnode -name \"*.java\" -type f ! -path \"*/build/*\" -exec wc -l {} \\\\;)"
     ]
   }
 }

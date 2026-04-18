@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="maven-antrun-" default="main">
-  <target name="main">
-    <mkdir dir="C:\Users\gerardo.cornejo\Desktop\jnode\core\target/generated-sources/vm/org/jnode/vm" />
-    <mkdir dir="C:\Users\gerardo.cornejo\Desktop\jnode\core\target/generated-sources/vm/org/jnode/security" />
-    <copy file="C:\Users\gerardo.cornejo\Desktop\jnode\core/src/template/org/jnode/vm/VmSystemSettings.java" tofile="C:\Users\gerardo.cornejo\Desktop\jnode\core\target/generated-sources/vm/org/jnode/vm/VmSystemSettings.java" />
-    <copy file="C:\Users\gerardo.cornejo\Desktop\jnode\core/src/template/org/jnode/security/JNodeSecurityManagerSettings.java" tofile="C:\Users\gerardo.cornejo\Desktop\jnode\core\target/generated-sources/vm/org/jnode/security/JNodeSecurityManagerSettings.java" />
-  </target>
-</project>

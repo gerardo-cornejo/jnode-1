@@ -20,3 +20,9 @@ classlib.pack.gz
 /netbeans/nbproject/private/
 /gui/target/*
 /core/target/*
+/build-tools/target/classes/*
+/all/target/*
+/fs/target/*
+/net/target/*
+/shell/target/*
+/textui/target/*
