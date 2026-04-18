@@ -1,0 +1,4 @@
+org\jnode\maven\iso\BuildBootImageMojo.class
+org\jnode\maven\iso\ISOBuildExecutor.class
+org\jnode\maven\iso\BuildISOImageMojo.class
+org\jnode\maven\iso\BuildISOImageMojo$1.class

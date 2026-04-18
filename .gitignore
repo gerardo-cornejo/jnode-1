@@ -27,3 +27,4 @@ classlib.pack.gz
 /shell/target/*
 /textui/target/*
 /distr/target/*
+*.class
